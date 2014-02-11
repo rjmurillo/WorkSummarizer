@@ -16,6 +16,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
         /// <param name="startDate">start of the query time period</param>
         /// <param name="endDate">end of the query time period</param>
         /// <returns>collection of tfs workitems</returns>
+        /// <!--<exception cref="TeamFoundationException">Thrown if an error occurs</exception>-->
         IEnumerable<WorkItem> PullWorkItemsThatChanged(Uri tfsConnectionstring, DateTime startDate, DateTime endDate);
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
         /// <param name="startDate">start of the query time period</param>
         /// <param name="endDate">end of the query time period</param>
         /// <returns>collection of tfs changesets</returns>
+        /// <!--<exception cref="TeamFoundationException">Thrown if an error occurs</exception>-->
         IEnumerable<Changeset> PullChangeSets(Uri tfsConnectionstring, DateTime startDate, DateTime endDate);
     }
 }
