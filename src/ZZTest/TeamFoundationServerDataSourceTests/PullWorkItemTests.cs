@@ -10,6 +10,8 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
     public class PullWorkItemTests
     {
         readonly Uri tfsConnection = new Uri("http://vstfcodebox:8080/tfs/Engineering_Excellence");
+        private const string projectName = "EE_Engineering";
+
         private ITfsData tfsData;
         private readonly DateTime startDate = new DateTime(2014, 1, 1);
         private readonly DateTime endDate = new DateTime(2014, 2, 15);
@@ -25,7 +27,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
         {
             try
             {
-                tfsData.PullWorkItemsThatChanged(new Uri("http://this:8080/will/not/work"), startDate, endDate);
+                tfsData.PullWorkItemsThatChanged(new Uri("http://this:8080/will/not/work"), projectName, startDate, endDate);
             }
             catch (TeamFoundationException)
             {
@@ -37,7 +39,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
         [TestMethod]
         public void VerifyPullWorkItems()
         {
-            IEnumerable<WorkItem> workItems =  tfsData.PullWorkItemsThatChanged(tfsConnection, startDate, endDate);
+            IEnumerable<WorkItem> workItems =  tfsData.PullWorkItemsThatChanged(tfsConnection, projectName, startDate, endDate);
 
             foreach (WorkItem wi in workItems)
             {

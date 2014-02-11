@@ -13,7 +13,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
 {
     public partial class TfsData
     {
-        public IEnumerable<WorkItem> PullWorkItemsThatChanged(Uri tfsConnectionstring, DateTime startDate, DateTime endDate)
+        public IEnumerable<WorkItem> PullWorkItemsThatChanged(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate)
         {
             WorkItemStore workItemStore = GetWorkItemStore(tfsConnectionstring);
 

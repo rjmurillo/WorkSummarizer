@@ -4,16 +4,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.VersionControl.Client;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace WorkSummarizer.TeamFoundationServerDataSource
 {
     public partial class TfsData : ITfsData
     {
-        public IEnumerable<Changeset> PullChangeSets(Uri tfsConnectionstring, DateTime startDate, DateTime endDate)
+        public IEnumerable<Changeset> PullChangeSets(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate)
         {
             try
             {
@@ -25,7 +23,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
                 VersionControlServer versionControlServer = (VersionControlServer)projectCollection.GetService(typeof(VersionControlServer));
                 
                 IEnumerable changesetHistory =
-                    versionControlServer.QueryHistory("$/", VersionSpec.Latest, 0,
+                    versionControlServer.QueryHistory("$/" + projectName + "/", VersionSpec.Latest, 0,
                                                       RecursionType.Full, null, versionFrom, versionTo, int.MaxValue,
                                                       false, false);
 
