@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Common;
 using Microsoft.TeamFoundation.VersionControl.Client;
+using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace WorkSummarizer.TeamDataSource
 {
@@ -19,5 +20,7 @@ namespace WorkSummarizer.TeamDataSource
         /// </code>
         /// </remarks>
         IEnumerable<Participant> InferParticipantsFromChangesets(IEnumerable<Changeset> changesets);
+
+        IEnumerable<Participant> InferParticipantsFromWorkItems(IEnumerable<WorkItem> workItems);
     }
 }
