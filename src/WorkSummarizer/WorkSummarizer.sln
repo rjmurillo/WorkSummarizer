@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21126.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkSummarizer", "WorkSummarizer.csproj", "{730E9457-05E3-4F42-871F-DE09AAD55483}"
 EndProject
@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tfs", "tfs", "{A9E8AE13-B63
 	ProjectSection(SolutionItems) = preProject
 		..\..\sample\tfs\20140101_20140214.json = ..\..\sample\tfs\20140101_20140214.json
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events.Outlook", "..\Events.Outlook\Events.Outlook.csproj", "{87498D93-630C-4079-A1E7-87731D561F62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,10 @@ Global
 		{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87498D93-630C-4079-A1E7-87731D561F62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87498D93-630C-4079-A1E7-87731D561F62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87498D93-630C-4079-A1E7-87731D561F62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87498D93-630C-4079-A1E7-87731D561F62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F0DA9875-3397-4E83-91F9-41D4F54B2A2B} = {3521A9CB-824F-447A-AC99-EAB69982148D}
 		{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508} = {3521A9CB-824F-447A-AC99-EAB69982148D}
+		{87498D93-630C-4079-A1E7-87731D561F62} = {3521A9CB-824F-447A-AC99-EAB69982148D}
 		{A9E8AE13-B63F-480B-87B5-ECFF2082C1F2} = {75A3D73E-5D6C-4518-A953-D1E38636A3E6}
 	EndGlobalSection
 EndGlobal
