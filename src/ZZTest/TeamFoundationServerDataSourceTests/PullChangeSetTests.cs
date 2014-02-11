@@ -11,7 +11,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
     [TestClass]
     public class PullChangeSetTests
     {
-        readonly Uri tfsConnection = new Uri("http://vstfcodebox:8080/tfs/");
+        readonly Uri tfsConnection = new Uri("http://vstfcodebox:8080/tfs/Engineering_Excellence");
         private ITfsData tfsData;
         private readonly DateTime startDate = new DateTime(2014, 1, 1);
         private readonly DateTime endDate = new DateTime(2014, 2, 15);
@@ -23,7 +23,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
         }
 
         [TestMethod]
-        public void ExceptionThrownIfBadUri()
+        public void ExceptionThrownIfBadUriForGettingChangeSets()
         {
             try
             {
@@ -37,7 +37,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
         }
 
         [TestMethod]
-        public void VerifyPullWorkItems()
+        public void VerifyPullChangeSets()
         {
             IEnumerable<Changeset> changesets = tfsData.PullChangeSets(tfsConnection, startDate, endDate);
 

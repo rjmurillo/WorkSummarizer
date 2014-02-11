@@ -9,7 +9,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
     [TestClass]
     public class PullWorkItemTests
     {
-        readonly Uri tfsConnection = new Uri("http://vstfcodebox:8080/tfs/");
+        readonly Uri tfsConnection = new Uri("http://vstfcodebox:8080/tfs/Engineering_Excellence");
         private ITfsData tfsData;
         private readonly DateTime startDate = new DateTime(2014, 1, 1);
         private readonly DateTime endDate = new DateTime(2014, 2, 15);
