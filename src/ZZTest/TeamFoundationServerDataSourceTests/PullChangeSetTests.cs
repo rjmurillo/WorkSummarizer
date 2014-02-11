@@ -43,7 +43,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
 
             foreach (Changeset cs in changesets)
             {
-                Assert.IsTrue(!string.IsNullOrEmpty(cs.Comment));
+                Assert.IsTrue(!string.IsNullOrEmpty(cs.Owner));
             }
         }
     }
