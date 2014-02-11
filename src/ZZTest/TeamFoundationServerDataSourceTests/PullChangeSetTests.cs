@@ -1,5 +1,7 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
+using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WorkSummarizer.TeamFoundationServerDataSource;
@@ -7,7 +9,7 @@ using WorkSummarizer.TeamFoundationServerDataSource;
 namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
 {
     [TestClass]
-    public class PullWorkItemTests
+    public class PullChangeSetTests
     {
         readonly Uri tfsConnection = new Uri("http://vstfcodebox:8080/tfs/");
         private ITfsData tfsData;
@@ -25,7 +27,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
         {
             try
             {
-                tfsData.PullWorkItemsThatChanged(new Uri("http://this:8080/will/not/work"), startDate, endDate);
+                tfsData.PullChangeSets(new Uri("http://this:8080/will/not/work"), startDate, endDate);
             }
             catch (TeamFoundationException)
             {
@@ -37,14 +39,12 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
         [TestMethod]
         public void VerifyPullWorkItems()
         {
-            IEnumerable<WorkItem> workItems =  tfsData.PullWorkItemsThatChanged(tfsConnection, startDate, endDate);
+            IEnumerable<Changeset> changesets = tfsData.PullChangeSets(tfsConnection, startDate, endDate);
 
-            foreach (WorkItem wi in workItems)
+            foreach (Changeset cs in changesets)
             {
-                Assert.IsTrue(!string.IsNullOrEmpty(wi.Title));
+                Assert.IsTrue(!string.IsNullOrEmpty(cs.Comment));
             }
         }
-
-       
     }
 }
