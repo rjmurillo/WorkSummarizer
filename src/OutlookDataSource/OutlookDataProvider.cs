@@ -7,9 +7,14 @@ using Microsoft.Office.Interop.Outlook;
 
 namespace OutlookDataSource
 {
-    public class OutlookDataProvider
+    public interface IOutlookDataProvider
     {
-        public static IEnumerable<OutlookMeeting> GetMeetings(DateTime startFilterDate, DateTime endFilterDate)
+        IEnumerable<OutlookMeeting> GetMeetings(DateTime startFilterDate, DateTime endFilterDate);
+    }
+
+    public class OutlookDataProvider : IOutlookDataProvider
+    {
+        public IEnumerable<OutlookMeeting> GetMeetings(DateTime startFilterDate, DateTime endFilterDate)
         {
             Microsoft.Office.Interop.Outlook.Application oApp = new Microsoft.Office.Interop.Outlook.Application();
             var mapiNamespace = oApp.GetNamespace("MAPI");

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TeamFoundationServerWorkItemStateUpdater.Graph
+namespace Graph
 {
     public class GraphNode<T> : Node<T>
         where T : class

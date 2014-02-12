@@ -1,4 +1,4 @@
-﻿namespace TeamFoundationServerWorkItemStateUpdater.Graph
+﻿namespace Graph
 {
     public class Node<T>
         where T : class

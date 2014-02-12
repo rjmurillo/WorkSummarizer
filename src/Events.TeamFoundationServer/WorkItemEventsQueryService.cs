@@ -7,7 +7,7 @@ using Common;
 using Events;
 using Microsoft.TeamFoundation;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TeamFoundationServerWorkItemStateUpdater.Graph;
+using Graph;
 using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace TfsCodeSwarm
@@ -35,7 +35,7 @@ namespace TfsCodeSwarm
                 foreach (Revision r in wi.Revisions)
                 {
                     var e = new Event();
-                    var p = new Participant() { Alias = (string)r.Fields["Changed by"].Value };
+                    var p = new Participant((string)r.Fields["Changed by"].Value);
 
                     e.Participants = new Graph<Participant> { p };
                     e.Date = (DateTime)r.Fields["Changed date"].Value;
