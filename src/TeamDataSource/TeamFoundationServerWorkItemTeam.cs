@@ -26,14 +26,25 @@ namespace TeamDataSource
 
         public IEnumerable<Participant> InferParticipantsFromChangesets(IEnumerable<Changeset> changesets)
         {
-            var wid = PullWorkItemIdentitiesFromChangesets(changesets);
+            return InferParticipantsFromChangesets(changesets, null);
+        }
+
+        public IEnumerable<Participant> InferParticipantsFromChangesets(IEnumerable<Changeset> changesets,
+            Func<Changeset, bool> predicate)
+        {
+            var wid = PullWorkItemIdentitiesFromChangesets(changesets, predicate);
             var wi = m_data.PullWorkItems(m_teamFoundationServerUri, m_projectName, wid);
             return InferParticipantsFromWorkItems(wi);
         }
 
-        private IEnumerable<int> PullWorkItemIdentitiesFromChangesets(IEnumerable<Changeset> changesets)
+        private IEnumerable<int> PullWorkItemIdentitiesFromChangesets(IEnumerable<Changeset> changesets, Func<Changeset, bool> predicate )
         {
             List<int> workItemsIdentities = new List<int>();
+
+            if (predicate != null)
+            {
+                changesets = changesets.Where(predicate);
+            }
 
             foreach (Changeset changeset in changesets)
             {
