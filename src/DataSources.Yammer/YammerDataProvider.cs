@@ -15,8 +15,8 @@ namespace DataSources.Yammer
             Console.WriteLine("Session: " + session.UserToken);
 
             var messages =
-                PullSentMessages(session)
-                    //.Where(p => p.CreatedAt.CompareTo(startFilterDate) > 1 && p.CreatedAt.CompareTo(endFilterDate) < 1)
+                PullSentMessages(session, startFilterDate)
+                    .Where(p => p.CreatedAt >= startFilterDate && p.CreatedAt <= endFilterDate)
                     .ToList();
 
             foreach (var message in messages)
@@ -29,7 +29,7 @@ namespace DataSources.Yammer
             return messages;
         }
 
-        public static IEnumerable<YammerMessage> PullSentMessages(YammerSession session)
+        private static IEnumerable<YammerMessage> PullSentMessages(YammerSession session, DateTime startDate)
         {
             bool hasNext = true;
             int lastMessageId = 0;
@@ -47,6 +47,12 @@ namespace DataSources.Yammer
                     lastMessageId = (int)message.id;
                     var createdAtString = message.GetPathValue("created_at", String.Empty);
                     var createdAt = DateTime.Parse(createdAtString);
+
+                    if (createdAt < startDate)
+                    {
+                        hasNext = false;
+                    }
+
                     yield return new YammerMessage(message.body.plain, sender, createdAt);
                 }
             }
