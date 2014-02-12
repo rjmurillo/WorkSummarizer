@@ -30,5 +30,9 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
         /// <returns>collection of tfs changesets</returns>
         /// <!--<exception cref="TeamFoundationException">Thrown if an error occurs</exception>-->
         IEnumerable<Changeset> PullChangeSets(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate);
+
+        IEnumerable<Changeset> PullChangesets(Uri tfsConnectionString, IEnumerable<int> changesetIds);
+
+        IEnumerable<WorkItem> PullWorkItems(Uri tfsConnectionString, string projectName, IEnumerable<int> workItemIds);
     }
 }
