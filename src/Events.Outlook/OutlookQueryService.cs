@@ -61,5 +61,32 @@ namespace Events.Outlook
             m_endUtc = endUtc;
             m_recipients = recipients;
         }
+
+        public string Subject
+        {
+            get { return m_subject; }
+        }
+
+        public string Body
+        {
+            get { return m_body; }
+        }
+
+        public DateTime StartUtc
+        {
+            get { return m_startUtc; }
+        }
+
+        public DateTime EndUtc
+        {
+            get { return m_endUtc; }
+        }
+
+        public IEnumerable<string> Recipients
+        {
+            get { return m_recipients; }
+        }
+
+        public TimeSpan Duration { get { return EndUtc - StartUtc; } }
     }
 }
