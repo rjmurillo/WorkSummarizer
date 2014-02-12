@@ -47,20 +47,47 @@ namespace Events.Outlook
 
     public class OutlookMeeting
     {
-        public string Subject { get; private set; }
-        public string Body { get; private set; }
-        public DateTime StartUtc { get; private set; }
-        public DateTime EndUtc { get; private set; }
-        public TimeSpan Duration { get { return EndUtc - StartUtc; } }
-        public IEnumerable<string> Recipients { get; private set; }
+        public readonly string m_subject;
+        public readonly string m_body;
+        public readonly DateTime m_startUtc;
+        public readonly DateTime m_endUtc;
+        public readonly TimeSpan m_duration;
+        public readonly IEnumerable<string> m_recipients;
 
         public OutlookMeeting(string subject, string body, DateTime startUtc, DateTime endUtc, IEnumerable<string> recipients)
         {
-            Subject = subject;
-            Body = body;
-            StartUtc = startUtc;
-            EndUtc = endUtc;
-            Recipients = recipients;
+            m_subject = subject;
+            m_body = body;
+            m_startUtc = startUtc;
+            m_endUtc = endUtc;
+            m_recipients = recipients;
         }
+
+        public string Subject
+        {
+            get { return m_subject; }
+        }
+
+        public string Body
+        {
+            get { return m_body; }
+        }
+
+        public DateTime StartUtc
+        {
+            get { return m_startUtc; }
+        }
+
+        public DateTime EndUtc
+        {
+            get { return m_endUtc; }
+        }
+
+        public IEnumerable<string> Recipients
+        {
+            get { return m_recipients; }
+        }
+
+        public TimeSpan Duration { get { return EndUtc - StartUtc; } }
     }
 }
