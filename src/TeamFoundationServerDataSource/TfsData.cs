@@ -46,8 +46,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
                 SELECT ID, Title, [Team Project], [Microsoft.VSTS.Common.Priority], System.ChangedDate, [System.AssignedTo], [System.IterationPath], [System.AreaPath], [System.State], [CodeBox.UserVotes]
                 FROM Issue 
                 WHERE 
-                    [System.TeamProject] = @projectName
-                    and System.WorkItemType <> 'Bug' 
+                    [System.TeamProject] = @projectName                    
                     and System.ChangedDate > @startDate 
                     and System.ChangedDate < @endDate
                 ";

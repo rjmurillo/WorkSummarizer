@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
@@ -63,22 +64,9 @@
       <Project>{87498d93-630c-4079-a1e7-87731d561f62}</Project>
       <Name>Events.Outlook</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Events.TeamFoundationServer\Events.TeamFoundationServer.csproj">
-      <Project>{f0da9875-3397-4e83-91f9-41d4f54b2a2b}</Project>
-      <Name>Events.TeamFoundationServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Events\Events.csproj">
-      <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
-      <Name>Events</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
-      <Project>{f1eca49b-433e-4a4c-b88a-3d58eb788619}</Project>
-      <Name>TeamDataSource</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TeamFoundationServerDataSource\TeamFoundationServerDataSource.csproj">
-      <Project>{d727bde2-b353-4a2d-aeaa-8407967859df}</Project>
-      <Name>TeamFoundationServerDataSource</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
