@@ -7,7 +7,7 @@ using Microsoft.Office.Interop.Outlook;
 
 namespace OutlookDataSource
 {
-    public class OutlookQueryService
+    public class OutlookDataProvider
     {
         public static IEnumerable<OutlookMeeting> GetMeetings(DateTime startFilterDate, DateTime endFilterDate)
         {
