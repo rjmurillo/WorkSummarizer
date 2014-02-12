@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Events.Outlook
+namespace OutlookDataSource
 {
     public class OutlookMeeting
     {

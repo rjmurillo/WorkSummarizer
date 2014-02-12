@@ -60,10 +60,6 @@
       <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Events.Outlook\Events.Outlook.csproj">
-      <Project>{87498d93-630c-4079-a1e7-87731d561f62}</Project>
-      <Name>Events.Outlook</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
       <Project>{F1ECA49B-433E-4A4C-B88A-3D58EB788619}</Project>
       <Name>TeamDataSource</Name>
