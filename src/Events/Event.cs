@@ -11,9 +11,13 @@ namespace Events
         public DateTime Date { get; set; }
         public double Duration { get; set; }
 
-        public Graph<Participant> Nodes { get; set; }
+        public Graph<Participant> Participants { get; set; }
 
         public Subject Subject { get; set; }
+
+        public string EventType { get; set; }
+
+        public object Context { get; set; }
 
     }
 }
