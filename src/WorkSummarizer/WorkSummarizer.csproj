@@ -33,10 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>packages\Microsoft.TeamFoundation.WIT.Client.12.0.21005.1\lib\Microsoft.TeamFoundation.WorkItemTracking.Client.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.TeamFoundation.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.TeamFoundation.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.TeamFoundation.VersionControl.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,21 +54,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events.Outlook\Events.Outlook.csproj">
       <Project>{87498d93-630c-4079-a1e7-87731d561f62}</Project>
       <Name>Events.Outlook</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Events.TeamFoundationServer\Events.TeamFoundationServer.csproj">
-      <Project>{f0da9875-3397-4e83-91f9-41d4f54b2a2b}</Project>
-      <Name>Events.TeamFoundationServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
-      <Project>{f1eca49b-433e-4a4c-b88a-3d58eb788619}</Project>
-      <Name>TeamDataSource</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TeamFoundationServerDataSource\TeamFoundationServerDataSource.csproj">
-      <Project>{d727bde2-b353-4a2d-aeaa-8407967859df}</Project>
-      <Name>TeamFoundationServerDataSource</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
