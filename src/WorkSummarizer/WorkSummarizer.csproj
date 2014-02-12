@@ -62,6 +62,14 @@
       <Project>{87498d93-630c-4079-a1e7-87731d561f62}</Project>
       <Name>Events.Outlook</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
+      <Project>{F1ECA49B-433E-4A4C-B88A-3D58EB788619}</Project>
+      <Name>TeamDataSource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TeamFoundationServerDataSource\TeamFoundationServerDataSource.csproj">
+      <Project>{D727BDE2-B353-4A2D-AEAA-8407967859DF}</Project>
+      <Name>TeamFoundationServerDataSource</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

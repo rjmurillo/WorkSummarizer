@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using Microsoft.TeamFoundation;
@@ -36,6 +37,15 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
             {
                 throw new TeamFoundationException("Unable to get versionControlServer for TFS server " + tfsConnectionstring.AbsoluteUri, ex);
             }
+        }
+
+        public IEnumerable<Changeset> PullChangesets(Uri tfsConnectionString, IEnumerable<int> changesetIds)
+        {
+            TfsTeamProjectCollection projectCollection =
+                   TfsTeamProjectCollectionFactory.GetTeamProjectCollection(tfsConnectionString);
+            VersionControlServer versionControlServer = (VersionControlServer)projectCollection.GetService(typeof(VersionControlServer));
+            
+            return changesetIds.Select(versionControlServer.GetChangeset);
         }
         
         public IEnumerable<WorkItem> PullWorkItemsThatChanged(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate)
@@ -82,6 +92,30 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
             {
                 throw new TeamFoundationException("Unable to get WorkItemStore for TFS server " + tfsConnectionString.AbsolutePath, ex);
             }
+        }
+
+
+        public IEnumerable<WorkItem> PullWorkItems(Uri tfsConnectionString, string projectName, IEnumerable<int> workItemIds)
+        {
+            WorkItemStore workItemStore = GetWorkItemStore(tfsConnectionString);
+
+            const string queryTemplate = @"
+                SELECT ID, Title, [Team Project], [Microsoft.VSTS.Common.Priority], System.ChangedDate, [System.AssignedTo], [System.IterationPath], [System.AreaPath], [System.State], [CodeBox.UserVotes]
+                FROM Issue 
+                WHERE 
+                    [System.TeamProject] = @projectName                    
+                    and ([System.ID]={0})
+                ";
+
+            var thing = string.Join(" OR [System.ID]=", workItemIds);
+
+            var query = (string.Format(CultureInfo.InvariantCulture, queryTemplate, thing));
+
+            IDictionary paramsDictionary = new Dictionary<string, object>();
+            paramsDictionary["projectName"] = projectName;
+
+            WorkItemCollection tfsWorkItemCollection = workItemStore.Query(query, paramsDictionary);
+            return tfsWorkItemCollection.Cast<WorkItem>().ToList();
         }
     }
 }

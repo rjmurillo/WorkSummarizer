@@ -4,16 +4,47 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using WorkSummarizer.TeamDataSource;
+using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace TeamDataSource
 {
     public class TeamFoundationServerWorkItemTeam : ITeamData
     {
-        public IEnumerable<Participant> InferParticipantsFromChangesets(IEnumerable<Microsoft.TeamFoundation.VersionControl.Client.Changeset> changesets)
+        private readonly ITfsData m_data;
+        private readonly Uri m_teamFoundationServerUri;
+        private readonly string m_projectName;
+
+        public TeamFoundationServerWorkItemTeam(ITfsData data, Uri teamFoundationServerUri, string projectName)
         {
-            throw new NotImplementedException();
+            m_data = data;
+            m_teamFoundationServerUri = teamFoundationServerUri;
+            m_projectName = projectName;
+        }
+
+        public IEnumerable<Participant> InferParticipantsFromChangesets(IEnumerable<Changeset> changesets)
+        {
+            var wid = PullWorkItemIdentitiesFromChangesets(changesets);
+            var wi = m_data.PullWorkItems(m_teamFoundationServerUri, m_projectName, wid);
+            return InferParticipantsFromWorkItems(wi);
+        }
+
+        private IEnumerable<int> PullWorkItemIdentitiesFromChangesets(IEnumerable<Changeset> changesets)
+        {
+            List<int> workItemsIdentities = new List<int>();
+
+            foreach (Changeset changeset in changesets)
+            {
+                var workItems = changeset.AssociatedWorkItems;
+                if (workItems != null)
+                {
+                    workItemsIdentities.AddRange(workItems.Select(s => s.Id));
+                }
+            }
+
+            return workItemsIdentities.Distinct();
         }
 
         public IEnumerable<Participant> InferParticipantsFromWorkItems(IEnumerable<WorkItem> workItems)
