@@ -20,13 +20,19 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
             const string queryTemplate = @"
                 SELECT ID, Title, [Team Project], [Microsoft.VSTS.Common.Priority], System.ChangedDate, [System.AssignedTo], [System.IterationPath], [System.AreaPath], [System.State], [CodeBox.UserVotes]
                 FROM Issue 
-                WHERE System.ChangedDate > @startDate and System.ChangedDate < @endDate
+                WHERE 
+                    [System.TeamProject] = @projectName
+                    and System.WorkItemType NOT IN ('Bug', 'Task') 
+                    and System.ChangedDate > @startDate 
+                    and System.ChangedDate < @endDate
                 ";
             IDictionary paramsDictionary = new Dictionary<string, object>();
+            paramsDictionary["projectName"] = projectName;
+
             //TFS will throw an error if you use the time in query and it defaults to midnight on the day sent in so we 
             //have to use the previous day's date.
             paramsDictionary["startDate"] = startDate.Date.AddDays(-1);
-            paramsDictionary["endDate"] = startDate.Date.AddDays(1);
+            paramsDictionary["endDate"] = endDate.Date.AddDays(1);
 
             WorkItemCollection tfsWorkItemCollection = workItemStore.Query(queryTemplate, paramsDictionary);
 

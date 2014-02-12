@@ -47,6 +47,27 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
             }
         }
 
-       
+        [TestMethod]
+        public void VerifyPullWorkItemsOnlyForProject()
+        {
+            IEnumerable<WorkItem> workItems = tfsData.PullWorkItemsThatChanged(tfsConnection, projectName, startDate, endDate);
+
+            foreach (WorkItem wi in workItems)
+            {
+                Assert.AreEqual(projectName, wi.Project.Name, "returned a project that should not have been returned");
+            }
+        }
+
+        [TestMethod]
+        public void VerifyPullWorkItemsDoesNotReturnTasksOrBugs()
+        {
+            IEnumerable<WorkItem> workItems = tfsData.PullWorkItemsThatChanged(tfsConnection, projectName, startDate, endDate);
+
+            foreach (WorkItem wi in workItems)
+            {
+                Assert.AreNotEqual("Bug", wi.Type.Name, "should not have returned a bug");
+                Assert.AreNotEqual("Task", wi.Type.Name, "should not have returned a task");
+            } 
+        }
     }
 }
