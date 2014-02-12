@@ -31,7 +31,7 @@ namespace Events.Outlook
             while (item != null)
             {
                 var foo = item as Microsoft.Office.Interop.Outlook.AppointmentItem;
-                if(foo == null)
+                if (foo == null)
                 {
                     continue;
                 }
@@ -47,19 +47,20 @@ namespace Events.Outlook
 
     public class OutlookMeeting
     {
-        private readonly string m_subject;
-        private readonly string m_body;
-        private readonly DateTime m_startUtc;
-        private readonly DateTime m_endUtc;
-        private readonly IEnumerable<string> m_recipients;
+        public string Subject { get; private set; }
+        public string Body { get; private set; }
+        public DateTime StartUtc { get; private set; }
+        public DateTime EndUtc { get; private set; }
+        public TimeSpan Duration { get { return EndUtc - StartUtc; } }
+        public IEnumerable<string> Recipients { get; private set; }
 
         public OutlookMeeting(string subject, string body, DateTime startUtc, DateTime endUtc, IEnumerable<string> recipients)
         {
-            m_subject = subject;
-            m_body = body;
-            m_startUtc = startUtc;
-            m_endUtc = endUtc;
-            m_recipients = recipients;
+            Subject = subject;
+            Body = body;
+            StartUtc = startUtc;
+            EndUtc = endUtc;
+            Recipients = recipients;
         }
     }
 }
