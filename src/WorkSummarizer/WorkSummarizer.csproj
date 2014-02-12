@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PluginRuntime.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TfsHelper.cs" />
@@ -60,9 +61,21 @@
       <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Events.Outlook\Events.Outlook.csproj">
+      <Project>{654ABF8B-1EA3-40F4-B8C4-66641A06801D}</Project>
+      <Name>Events.Outlook</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.TeamFoundationServer\Events.TeamFoundationServer.csproj">
+      <Project>{F0DA9875-3397-4E83-91F9-41D4F54B2A2B}</Project>
+      <Name>Events.TeamFoundationServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
       <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
       <Name>Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extensibility\Extensibility.csproj">
+      <Project>{5E57807D-9972-4DC0-98AB-220E6C55E82D}</Project>
+      <Name>Extensibility</Name>
     </ProjectReference>
     <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
       <Project>{F1ECA49B-433E-4A4C-B88A-3D58EB788619}</Project>
@@ -76,9 +89,6 @@
       <Project>{C3B1C9CD-BFCC-4CEE-98E0-1794A48A3856}</Project>
       <Name>Events.Yammer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
-using Events;
-using Microsoft.TeamFoundation;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using Graph;
+using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using WorkSummarizer.TeamFoundationServerDataSource;
 
-namespace TfsCodeSwarm
+namespace Events.TeamFoundationServer
 {
     public class WorkItemEventsQueryService : IEventQueryService
     {

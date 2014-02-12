@@ -6,7 +6,7 @@ using DataSources.Yammer;
 
 namespace Events.Yammer
 {
-    public class YammerEventsQueryService
+    public class YammerEventsQueryService : IEventQueryService
     {
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime)
         {
