@@ -64,6 +64,10 @@
       <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
       <Name>Events</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
+      <Name>Graph</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
       <Project>{F1ECA49B-433E-4A4C-B88A-3D58EB788619}</Project>
       <Name>TeamDataSource</Name>
