@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YammerEvent.cs" />
     <Compile Include="YammerEventsQueryService.cs" />
   </ItemGroup>
   <ItemGroup>

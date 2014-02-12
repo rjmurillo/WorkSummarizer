@@ -15,8 +15,4 @@ namespace Events.Yammer
             return null;
         }
     }
-
-    public class YammerEvent
-    {
-    }
 }
