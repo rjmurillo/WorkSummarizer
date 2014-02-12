@@ -1,4 +1,4 @@
-﻿namespace TeamFoundationServerWorkItemStateUpdater.Graph
+﻿namespace Graph
 {
     using System.Collections.ObjectModel;
     using System.Linq;

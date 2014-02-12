@@ -8,7 +8,12 @@ namespace Common
 {
     public class Participant : IEquatable<Participant>
     {
-        public string Alias { get; set; }
+        public Participant(string alias)
+        {
+            Alias = alias;
+        }
+
+        public string Alias { get; private set; }
 
         public override string ToString()
         {

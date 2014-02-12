@@ -37,7 +37,7 @@ namespace TeamDataSource
             return InferParticipantsFromWorkItems(wi);
         }
 
-        private IEnumerable<int> PullWorkItemIdentitiesFromChangesets(IEnumerable<Changeset> changesets, Func<Changeset, bool> predicate )
+        private IEnumerable<int> PullWorkItemIdentitiesFromChangesets(IEnumerable<Changeset> changesets, Func<Changeset, bool> predicate)
         {
             List<int> workItemsIdentities = new List<int>();
 
@@ -91,7 +91,7 @@ namespace TeamDataSource
                         }
                     }
 
-                    participants.Add(new Participant() { Alias = (string)revision.Fields["Changed by"].Value });
+                    participants.Add(new Participant((string)revision.Fields["Changed by"].Value));
                 }
             }
 

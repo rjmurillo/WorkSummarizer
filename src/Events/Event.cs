@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Common;
-using TeamFoundationServerWorkItemStateUpdater.Graph;
+using Graph;
 
 namespace Events
 {
