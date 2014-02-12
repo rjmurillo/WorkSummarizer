@@ -66,7 +66,6 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
             foreach (WorkItem wi in workItems)
             {
                 Assert.AreNotEqual("Bug", wi.Type.Name, "should not have returned a bug");
-                Assert.AreNotEqual("Task", wi.Type.Name, "should not have returned a task");
             } 
         }
     }

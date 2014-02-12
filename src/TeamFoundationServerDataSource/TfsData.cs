@@ -47,7 +47,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
                 FROM Issue 
                 WHERE 
                     [System.TeamProject] = @projectName
-                    and System.WorkItemType NOT IN ('Bug', 'Task') 
+                    and System.WorkItemType <> 'Bug' 
                     and System.ChangedDate > @startDate 
                     and System.ChangedDate < @endDate
                 ";
