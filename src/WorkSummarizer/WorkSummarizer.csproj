@@ -60,6 +60,14 @@
       <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Events.Outlook\Events.Outlook.csproj">
+      <Project>{654abf8b-1ea3-40f4-b8c4-66641a06801d}</Project>
+      <Name>Events.Outlook</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.TeamFoundationServer\Events.TeamFoundationServer.csproj">
+      <Project>{f0da9875-3397-4e83-91f9-41d4f54b2a2b}</Project>
+      <Name>Events.TeamFoundationServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
       <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
       <Name>Events</Name>

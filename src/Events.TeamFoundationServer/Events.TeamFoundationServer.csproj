@@ -7,8 +7,8 @@
     <ProjectGuid>{F0DA9875-3397-4E83-91F9-41D4F54B2A2B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TfsCodeSwarm</RootNamespace>
-    <AssemblyName>TFSToCodeSwarm</AssemblyName>
+    <RootNamespace>Events.TeamFoundationServer</RootNamespace>
+    <AssemblyName>Events.TeamFoundationServer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="ChangesetEventsQueryService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TeamFoundationServerPlugin.cs" />
     <Compile Include="WorkItemEventsQueryService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +84,10 @@
     <ProjectReference Include="..\Events\Events.csproj">
       <Project>{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}</Project>
       <Name>Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extensibility\Extensibility.csproj">
+      <Project>{5E57807D-9972-4DC0-98AB-220E6C55E82D}</Project>
+      <Name>Extensibility</Name>
     </ProjectReference>
     <ProjectReference Include="..\Graph\Graph.csproj">
       <Project>{15E4259E-F270-4E1C-B91F-D00A88621301}</Project>
