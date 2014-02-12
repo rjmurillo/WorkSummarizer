@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Events.Outlook")]
+[assembly: AssemblyTitle("OutlookDataSource")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Events.Outlook")]
+[assembly: AssemblyProduct("OutlookDataSource")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f389b583-b95f-4bfc-bb8f-7a57bbbbd8f4")]
+[assembly: Guid("6fb28042-970a-48a3-ad57-064581ebde71")]
 
 // Version information for an assembly consists of the following four values:
 //
