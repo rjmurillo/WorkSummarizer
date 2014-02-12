@@ -2,25 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WorkSummarizer
 {
     public class WorkItemNode
     {
-        public WorkItem WorkItem { get; private set; }
-        public List<int> ChangesetIds = new List<int>();
-        public int Id { get { return WorkItem.Id; } }
-        public int ParentId { get; private set; }
         public WorkItemNode(WorkItem workItem)
         {
             // link to changesets
+            var csIds = new List<int>();
             foreach (ExternalLink l in workItem.Links.OfType<ExternalLink>()
                 .Where(p => p.LinkedArtifactUri.StartsWith("vstfs:///VersionControl/Changeset", StringComparison.CurrentCulture)))
             {
-                ChangesetIds.Add(int.Parse(l.LinkedArtifactUri.Split('/').Last()));
+                csIds.Add(int.Parse(l.LinkedArtifactUri.Split('/').Last()));
             }
+            ChangesetIds = csIds;
 
             // link to parent
             ParentId = -1;
@@ -30,10 +26,20 @@ namespace WorkSummarizer
                 ParentId = wil.TargetId;
             }
         }
+
+        public WorkItem WorkItem { get; private set; }
+
+        public IEnumerable<int> ChangesetIds { get; private set; }
+
+        public int Id { get { return WorkItem.Id; } }
+
+        public int ParentId { get; private set; }
+
         public bool ContainsField(string fieldName)
         {
             return WorkItem != null && WorkItem.Fields.Contains(fieldName);
         }
+
         public T GetFieldValue<T>(string fieldName)
         {
             var defaultValue = default(T);
