@@ -6,7 +6,7 @@ namespace Renders.Console
 {
     public class ConsoleWriteEvents : IRenderEvents
     {
-        public void WriteOut(IEnumerable<Event> events)
+        public void WriteOut(string eventType, IEnumerable<Event> events)
         {
             foreach (Event evt in events)
             {

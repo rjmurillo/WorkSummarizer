@@ -7,17 +7,26 @@ namespace Renders.Excel
 {
     public class ExcelWriteEvents : IRenderEvents
     {
-        public void WriteOut(IEnumerable<Event> events)
+        readonly Application application = new Application();
+        private readonly Workbook workbook;
+
+        public ExcelWriteEvents()
         {
-            Application application = new Application();
-            Workbook workbook = application.Workbooks.Add();
-            Worksheet sheet = workbook.ActiveSheet;
+            workbook = application.Workbooks.Add();
+        }
+
+        public void WriteOut(string eventType, IEnumerable<Event> events)
+        {   
+            Worksheet sheet = workbook.Sheets.Add();
+            sheet.Name = eventType;
+
             int writingRowNumber = 1;
 
             foreach (Event evt in events)
             {
                 WriteRow(sheet, evt, writingRowNumber++);
             }
+            
 
             application.Visible = true;
             application.UserControl = true;
