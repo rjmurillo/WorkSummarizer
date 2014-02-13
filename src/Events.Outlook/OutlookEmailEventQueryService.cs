@@ -8,7 +8,7 @@ using Graph;
 
 namespace Events.Outlook
 {
-    public class OutlookEmailEventQueryService : IEventQueryService
+    public class OutlookEmailEventQueryService : EventQueryServiceBase
     {
         private readonly IDataPull<OutlookItem> m_outlookDataSource;
 
@@ -17,11 +17,11 @@ namespace Events.Outlook
             m_outlookDataSource = new EmailProvider();
         }
 
-        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
+        public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event, bool> predicate )
         {
             var meetings = m_outlookDataSource.PullData(startDateTime, stopDateTime);
 
-            return meetings.Select(x =>
+            var retval = meetings.Select(x =>
                 new Event()
                 {
                     Text = x.Body,
@@ -31,6 +31,8 @@ namespace Events.Outlook
                     Participants =
                         x.Recipients.Select(y => new Participant(y)).ToGraph()
                 });
+
+            return (predicate != null) ? retval.Where(predicate) : retval;
         }
     }
 }

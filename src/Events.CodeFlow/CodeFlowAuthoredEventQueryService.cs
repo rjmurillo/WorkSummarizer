@@ -6,20 +6,32 @@ using DataSources.CodeFlow;
 
 namespace Events.CodeFlow
 {
-    public class CodeFlowAuthoredEventQueryService : IEventQueryService
+    public class CodeFlowAuthoredEventQueryService : EventQueryServiceBase
     {
-        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
+        public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime,
+            Func<Event, bool> predicate)
         {
             var cfdp = new CodeFlowDataProvider();
 
-            return cfdp.PullData(startDateTime, stopDateTime)
-                .Select(p => new Event
+            var retval = cfdp.PullData(startDateTime, stopDateTime)
+                .Select(p =>
                 {
-                    Date = p.PublishedUtcDate,
-                    Duration = p.ClosedUtcDate - p.PublishedUtcDate,
-                    Subject = new Subject { Text = p.AuthorLogin },
-                    Text = p.Name
+                    var e = new Event
+                    {
+                        Date = p.PublishedUtcDate,
+                        Duration = p.ClosedUtcDate - p.PublishedUtcDate,
+                        Text = p.Name
+                    };
+
+                    e.Participants.Add(new Participant(p.AuthorLogin));
+
+                    return e;
                 });
+        
+
+    
+
+            return (predicate != null) ? retval.Where(predicate) : retval;
         }
     }
 }

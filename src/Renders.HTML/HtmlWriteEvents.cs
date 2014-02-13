@@ -11,7 +11,7 @@ namespace Renders.HTML
 {
     public class HtmlWriteEvents : IRenderEvents
     {
-        public void WriteOut(string eventType, IEnumerable<Event> events)
+        public void Render(string eventType, IEnumerable<Event> events)
         {
             var sb = new StringBuilder(events.Count() * 250);
 
