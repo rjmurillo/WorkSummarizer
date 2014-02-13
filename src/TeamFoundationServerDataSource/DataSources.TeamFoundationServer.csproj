@@ -51,6 +51,7 @@
     <Compile Include="TeamFoundationServerChangesetTeamDataProvider.cs" />
     <Compile Include="TeamFoundationServerWorkItemDataProvider.cs" />
     <Compile Include="TeamFoundationServerWorkItemTeamDataProvider.cs" />
+    <Compile Include="WorkItemGraphDataProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
@@ -60,6 +61,10 @@
     <ProjectReference Include="..\DataSources\DataSources.csproj">
       <Project>{D5F64C26-0017-4248-A70C-73C8BBFD49E4}</Project>
       <Name>DataSources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
+      <Name>Graph</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

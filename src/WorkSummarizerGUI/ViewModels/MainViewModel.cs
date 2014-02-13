@@ -110,12 +110,11 @@ namespace WorkSummarizerGUI.ViewModels
                         foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
                         {
                             Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
-                            var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1),
-                                new DateTime(2014, 2, 14));
+                            var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14));
 
                             foreach (IRenderEvents render in renders)
                             {
-                                render.WriteOut(eventQueryServiceRegistration.Key, evts);
+                                render.Render(eventQueryServiceRegistration.Key, evts);
                             }
 
                             Console.WriteLine();
@@ -127,7 +126,9 @@ namespace WorkSummarizerGUI.ViewModels
                         }
 
                         return null;
-                    }), frame);
+                    }), 
+                    frame);
+
                 Dispatcher.PushFrame(frame);
             }
 
