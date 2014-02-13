@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 using Events;
@@ -89,6 +90,11 @@ namespace WorkSummarizerGUI.ViewModels
                 m_startLocalTime = value;
                 OnPropertyChanged();
             }
+        }
+
+        public string Version
+        {
+            get { return "v" + Assembly.GetExecutingAssembly().GetName().Version; }
         }
 
         public void Generate()
