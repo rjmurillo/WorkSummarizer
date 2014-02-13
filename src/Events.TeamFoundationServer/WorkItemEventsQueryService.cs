@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common;
 using DataSources.TeamFoundationServer;
 using Graph;
@@ -8,7 +9,7 @@ using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace Events.TeamFoundationServer
 {
-    public class WorkItemEventsQueryService : IEventQueryService
+    public class WorkItemEventsQueryService : EventQueryServiceBase
     {
         public WorkItemEventsQueryService(Uri teamFoundationServerUri, string projectName)
         {
@@ -19,7 +20,7 @@ namespace Events.TeamFoundationServer
         public Uri TeamFoundationServer { get; private set; }
         public string Project { get; private set; }
 
-        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime)
+        public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime, Func<Event, bool> predicate)
         {
             var source = new TeamFoundationServerWorkItemDataProvider(TeamFoundationServer, Project);
             var wis = source.PullData(startDateTime, endDateTime);
@@ -64,7 +65,7 @@ namespace Events.TeamFoundationServer
                 }
             }
 
-            return retval;
+            return (predicate != null) ? retval.Where(predicate) : retval;
         }
     }
 }

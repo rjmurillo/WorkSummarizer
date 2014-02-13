@@ -64,6 +64,10 @@
       <Project>{5e57807d-9972-4dc0-98ab-220e6c55e82d}</Project>
       <Name>Extensibility</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{15E4259E-F270-4E1C-B91F-D00A88621301}</Project>
+      <Name>Graph</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

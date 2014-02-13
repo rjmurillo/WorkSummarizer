@@ -7,13 +7,13 @@ using DataSources.Yammer;
 
 namespace Events.Yammer
 {
-    public class YammerEventsQueryService : IEventQueryService
+    public class YammerEventsQueryService : EventQueryServiceBase
     {
-        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime)
+        public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime, Func<Event, bool> predicate )
         {
             var dp = new YammerDataProvider();
 
-            return dp.PullData(startDateTime, endDateTime)
+            var retval = dp.PullData(startDateTime, endDateTime)
                 .Select(p =>
                 {
                     var e = new Event
@@ -25,6 +25,8 @@ namespace Events.Yammer
                     e.Participants.Add(new Participant(p.Sender));
                     return e;
                 });
+
+            return (predicate != null) ? retval.Where(predicate) : retval;
         }
     }
 }
