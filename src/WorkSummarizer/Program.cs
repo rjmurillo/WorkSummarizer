@@ -13,6 +13,7 @@ using Microsoft.Office.Interop.Excel;
 using Renders;
 using Renders.Console;
 using Renders.Excel;
+using Renders.HTML;
 
 namespace WorkSummarizer
 {
@@ -36,8 +37,9 @@ namespace WorkSummarizer
             pluginRuntime.Start(plugins);
 
             var renders = new List<IRenderEvents>();
-            renders.Add(new ExcelWriteEvents());
+            //renders.Add(new ExcelWriteEvents());
             //renders.Add(new ConsoleWriteEvents());
+            renders.Add(new HtmlWriteEvents());
             
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
