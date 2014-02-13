@@ -6,16 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Events;
+using TagCloud;
 
 namespace Renders.HTML
 {
     public class HtmlWriteEvents : IRenderEvents
     {
-        public void Render(string eventType, IEnumerable<Event> events)
+        public void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags)
         {
             var sb = new StringBuilder(events.Count() * 250);
 
             sb.Append("<html><head><title>" + eventType + "</title></head><body>");
+
+            if (weightedTags != null)
+            {
+                BuildTagCloud(sb, weightedTags);
+            }
+
             foreach (var evnt in events)
             {
                 BuildHtmlFragment(sb, evnt);
@@ -65,6 +72,12 @@ namespace Renders.HTML
                 sb.Append("<div>text: <div style=\"border:1px solid #9AF\">" + evnt.Text + "</div></div>");
             }
             sb.Append("</p>");
+        }
+
+        private static void BuildTagCloud(StringBuilder sb, IDictionary<string, int> weightedTags)
+        {
+            var htmlTags = new TagCloud.TagCloud(weightedTags, new TagCloudGenerationRules { MaxNumberOfTags = 100 }).ToString();
+            sb.Append("<p>" + htmlTags + "</p>");
         }
     }
 }

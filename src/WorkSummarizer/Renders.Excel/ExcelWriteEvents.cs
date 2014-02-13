@@ -15,7 +15,7 @@ namespace Renders.Excel
             workbook = application.Workbooks.Add();
         }
 
-        public void Render(string eventType, IEnumerable<Event> events)
+        public void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags)
         {
             Worksheet sheet = GetSheet(eventType); 
            
