@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace OutlookDataSource
+namespace DataSources.Outlook
 {
     public class OutlookItem
     {

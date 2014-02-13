@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
-using OutlookDataSource;
+using DataSources.Outlook;
 using Graph;
 
 namespace Events.Outlook
