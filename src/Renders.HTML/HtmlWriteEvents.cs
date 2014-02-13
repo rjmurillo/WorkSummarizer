@@ -16,7 +16,9 @@ namespace Renders.HTML
         {
             var sb = new StringBuilder(events.Count() * 250);
 
-            sb.Append("<html><head><title>" + eventType + "</title></head><body>");
+            sb.Append("<html><head><title>" + eventType + "</title><style type=\"text/css\">");
+            BuildTagCloudCss(sb);
+            sb.Append("</style></head><body>");
 
             if (weightedTags != null)
             {
@@ -76,8 +78,58 @@ namespace Renders.HTML
 
         private static void BuildTagCloud(StringBuilder sb, IDictionary<string, int> weightedTags)
         {
-            var htmlTags = new TagCloud.TagCloud(weightedTags, new TagCloudGenerationRules { MaxNumberOfTags = 100 }).ToString();
+            var htmlTags =
+                new TagCloud.TagCloud(
+                    weightedTags,
+                    new TagCloudGenerationRules {
+                        MaxNumberOfTags = 100,
+                        Order = TagCloudOrder.WeightDescending,
+                        TagCssClassPrefix = "TagWeight",
+                    }).ToString();
             sb.Append("<p>" + htmlTags + "</p>");
+        }
+
+        private static void BuildTagCloudCss(StringBuilder sb)
+        {
+            sb.Append(@"
+                .TagCloud			/* Applies to the entire tag cloud */
+                {
+	                font-family:Trebuchet MS;
+	                border:1px solid #888;
+	                padding:3px; 
+	                text-align:center;
+                }
+
+                .TagCloud > span	/* Applies to each tag of the tag cloud */
+                {
+	                margin-right:3px;
+	                text-align:center;
+                }
+
+                .TagCloud > span.TagWeight1	/* Applies to the largest tags */
+                {
+	                font-size:40px;
+                }
+
+                .TagCloud > span.TagWeight2
+                {
+	                font-size:32px;
+                }
+
+                .TagCloud > span.TagWeight3
+                {
+	                font-size:25px;
+                }
+
+                .TagCloud > span.TagWeight4
+                {
+	                font-size:18px;
+                }
+
+                .TagCloud > span.TagWeight5	/* Applies to the smallest tags */
+                {
+	                font-size:12px;
+                }");
         }
     }
 }
