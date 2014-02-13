@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using OpenNLP.Tools.Coreference.Resolver;
 
 namespace WorkSummarizer
 {
@@ -25,7 +26,7 @@ namespace WorkSummarizer
         {
             if (String.IsNullOrEmpty(text))
             {
-                return null;
+                return String.Empty;
             }
 
             text = HtmlToPlainText(text);
@@ -97,6 +98,30 @@ namespace WorkSummarizer
             }
 
             return nounLookup.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        public IEnumerable<string> GetImportantSentences(string input)
+        {
+            var nouns = GetNouns(input);
+            var sentences = GetSentences(input).ToList();
+
+            var outputSentences = new HashSet<string>();
+            foreach (var noun in nouns.Keys.Take(nouns.Keys.Count / 10))
+            {
+                var nounKey = noun;
+
+                var foundSentences = sentences.Where(x => x.IndexOf(nounKey, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+
+                foundSentences.ForEach(y => outputSentences.Add(y));
+            }
+
+            return outputSentences.ToList();
+        }
+
+        public IEnumerable<string> GetSentences(string input)
+        {
+            var sentenceDetect = new OpenNLP.Tools.SentenceDetect.EnglishMaximumEntropySentenceDetector("Resources/EnglishSD.nbin");
+            return sentenceDetect.SentenceDetect(input);
         }
     }
 }
