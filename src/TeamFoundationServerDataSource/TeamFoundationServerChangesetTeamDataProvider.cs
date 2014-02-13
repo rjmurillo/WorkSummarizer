@@ -31,7 +31,7 @@ namespace DataSources.TeamFoundationServer
         {
             var wid = PullWorkItemIdentitiesFromChangesets(changesets, predicate);
             var wi = m_data.PullWorkItems(wid);
-            return m_workItemTeamDataProvider.InferParticipantsFromWorkItems(wi);
+            return m_workItemTeamDataProvider.InferParticipants(wi);
         }
 
         private IEnumerable<int> PullWorkItemIdentitiesFromChangesets(IEnumerable<Changeset> changesets, Func<Changeset, bool> predicate)
