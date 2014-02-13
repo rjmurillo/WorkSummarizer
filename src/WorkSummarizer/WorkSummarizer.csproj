@@ -110,6 +110,10 @@
       <Project>{C3B1C9CD-BFCC-4CEE-98E0-1794A48A3856}</Project>
       <Name>Events.Yammer</Name>
     </ProjectReference>
+    <ProjectReference Include="Events.Connect\Events.Connect.csproj">
+      <Project>{1274a6db-904b-4e39-81b5-77ddf9fd8f7f}</Project>
+      <Name>Events.Connect</Name>
+    </ProjectReference>
     <ProjectReference Include="Events.Kudos\Events.Kudos.csproj">
       <Project>{51052c51-246e-4032-9172-3322a838b4cd}</Project>
       <Name>Events.Kudos</Name>

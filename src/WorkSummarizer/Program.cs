@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Events;
 using Events.CodeFlow;
+using Events.Connect;
 using Events.Kudos;
 using Events.ManicTime;
 using Events.Outlook;
@@ -21,6 +22,7 @@ namespace WorkSummarizer
 
             plugins.Add(typeof(FakeEventsPlugin));
             // plugins.Add(typeof(CodeFlowPlugin));
+            // plugins.Add(typeof(ConnectPlugin));
             // plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
             // plugins.Add(typeof(OutlookPlugin));
