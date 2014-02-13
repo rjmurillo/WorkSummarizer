@@ -11,6 +11,7 @@ namespace Events.Outlook
     {
         public OutlookPlugin(IPluginRuntime pluginRuntime)
         {
+            pluginRuntime.EventQueryServices["Outlook.Mail"] = new OutlookEmailEventQueryService();
             pluginRuntime.EventQueryServices["Outlook.Meetings"] = new OutlookMeetingEventQueryService();
         }
     }

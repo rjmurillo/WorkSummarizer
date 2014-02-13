@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Events.Outlook;
+using Events.TeamFoundationServer;
+using Events.Yammer;
 
 namespace WorkSummarizer
 {
@@ -24,7 +27,11 @@ namespace WorkSummarizer
                 
                 foreach(var evt in eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14)))
                 {
-                    Console.WriteLine("{0} {1}: {2}...", evt.Date, evt.Subject, evt.Text.Substring(0, Math.Min(evt.Text.Length, 30)).Replace("\n", String.Empty));
+                    Console.WriteLine(
+                        "{0} {1}: {2}...", 
+                        evt.Date, 
+                        evt.Subject != null ? evt.Subject.Text.Substring(0, Math.Min(evt.Subject.Text.Length, 20)) : String.Empty, 
+                        evt.Text != null ? evt.Text.Substring(0, Math.Min(evt.Text.Length, 25)).Replace("\n", String.Empty) : String.Empty);
                 }
                 
                 Console.WriteLine();
