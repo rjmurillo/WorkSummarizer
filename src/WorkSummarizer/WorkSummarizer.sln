@@ -65,6 +65,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events.Kudos", "..\Events.K
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamFoundationServerDataSourceTests", "..\..\test\TeamFoundationServerDataSourceTests\TeamFoundationServerDataSourceTests.csproj", "{57D5B54E-B854-4EA1-B709-C03408811499}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSources", "..\DataSources\DataSources.csproj", "{D5F64C26-0017-4248-A70C-73C8BBFD49E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,10 @@ Global
 		{57D5B54E-B854-4EA1-B709-C03408811499}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57D5B54E-B854-4EA1-B709-C03408811499}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57D5B54E-B854-4EA1-B709-C03408811499}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F64C26-0017-4248-A70C-73C8BBFD49E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F64C26-0017-4248-A70C-73C8BBFD49E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F64C26-0017-4248-A70C-73C8BBFD49E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F64C26-0017-4248-A70C-73C8BBFD49E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -172,6 +178,7 @@ Global
 		{3654122B-F208-4226-B88B-AA365110FAD0} = {114F113A-772E-4CA4-8B8C-32066CE371B0}
 		{AE35E238-8D79-4C36-A818-53F85B692C36} = {114F113A-772E-4CA4-8B8C-32066CE371B0}
 		{E672F510-84AA-45BD-8F39-A94BD1172B69} = {114F113A-772E-4CA4-8B8C-32066CE371B0}
+		{D5F64C26-0017-4248-A70C-73C8BBFD49E4} = {114F113A-772E-4CA4-8B8C-32066CE371B0}
 		{57D5B54E-B854-4EA1-B709-C03408811499} = {611C092D-4CC2-4FC3-A9F4-16758FFB1176}
 	EndGlobalSection
 EndGlobal
