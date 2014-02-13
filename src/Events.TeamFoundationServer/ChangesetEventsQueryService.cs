@@ -19,7 +19,7 @@ namespace Events.TeamFoundationServer
 
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            var source = new TfsData();
+            var source = new TeamFoundationServerDataProvider();
             return source.PullChangesets(m_teamFoundationServer, m_project, startDateTime, stopDateTime).Select(
                 p =>
                 {

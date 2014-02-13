@@ -20,7 +20,7 @@ namespace Events.TeamFoundationServer
 
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime)
         {
-            var source = new TfsData();
+            var source = new TeamFoundationServerDataProvider();
             var wis = source.PullWorkItemsThatChanged(TeamFoundationServer, Project, startDateTime, endDateTime);
 
             // Convert WI to Event

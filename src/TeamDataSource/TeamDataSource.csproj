@@ -50,9 +50,9 @@
       <Project>{8D667DE1-CF34-448D-96E1-6B3B4AA5D102}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TeamFoundationServerDataSource\TeamFoundationServerDataSource.csproj">
+    <ProjectReference Include="..\TeamFoundationServerDataSource\DataSources.TeamFoundationServer.csproj">
       <Project>{D727BDE2-B353-4A2D-AEAA-8407967859DF}</Project>
-      <Name>TeamFoundationServerDataSource</Name>
+      <Name>DataSources.TeamFoundationServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

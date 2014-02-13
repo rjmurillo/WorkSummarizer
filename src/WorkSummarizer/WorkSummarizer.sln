@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tfs", "tfs", "{A9E8AE13-B63
 		..\..\sample\tfs\20140101_20140214.json = ..\..\sample\tfs\20140101_20140214.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamFoundationServerDataSource", "..\TeamFoundationServerDataSource\TeamFoundationServerDataSource.csproj", "{D727BDE2-B353-4A2D-AEAA-8407967859DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSources.TeamFoundationServer", "..\TeamFoundationServerDataSource\DataSources.TeamFoundationServer.csproj", "{D727BDE2-B353-4A2D-AEAA-8407967859DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Sources", "Data Sources", "{114F113A-772E-4CA4-8B8C-32066CE371B0}"
 EndProject

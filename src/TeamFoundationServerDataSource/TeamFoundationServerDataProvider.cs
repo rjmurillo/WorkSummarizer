@@ -13,7 +13,7 @@ using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace WorkSummarizer.TeamFoundationServerDataSource
 {
-    public partial class TfsData : ITfsData
+    public class TeamFoundationServerDataProvider : ITfsData
     {
         public IEnumerable<Changeset> PullChangesets(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate)
         {
