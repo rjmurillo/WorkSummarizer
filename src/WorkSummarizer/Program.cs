@@ -16,6 +16,7 @@ namespace WorkSummarizer
         {
             var plugins = new List<Type>();
 
+            plugins.Add(typeof(FakeEventsPlugin));
             //plugins.Add(typeof(OutlookPlugin));
             // plugins.Add(typeof (TeamFoundationServerPlugin));
             // plugins.Add(typeof (YammerPlugin));
