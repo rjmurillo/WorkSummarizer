@@ -48,6 +48,10 @@
       <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataSources.ManicTime\DataSources.ManicTime.csproj">
+      <Project>{e672f510-84aa-45bd-8f39-a94bd1172b69}</Project>
+      <Name>DataSources.ManicTime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
       <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
       <Name>Events</Name>
@@ -55,10 +59,6 @@
     <ProjectReference Include="..\Extensibility\Extensibility.csproj">
       <Project>{5e57807d-9972-4dc0-98ab-220e6c55e82d}</Project>
       <Name>Extensibility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WorkSummarizer\DataSources.ManicTime\DataSources.ManicTime.csproj">
-      <Project>{e672f510-84aa-45bd-8f39-a94bd1172b69}</Project>
-      <Name>DataSources.ManicTime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

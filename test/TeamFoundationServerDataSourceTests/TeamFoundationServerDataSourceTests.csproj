@@ -57,7 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TeamFoundationServerDataSource\TeamFoundationServerDataSource.csproj">
+    <ProjectReference Include="..\..\src\TeamFoundationServerDataSource\TeamFoundationServerDataSource.csproj">
       <Project>{d727bde2-b353-4a2d-aeaa-8407967859df}</Project>
       <Name>TeamFoundationServerDataSource</Name>
     </ProjectReference>

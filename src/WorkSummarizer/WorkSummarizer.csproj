@@ -74,6 +74,14 @@
       <Project>{e4370d41-e906-47ee-b9cb-7c19e17b60c9}</Project>
       <Name>Events.CodeFlow</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Events.Connect\Events.Connect.csproj">
+      <Project>{1274a6db-904b-4e39-81b5-77ddf9fd8f7f}</Project>
+      <Name>Events.Connect</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.Kudos\Events.Kudos.csproj">
+      <Project>{51052c51-246e-4032-9172-3322a838b4cd}</Project>
+      <Name>Events.Kudos</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events.ManicTime\Events.ManicTime.csproj">
       <Project>{82b4140f-d6b8-45be-aa72-b2d179b8069e}</Project>
       <Name>Events.ManicTime</Name>
@@ -109,14 +117,6 @@
     <ProjectReference Include="..\Events.Yammer\Events.Yammer.csproj">
       <Project>{C3B1C9CD-BFCC-4CEE-98E0-1794A48A3856}</Project>
       <Name>Events.Yammer</Name>
-    </ProjectReference>
-    <ProjectReference Include="Events.Connect\Events.Connect.csproj">
-      <Project>{1274a6db-904b-4e39-81b5-77ddf9fd8f7f}</Project>
-      <Name>Events.Connect</Name>
-    </ProjectReference>
-    <ProjectReference Include="Events.Kudos\Events.Kudos.csproj">
-      <Project>{51052c51-246e-4032-9172-3322a838b4cd}</Project>
-      <Name>Events.Kudos</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
