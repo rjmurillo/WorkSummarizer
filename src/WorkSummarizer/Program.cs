@@ -10,6 +10,8 @@ using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
 using Microsoft.Office.Interop.Excel;
+using Renders;
+using Renders.Excel;
 
 namespace WorkSummarizer
 {
@@ -20,9 +22,9 @@ namespace WorkSummarizer
         {
             var plugins = new List<Type>();
 
-            plugins.Add(typeof(FakeEventsPlugin));
-            // plugins.Add(typeof(CodeFlowPlugin));
-            // plugins.Add(typeof(ConnectPlugin));
+            //plugins.Add(typeof(FakeEventsPlugin));
+             plugins.Add(typeof(CodeFlowPlugin));
+             plugins.Add(typeof(ConnectPlugin));
             // plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
             // plugins.Add(typeof(OutlookPlugin));
@@ -58,6 +60,14 @@ namespace WorkSummarizer
             {
                 Console.WriteLine("No event query services registered!");
             }
+
+            //var renders = new List<IRenderEvents>();
+            //renders.Add(new ExcelWriteEvents());
+
+            //foreach (IRenderEvents render in renders)
+            //{
+            //    render.WriteOut(evt);
+            //}
 
             if (useExcel)
             {
