@@ -44,9 +44,11 @@ namespace WorkSummarizer
                 Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
                 var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14));
                
+                IDictionary<string, int> weightedTags = null; // TODO - pass real tags
+
                 foreach (IRenderEvents render in renders)
                 {
-                    render.Render(eventQueryServiceRegistration.Key, evts);
+                    render.Render(eventQueryServiceRegistration.Key, evts, weightedTags);
                 }
                 
                 Console.WriteLine();

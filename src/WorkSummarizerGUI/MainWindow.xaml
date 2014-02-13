@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
         Title="Work Summarizer"
-        Height="540"
+        Height="570"
         MinWidth="300"
         Width="300"
         MaxWidth="300"
@@ -25,6 +25,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
         <Label Grid.Row="0" 
@@ -102,7 +103,9 @@
                     <ItemsControl ItemsSource="{Binding ReportingSinks}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox Content="{Binding Name}" />
+                                <CheckBox Content="{Binding Name}" 
+                                          IsChecked="{Binding IsSelected}"
+                                          IsEnabled="{Binding IsEnabled}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -117,5 +120,15 @@
                         Click="OnGenerateClick"/>
             </StackPanel>
         </ScrollViewer>
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <Label Content="By benb, edkotows, jocarrie, mattwest, rimuri"
+                       FontSize="10"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <Label Content="{Binding Version, Mode=OneTime}"
+                       FontSize="10"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
