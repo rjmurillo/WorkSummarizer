@@ -48,6 +48,10 @@
       <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataSources\DataSources.csproj">
+      <Project>{D5F64C26-0017-4248-A70C-73C8BBFD49E4}</Project>
+      <Name>DataSources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
       <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
       <Name>Events</Name>
@@ -59,6 +63,10 @@
     <ProjectReference Include="..\DataSources.Kudos\DataSources.Kudos.csproj">
       <Project>{ae35e238-8d79-4c36-a818-53f85b692c36}</Project>
       <Name>DataSources.Kudos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{15E4259E-F270-4E1C-B91F-D00A88621301}</Project>
+      <Name>Graph</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

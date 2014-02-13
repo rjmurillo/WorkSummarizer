@@ -30,14 +30,14 @@ namespace WorkSummarizer
             // plugins.Add(typeof(ManicTimePlugin));
              plugins.Add(typeof(OutlookPlugin));
             // plugins.Add(typeof(TeamFoundationServerPlugin));
-            // plugins.Add(typeof(YammerPlugin));
+             plugins.Add(typeof(YammerPlugin));
 
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(plugins);
 
             var renders = new List<IRenderEvents>();
             renders.Add(new ExcelWriteEvents());
-            renders.Add(new ConsoleWriteEvents());
+            //renders.Add(new ConsoleWriteEvents());
             
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
@@ -46,7 +46,7 @@ namespace WorkSummarizer
                
                 foreach (IRenderEvents render in renders)
                 {
-                    render.WriteOut(evts);
+                    render.WriteOut(eventQueryServiceRegistration.Key, evts);
                 }
                 
                 Console.WriteLine();

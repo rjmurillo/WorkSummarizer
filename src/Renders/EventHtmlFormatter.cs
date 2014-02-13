@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Events;
 
-namespace Events
+namespace Renders
 {
     public static class EventHtmlFormatter
     {
@@ -39,6 +38,18 @@ namespace Events
             if (evnt.Context != null)
             {
                 sb.Append("<div>context: " + evnt.Context + "</div>");
+            }
+            if (evnt.Participants != null)
+            {
+                sb.Append("<div>participants: ");
+                string separator = string.Empty;
+                foreach (var participant in evnt.Participants)
+                {
+                    sb.Append(separator);
+                    separator = ", ";
+                    sb.Append(participant.Value.Alias);
+                }
+                sb.Append("</div>");
             }
             if (!string.IsNullOrWhiteSpace(evnt.Text))
             {

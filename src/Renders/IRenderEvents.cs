@@ -9,6 +9,6 @@ namespace Renders
 {
     public interface IRenderEvents
     {
-        void WriteOut(IEnumerable<Event> events);
+        void WriteOut(string eventType, IEnumerable<Event> events);
     }
 }
