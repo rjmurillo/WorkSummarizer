@@ -5,27 +5,27 @@ using Microsoft.Office.Interop.Outlook;
 
 namespace DataSources.Outlook
 {
-    public class OutlookDataEmailProvider : IDataPull<OutlookItem>
+    public class EmailProvider : IDataPull<OutlookItem>
     {
         public IEnumerable<OutlookItem> PullData(DateTime startDateUtc, DateTime endDateUtc)
         {
-            Microsoft.Office.Interop.Outlook.Application oApp = new Microsoft.Office.Interop.Outlook.Application();
+            Application oApp = new Application();
             var mapiNamespace = oApp.GetNamespace("MAPI");
 
             var calendarFolder =
-                mapiNamespace.GetDefaultFolder(Microsoft.Office.Interop.Outlook.OlDefaultFolders.olFolderInbox);
+                mapiNamespace.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
 
             var filter = "[CreationTime] >= \"" + startDateUtc.ToShortDateString() + "\" and [CreationTime] <=\"" +
                          endDateUtc.ToShortDateString() + "\"";
 
-            Microsoft.Office.Interop.Outlook.Items restrictedItems = calendarFolder.Items.Restrict(filter);
+            Items restrictedItems = calendarFolder.Items.Restrict(filter);
 
             return
                 restrictedItems.OfType<MailItem>()
                     .Select(
                         mail =>
                             new OutlookItem(mail.Subject ?? String.Empty, mail.Body ?? String.Empty, mail.CreationTime,
-                                mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.Name)))
+                                mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.AddressEntry.GetContact().Account)))
                     .ToList();
         }
     }

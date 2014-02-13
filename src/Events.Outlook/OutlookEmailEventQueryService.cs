@@ -14,7 +14,7 @@ namespace Events.Outlook
 
         public OutlookEmailEventQueryService()
         {
-            m_outlookDataSource = new OutlookDataEmailProvider();
+            m_outlookDataSource = new EmailProvider();
         }
 
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)

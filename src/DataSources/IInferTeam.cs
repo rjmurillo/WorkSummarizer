@@ -8,6 +8,6 @@ namespace DataSources
     {
         IEnumerable<Participant> InferParticipants(IEnumerable<T> data);
 
-        IEnumerable<Participant> InferParticipants(IEnumerable<T> workItems, Func<T, bool> predicate);
+        IEnumerable<Participant> InferParticipants(IEnumerable<T> data, Func<T, bool> predicate);
     }
 }
