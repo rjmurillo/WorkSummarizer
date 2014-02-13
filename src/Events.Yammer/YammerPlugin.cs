@@ -6,7 +6,7 @@ namespace Events.Yammer
     {
         public YammerPlugin(IPluginRuntime pluginRuntime)
         {
-            pluginRuntime.EventQueryServices["Yammer.SentMessages"] = new YammerEventsQueryService();
+            pluginRuntime.EventQueryServices[new ServiceRegistration("Yammer.SentMessages", "Yammer", "Sent messages")] = new YammerEventsQueryService();
         }
     }
 }

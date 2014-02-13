@@ -12,7 +12,7 @@ namespace Events
     {
         public FakeEventsPlugin(IPluginRuntime pluginRuntime)
         {
-            pluginRuntime.EventQueryServices["Fake"] = new FakeEventsQueryService();
+            pluginRuntime.EventQueryServices[new ServiceRegistration("Fake", "Fake", "Random series")] = new FakeEventsQueryService();
         }
 
         private class FakeEventsQueryService : IEventQueryService
@@ -23,8 +23,7 @@ namespace Events
             {
                 return Enumerable.Range(0, 100).Select(p => new Event { Date = startDateTime, EventType = "Fake", Subject = new Subject { Text = "Fake subject " + p }, Text = m_random.Next(100) + " is the meaning of life, the universe and everything" });
             }
-
-
+            
             public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event, bool> predicate)
             {
                 return Enumerable.Range(0, 100).Select(p => new Event { Date = startDateTime, EventType = "Fake", Subject = new Subject { Text = "Fake subject " + p }, Text = m_random.Next(100) + " is the meaning of life, the universe and everything" });

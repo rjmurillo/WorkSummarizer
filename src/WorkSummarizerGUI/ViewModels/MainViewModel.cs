@@ -134,7 +134,7 @@ namespace WorkSummarizerGUI.ViewModels
                                 // TODO renderers as plugins
                                 foreach (IRenderEvents render in selectedReportingSinkTypes.Select(Activator.CreateInstance))
                                 {
-                                    render.Render(eventQueryServiceRegistration.Key, evts);
+                                    render.Render(eventQueryServiceRegistration.Key.Id, evts);
                                 }
 
                                 Console.WriteLine();

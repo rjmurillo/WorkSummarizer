@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Extensibility;
+﻿using Extensibility;
 
 namespace Events.ManicTime
 {
@@ -11,7 +6,7 @@ namespace Events.ManicTime
     {
         public ManicTimePlugin(IPluginRuntime pluginRuntime)
         {
-            pluginRuntime.EventQueryServices["ManicTime.Activites"] = new ManicTimeActivityEventQueryService();
+            pluginRuntime.EventQueryServices[new ServiceRegistration("ManicTime.Activites", "ManicTime", "Activities")] = new ManicTimeActivityEventQueryService();
         }
     }
 }

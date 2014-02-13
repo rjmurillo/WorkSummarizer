@@ -11,7 +11,7 @@ namespace Events.Kudos
     {
         public KudosPlugin(IPluginRuntime pluginRuntime)
         {
-            pluginRuntime.EventQueryServices["Kudos.Received"] = new KudosReceivedEventQueryService();
+            pluginRuntime.EventQueryServices[new ServiceRegistration("Kudos.Received", "Kudos", "Received")] = new KudosReceivedEventQueryService();
         }
     }
 }

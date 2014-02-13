@@ -10,11 +10,11 @@ namespace WorkSummarizer
     {
         public PluginRuntime()
         {
-            EventQueryServices = new Dictionary<string, IEventQueryService>();
+            EventQueryServices = new Dictionary<ServiceRegistration, IEventQueryService>();
         }
-        
-        public IDictionary<string, IEventQueryService> EventQueryServices { get; private set; }
 
+        public IDictionary<ServiceRegistration, IEventQueryService> EventQueryServices { get; private set; }
+        
         // REVIEW plugin discovery if we were fancy.
         public void Start(IEnumerable<Type> pluginTypes)
         {
