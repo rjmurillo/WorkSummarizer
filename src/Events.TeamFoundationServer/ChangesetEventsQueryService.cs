@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WorkSummarizer.TeamFoundationServerDataSource;
@@ -15,14 +16,22 @@ namespace Events.TeamFoundationServer
             m_teamFoundationServer = teamFoundationServerUri;
             m_project = projectName;
         }
-        
+
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
             var source = new TfsData();
             return source.PullChangesets(m_teamFoundationServer, m_project, startDateTime, stopDateTime).Select(
-                p => 
-                { 
-                    return new Event{ Text = p.Comment, Date = p.CreationDate }; 
+                p =>
+                {
+                    var e = new Event
+                    {
+                        Text = p.Comment,
+                        Date = p.CreationDate,
+                        Duration = 0d,
+                        Context = p.ChangesetId
+                    };
+                    e.Participants.Add(new Participant(p.Committer));
+                    return e;
                 });
         }
     }
