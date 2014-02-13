@@ -16,7 +16,6 @@ namespace OutlookDataSource
 
     public class OutlookDataProvider : IOutlookDataProvider
     {
-
         public IEnumerable<OutlookItem> GetMeetings(DateTime startFilterDate, DateTime endFilterDate)
         {
             Microsoft.Office.Interop.Outlook.Application oApp = new Microsoft.Office.Interop.Outlook.Application();
@@ -41,10 +40,11 @@ namespace OutlookDataSource
                 var foo = item as Microsoft.Office.Interop.Outlook.AppointmentItem;
                 if (foo == null)
                 {
+                    item = calendarItems.FindNext();
                     continue;
                 }
 
-                itemsList.Add(new OutlookItem(foo.Subject, foo.Body, foo.StartUTC, foo.EndUTC,
+                itemsList.Add(new OutlookItem(foo.Subject ?? String.Empty, foo.Body ?? String.Empty, foo.StartUTC, foo.EndUTC,
                     foo.Recipients.Cast<Recipient>().Select(x => x.Name)));
                 item = calendarItems.FindNext();
             }
@@ -64,7 +64,7 @@ namespace OutlookDataSource
 
             Microsoft.Office.Interop.Outlook.Items restrictedItems = calendarFolder.Items.Restrict(filter);
 
-            return restrictedItems.OfType<MailItem>().Select(mail => new OutlookItem(mail.Subject, mail.Body, mail.CreationTime, mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.Name))).ToList();
+            return restrictedItems.OfType<MailItem>().Select(mail => new OutlookItem(mail.Subject ?? String.Empty, mail.Body ?? String.Empty, mail.CreationTime, mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.Name))).ToList();
         }
     }
 }
