@@ -6,8 +6,7 @@
         MinWidth="300"
         Width="300"
         MaxWidth="300"
-        DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}"
-        WindowStyle="ToolWindow">
+        DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         
