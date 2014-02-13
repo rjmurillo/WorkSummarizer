@@ -108,7 +108,7 @@
                     </ItemsControl>
                 </StackPanel>
                 
-                <Button Content="generate"
+                <Button Content="_generate"
                         Height="40"
                         Width="140"
                         HorizontalAlignment="Right"

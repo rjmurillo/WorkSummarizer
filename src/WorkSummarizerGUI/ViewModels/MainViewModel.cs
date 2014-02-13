@@ -91,6 +91,9 @@ namespace WorkSummarizerGUI.ViewModels
                                                        .Select(p => p.EventSourceType)
                                                        .ToList();
 
+            var selectedStartLocalTime = m_startLocalTime;
+            var selectedEndLocalTime = m_endLocalTime;
+
             if (selectedEventSourceTypes.Any())
             {
                 DispatcherFrame frame = new DispatcherFrame();
@@ -110,7 +113,7 @@ namespace WorkSummarizerGUI.ViewModels
                         foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
                         {
                             Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
-                            var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14));
+                            var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
 
                             foreach (IRenderEvents render in renders)
                             {
