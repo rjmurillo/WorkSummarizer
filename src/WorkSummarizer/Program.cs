@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Events;
+using Events.CodeFlow;
 using Events.Kudos;
 using Events.ManicTime;
 using Events.Outlook;
@@ -19,11 +20,12 @@ namespace WorkSummarizer
             var plugins = new List<Type>();
 
             plugins.Add(typeof(FakeEventsPlugin));
+            // plugins.Add(typeof(CodeFlowPlugin));
             // plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
-            //plugins.Add(typeof(OutlookPlugin));
-            // plugins.Add(typeof (TeamFoundationServerPlugin));
-            // plugins.Add(typeof (YammerPlugin));
+            // plugins.Add(typeof(OutlookPlugin));
+            // plugins.Add(typeof(TeamFoundationServerPlugin));
+            // plugins.Add(typeof(YammerPlugin));
 
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(plugins);

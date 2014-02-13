@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="deb214e8-8417-4942-b228-f9212557c5b6" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://tk5cdflwiis02/DashboardService/DashboardService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="DashboardService.xsd" MetadataType="Schema" ID="862005da-0aeb-4c5b-808c-92b6bd858d84" SourceId="1" SourceUrl="http://tk5cdflwiis02/DashboardService/DashboardService.svc?xsd=xsd1" />
+    <MetadataFile FileName="DashboardService1.xsd" MetadataType="Schema" ID="a5030d22-b723-472a-8822-4ede7d77e12c" SourceId="1" SourceUrl="http://tk5cdflwiis02/DashboardService/DashboardService.svc?xsd=xsd2" />
+    <MetadataFile FileName="DashboardService.disco" MetadataType="Disco" ID="c26661d2-a7f8-4c98-8241-f2062c979a66" SourceId="1" SourceUrl="http://tk5cdflwiis02/DashboardService/DashboardService.svc?disco" />
+    <MetadataFile FileName="DashboardService2.xsd" MetadataType="Schema" ID="c54ae5b8-c7a7-4c3c-a09d-5da227a5d248" SourceId="1" SourceUrl="http://tk5cdflwiis02/DashboardService/DashboardService.svc?xsd=xsd3" />
+    <MetadataFile FileName="DashboardService3.xsd" MetadataType="Schema" ID="a983c0e4-591a-4ef0-aac9-b71f3ee3ee65" SourceId="1" SourceUrl="http://tk5cdflwiis02/DashboardService/DashboardService.svc?xsd=xsd0" />
+    <MetadataFile FileName="DashboardService.wsdl" MetadataType="Wsdl" ID="f62ef755-cc15-4876-bd3b-e1c61fa0100b" SourceId="1" SourceUrl="http://tk5cdflwiis02/DashboardService/DashboardService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

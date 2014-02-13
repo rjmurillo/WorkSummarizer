@@ -70,6 +70,10 @@
       <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Events.CodeFlow\Events.CodeFlow.csproj">
+      <Project>{e4370d41-e906-47ee-b9cb-7c19e17b60c9}</Project>
+      <Name>Events.CodeFlow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events.ManicTime\Events.ManicTime.csproj">
       <Project>{82b4140f-d6b8-45be-aa72-b2d179b8069e}</Project>
       <Name>Events.ManicTime</Name>
