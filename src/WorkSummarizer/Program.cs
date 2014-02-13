@@ -24,20 +24,20 @@ namespace WorkSummarizer
             var plugins = new List<Type>();
 
             plugins.Add(typeof(FakeEventsPlugin));
-             plugins.Add(typeof(CodeFlowPlugin));
-             plugins.Add(typeof(ConnectPlugin));
-             plugins.Add(typeof(KudosPlugin));
-             plugins.Add(typeof(ManicTimePlugin));
-             plugins.Add(typeof(OutlookPlugin));
-             plugins.Add(typeof(TeamFoundationServerPlugin));
-             plugins.Add(typeof(YammerPlugin));
+//             plugins.Add(typeof(CodeFlowPlugin));
+//             plugins.Add(typeof(ConnectPlugin));
+//             plugins.Add(typeof(KudosPlugin));
+//             plugins.Add(typeof(ManicTimePlugin));
+//             plugins.Add(typeof(OutlookPlugin));
+//             plugins.Add(typeof(TeamFoundationServerPlugin));
+//             plugins.Add(typeof(YammerPlugin));
 
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(plugins);
 
             var renders = new List<IRenderEvents>();
-            renders.Add(new ExcelWriteEvents());
-            //renders.Add(new ConsoleWriteEvents());
+            //renders.Add(new ExcelWriteEvents());
+            renders.Add(new ConsoleWriteEvents());
             
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
