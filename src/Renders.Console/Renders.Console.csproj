@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E4370D41-E906-47EE-B9CB-7C19E17B60C9}</ProjectGuid>
+    <ProjectGuid>{B97B4ED9-962C-49BA-B6FD-F6D913773830}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Events.CodeFlow</RootNamespace>
-    <AssemblyName>Events.CodeFlow</AssemblyName>
+    <RootNamespace>Renders.Console</RootNamespace>
+    <AssemblyName>Renders.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,30 +39,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeFlowAuthoredEventQueryService.cs" />
-    <Compile Include="CodeFlowPlugin.cs" />
+    <Compile Include="ConsoleWriteEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
+      <Project>{8D667DE1-CF34-448D-96E1-6B3B4AA5D102}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataSources.CodeFlow\DataSources.CodeFlow.csproj">
-      <Project>{fe7e3eb9-4e5a-4cf4-84dd-f41e9dc65544}</Project>
-      <Name>DataSources.CodeFlow</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DataSources\DataSources.csproj">
-      <Project>{D5F64C26-0017-4248-A70C-73C8BBFD49E4}</Project>
-      <Name>DataSources</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
-      <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
+      <Project>{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}</Project>
       <Name>Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Extensibility\Extensibility.csproj">
-      <Project>{5e57807d-9972-4dc0-98ab-220e6c55e82d}</Project>
-      <Name>Extensibility</Name>
+    <ProjectReference Include="..\Renders\Renders.csproj">
+      <Project>{5D85BB42-31CA-4DAA-9076-36AEDD35886D}</Project>
+      <Name>Renders</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
