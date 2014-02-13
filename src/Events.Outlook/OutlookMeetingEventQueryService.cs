@@ -25,7 +25,7 @@ namespace Events.Outlook
             return meetings.Select(x =>
                 new Event()
                 {
-                    Text = x.Body,
+                    Text = x.Body ?? string.Empty,
                     Subject = new Subject() { Text = x.Subject },
                     Date = x.StartUtc,
                     Duration = x.Duration.TotalMinutes,
