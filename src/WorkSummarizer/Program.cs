@@ -33,8 +33,8 @@ namespace WorkSummarizer
                 
                 foreach(var evt in eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14)))
                 {
-                    //Console.WriteLine("{0} {1}: {2}...", evt.Date, evt.Subject, evt.Text.Substring(0, Math.Min(evt.Text.Length, 30)).Replace("\n", String.Empty));
-                    WriteRow(sheet, evt, writingRowNumber++);
+                    // Console.WriteLine("{0} {1}: {2}...", evt.Date, evt.Subject, evt.Text.Substring(0, Math.Min(evt.Text.Length, 30)).Replace("\n", String.Empty));
+                    // WriteRow(sheet, evt, writingRowNumber++);
                 }
                 
                 Console.WriteLine();
