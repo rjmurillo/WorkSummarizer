@@ -45,6 +45,18 @@
     <Reference Include="Microsoft.TeamFoundation.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.TeamFoundation.VersionControl.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="OpenNLP">
+      <HintPath>..\Lib\OpenNLP.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpEntropy">
+      <HintPath>..\Lib\SharpEntropy.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpEntropySqlite">
+      <HintPath>..\Lib\SharpEntropySqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpWordNet">
+      <HintPath>..\Lib\SharpWordNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,12 +70,22 @@
     <Compile Include="PluginRuntime.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextProcessor.cs" />
     <Compile Include="TfsHelper.cs" />
     <Compile Include="WorkItemNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="Resources\EnglishPOS.nbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\EnglishTok.nbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
+    <Content Include="Resources\tagdict">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
