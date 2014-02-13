@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Events.Outlook;
+using Events.TeamFoundationServer;
+using Events.Yammer;
 
 namespace WorkSummarizer
 {
@@ -13,7 +16,7 @@ namespace WorkSummarizer
 
             // plugins.Add(typeof(OutlookPlugin));
             // plugins.Add(typeof (TeamFoundationServerPlugin));
-            // plugins.Add(typeof (YammerPlugin));
+             plugins.Add(typeof (YammerPlugin));
 
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(plugins);
