@@ -16,10 +16,9 @@ namespace Renders.Excel
         }
 
         public void WriteOut(string eventType, IEnumerable<Event> events)
-        {   
-            Worksheet sheet = workbook.Sheets.Add();
-            sheet.Name = eventType;
-
+        {
+            Worksheet sheet = GetSheet(eventType); 
+           
             int writingRowNumber = 1;
 
             foreach (Event evt in events)
@@ -27,9 +26,21 @@ namespace Renders.Excel
                 WriteRow(sheet, evt, writingRowNumber++);
             }
             
-
             application.Visible = true;
             application.UserControl = true;
+        }
+
+        private Worksheet GetSheet(string eventType)
+        {
+            Worksheet sheet;
+            if (workbook.Sheets.Count == 1 && string.Equals(((Worksheet)workbook.Sheets[1]).Name, "Sheet1"))
+                sheet = workbook.Sheets[1];
+            else
+                sheet = workbook.Sheets.Add();
+
+            sheet.Name = eventType;
+
+            return sheet;
         }
 
         private static void WriteRow(Worksheet sheet, Event theEvent, int row)
