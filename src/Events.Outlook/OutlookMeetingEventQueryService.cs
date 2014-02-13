@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using DataSources;
 using DataSources.Outlook;
 using Graph;
 
@@ -11,16 +12,16 @@ namespace Events.Outlook
 {
     public class OutlookMeetingEventQueryService : IEventQueryService
     {
-        private readonly IOutlookDataProvider m_outlookDataSource;
+        private readonly IDataPull<OutlookItem> m_outlookDataSource;
 
         public OutlookMeetingEventQueryService()
         {
-            m_outlookDataSource = new OutlookDataProvider();
+            m_outlookDataSource = new OutlookDataMeetingProvider();
         }
 
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            var meetings = m_outlookDataSource.GetMeetings(startDateTime, stopDateTime);
+            var meetings = m_outlookDataSource.PullData(startDateTime, stopDateTime);
 
             return meetings.Select(x =>
                 new Event()
