@@ -15,7 +15,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
 {
     public partial class TfsData : ITfsData
     {
-        public IEnumerable<Changeset> PullChangeSets(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate)
+        public IEnumerable<Changeset> PullChangesets(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate)
         {
             try
             {

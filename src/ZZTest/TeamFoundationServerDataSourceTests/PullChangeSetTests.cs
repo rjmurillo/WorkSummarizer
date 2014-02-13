@@ -28,7 +28,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
         {
             try
             {
-                tfsData.PullChangeSets(new Uri("http://this:8080/will/not/work"), projectName, startDate, endDate);
+                tfsData.PullChangesets(new Uri("http://this:8080/will/not/work"), projectName, startDate, endDate);
             }
             catch (TeamFoundationException)
             {
@@ -40,7 +40,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
         [TestMethod]
         public void VerifyPullChangeSets()
         {
-            IEnumerable<Changeset> changesets = tfsData.PullChangeSets(tfsConnection, projectName, startDate, endDate);
+            IEnumerable<Changeset> changesets = tfsData.PullChangesets(tfsConnection, projectName, startDate, endDate);
 
             foreach (Changeset cs in changesets)
             {

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PluginRuntime.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TfsHelper.cs" />
@@ -64,13 +65,21 @@
       <Project>{654abf8b-1ea3-40f4-b8c4-66641a06801d}</Project>
       <Name>Events.Outlook</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Events.TeamFoundationServer\Events.TeamFoundationServer.csproj">
+      <Project>{f0da9875-3397-4e83-91f9-41d4f54b2a2b}</Project>
+      <Name>Events.TeamFoundationServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
-      <Project>{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}</Project>
+      <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
       <Name>Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OutlookDataSource\OutlookDataSource.csproj">
-      <Project>{65827b3b-3c23-440d-958d-9fcc4c692cc0}</Project>
-      <Name>OutlookDataSource</Name>
+    <ProjectReference Include="..\Extensibility\Extensibility.csproj">
+      <Project>{5e57807d-9972-4dc0-98ab-220e6c55e82d}</Project>
+      <Name>Extensibility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
+      <Name>Graph</Name>
     </ProjectReference>
     <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
       <Project>{F1ECA49B-433E-4A4C-B88A-3D58EB788619}</Project>

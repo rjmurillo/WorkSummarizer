@@ -9,6 +9,12 @@ namespace WorkSummarizer
     {
         public WorkItemNode(WorkItem workItem)
         {
+            if (workItem == null)
+            {
+                throw new ArgumentNullException("workItem");
+            }
+            WorkItem = workItem;
+
             // link to changesets
             var csIds = new List<int>();
             foreach (ExternalLink l in workItem.Links.OfType<ExternalLink>()
@@ -34,6 +40,8 @@ namespace WorkSummarizer
         public int Id { get { return WorkItem.Id; } }
 
         public int ParentId { get; private set; }
+
+        public bool HasParent { get { return ParentId != -1; } }
 
         public bool ContainsField(string fieldName)
         {

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TfsCodeSwarm
+namespace Events.TeamFoundationServer
 {
-    public class ChangesetEventsQueryService
+    public class ChangesetEventsQueryService : IEventQueryService
     {
+        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
+        {
+            return Enumerable.Empty<Event>();
+        }
     }
 }
