@@ -56,9 +56,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\WorkSummarizer\FakeEventsPlugin.cs">
+      <Link>FakeEventsPlugin.cs</Link>
+    </Compile>
     <Compile Include="..\WorkSummarizer\PluginRuntime.cs">
       <Link>PluginRuntime.cs</Link>
     </Compile>
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="ViewModels\EventSourceViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReportingSinkViewModel.cs" />
