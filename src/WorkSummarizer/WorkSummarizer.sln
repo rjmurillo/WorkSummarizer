@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Sources", "Data Source
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events.Yammer", "..\Events.Yammer\Events.Yammer.csproj", "{C3B1C9CD-BFCC-4CEE-98E0-1794A48A3856}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutlookDataSource", "..\OutlookDataSource\OutlookDataSource.csproj", "{65827B3B-3C23-440D-958D-9FCC4C692CC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSources.Outlook", "..\OutlookDataSource\DataSources.Outlook.csproj", "{65827B3B-3C23-440D-958D-9FCC4C692CC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events.Outlook", "..\Events.Outlook\Events.Outlook.csproj", "{654ABF8B-1EA3-40F4-B8C4-66641A06801D}"
 EndProject
