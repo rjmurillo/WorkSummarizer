@@ -36,7 +36,7 @@ namespace Events.TeamFoundationServer
                     e.Date = (DateTime)r.Fields["Changed date"].Value;
                     e.Duration = 0d;
                     e.Text = (string)r.Fields["History"].Value;
-                    e.EventType = r.Index == 0 ? "TFS Workitem Created" : "TFS Workitem Revision";
+                    e.EventType = r.Index == 0 ? "TFS Work item Created" : "TFS Work item Revision";
 
                     if (r.Fields.Contains("State"))
                     {
@@ -45,15 +45,15 @@ namespace Events.TeamFoundationServer
                         {
                             if (stateValue.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
                             {
-                                e.EventType = "TFS Workitem Resolve";
+                                e.EventType = "TFS Work item Resolve";
                             }
                             else if (stateValue.Equals("Closed", StringComparison.OrdinalIgnoreCase))
                             {
-                                e.EventType = "TFS Workitem Closed";
+                                e.EventType = "TFS Work item Closed";
                             }
                             else if (stateValue.Equals("Active", StringComparison.OrdinalIgnoreCase))
                             {
-                                e.EventType = "TFS Workitem Activated";
+                                e.EventType = "TFS Work item Activated";
                             }
                         }
                     }
