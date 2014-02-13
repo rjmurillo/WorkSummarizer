@@ -16,7 +16,7 @@ namespace Events.Outlook
 
         public OutlookMeetingEventQueryService()
         {
-            m_outlookDataSource = new OutlookDataMeetingProvider();
+            m_outlookDataSource = new MeetingProvider();
         }
 
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)

@@ -5,7 +5,7 @@ using Microsoft.Office.Interop.Outlook;
 
 namespace DataSources.Outlook
 {
-    public class OutlookDataMeetingProvider : IDataPull<OutlookItem>
+    public class MeetingProvider : IDataPull<OutlookItem>
     {
         public IEnumerable<OutlookItem> PullData(DateTime startFilterDate, DateTime endFilterDate)
         {
@@ -37,7 +37,7 @@ namespace DataSources.Outlook
 
                 itemsList.Add(new OutlookItem(foo.Subject ?? String.Empty, foo.Body ?? String.Empty, foo.StartUTC,
                     foo.EndUTC,
-                    foo.Recipients.Cast<Recipient>().Select(x => x.Name)));
+                    foo.Recipients.Cast<Recipient>().Select(x => x.AddressEntry.GetContact().Account)));
                 item = calendarItems.FindNext();
             }
 
