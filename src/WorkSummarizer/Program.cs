@@ -46,7 +46,7 @@ namespace WorkSummarizer
                
                 foreach (IRenderEvents render in renders)
                 {
-                    render.WriteOut(eventQueryServiceRegistration.Key, evts);
+                    render.Render(eventQueryServiceRegistration.Key, evts);
                 }
                 
                 Console.WriteLine();
