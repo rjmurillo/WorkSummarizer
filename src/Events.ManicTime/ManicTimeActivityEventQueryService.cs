@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 using DataSources.ManicTime;
 
 namespace Events.ManicTime
@@ -11,8 +12,17 @@ namespace Events.ManicTime
     {
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            ManicTimeDataProvider.PullActivities(startDateTime, stopDateTime);
-            return Enumerable.Empty<Event>();
+            return ManicTimeDataProvider.PullActivities(startDateTime, stopDateTime).Select(p => 
+            {
+                return new Event
+                {
+                    Date = p.StartUtcTime,
+                    Duration = (p.EndUtcTime - p.StartUtcTime).TotalMinutes,
+                    EventType = "ManicTime.Activity",
+                    Subject = new Subject { Text = p.GroupDisplayName },
+                    Text = p.DisplayName
+                };
+            });
         }
     }
 }
