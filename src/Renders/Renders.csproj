@@ -39,10 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHtmlFormatter.cs" />
     <Compile Include="IRenderEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
       <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
       <Name>Events</Name>

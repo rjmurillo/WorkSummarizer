@@ -1,0 +1,56 @@
+﻿<Window x:Class="WorkSummarizerGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Work Summarizer"
+        Height="500"
+        MinWidth="360"
+        MaxWidth="360">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Label Grid.Row="0" 
+               Content="WORK SUMMARIZER"
+               FontFamily="Segoe UI"
+               FontSize="24"
+               FontWeight="Bold"/>
+        
+        <ProgressBar Grid.Row="1" 
+                     Height="3"
+                     IsIndeterminate="True"/>
+        
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <StackPanel>
+                    <Label Content="sources"
+                           FontFamily="Segoe UI"
+                           FontSize="22"
+                           FontWeight="Bold" />
+                    <CheckBox Content="Team Foundation Server"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="time span"
+                           FontFamily="Segoe UI"
+                           FontSize="22"
+                           FontWeight="Bold" />
+                    <DatePicker />
+                    <DatePicker />
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="reporting"
+                           FontFamily="Segoe UI"
+                           FontSize="22"
+                           FontWeight="Bold" />
+                    <CheckBox Content="web page"
+                              IsEnabled="False"
+                              IsChecked="True" />
+                    <CheckBox Content="excel" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
