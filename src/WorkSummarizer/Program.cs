@@ -28,7 +28,7 @@ namespace WorkSummarizer
             // plugins.Add(typeof(ConnectPlugin));
             // plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
-             plugins.Add(typeof(OutlookPlugin));
+            // plugins.Add(typeof(OutlookPlugin));
             // plugins.Add(typeof(TeamFoundationServerPlugin));
              plugins.Add(typeof(YammerPlugin));
 
