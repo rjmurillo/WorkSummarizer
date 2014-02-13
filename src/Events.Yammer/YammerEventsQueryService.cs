@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
 using DataSources.Yammer;
 
 namespace Events.Yammer
@@ -13,7 +14,14 @@ namespace Events.Yammer
             return YammerDataProvider.PullSentMessages(startDateTime, endDateTime)
                 .Select(p =>
                 {
-                    return new Event {Date = p.CreatedAt, EventType = "Yammer.SentMessages", Text = p.Body};
+                    var e = new Event
+                    {
+                        Date = p.CreatedAt, 
+                        EventType = "Yammer.SentMessages", 
+                        Text = p.Body
+                    };
+                    e.Participants.Add(new Participant(p.Sender));
+                    return e;
                 });
         }
     }

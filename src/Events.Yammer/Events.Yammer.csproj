@@ -48,6 +48,10 @@
     <Compile Include="YammerPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{8D667DE1-CF34-448D-96E1-6B3B4AA5D102}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataSources.Yammer\DataSources.Yammer.csproj">
       <Project>{7c1b623d-96e7-4166-953d-0899d6f3f07e}</Project>
       <Name>DataSources.Yammer</Name>
@@ -59,6 +63,10 @@
     <ProjectReference Include="..\Extensibility\Extensibility.csproj">
       <Project>{5E57807D-9972-4DC0-98AB-220E6C55E82D}</Project>
       <Name>Extensibility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{15E4259E-F270-4E1C-B91F-D00A88621301}</Project>
+      <Name>Graph</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
