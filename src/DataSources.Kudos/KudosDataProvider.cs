@@ -5,9 +5,9 @@ using DataSources.Kudos.KudosDomainService;
 
 namespace DataSources.Kudos
 {
-    public class KudosDataProvider
+    public class KudosDataProvider : IDataPull<KudosPost>
     {
-        public static IEnumerable<KudosPost> PullReceivedKudos(DateTime startUtcTime, DateTime endUtcTime)
+        public IEnumerable<KudosPost> PullData(DateTime startUtcTime, DateTime endUtcTime)
         {
             using (var kudosSoapClient = new KudosDomainServicesoapClient())
             {

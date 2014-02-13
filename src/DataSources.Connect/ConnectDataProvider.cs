@@ -12,10 +12,10 @@ using HtmlAgilityPack;
 
 namespace DataSources.Connect
 {
-    public class ConnectDataProvider
+    public class ConnectDataProvider : IDataPull<ConnectSubmission>
     {
         // https://msconnect.microsoft.com/ViewHistory/GetConnectHistory/%7B0%7D
-        public static IEnumerable<ConnectSubmission> PullHistory(DateTime startUtcTime, DateTime endUtcTime)
+        public IEnumerable<ConnectSubmission> PullData(DateTime startUtcTime, DateTime endUtcTime)
         {
             // because cloud property requires Federated auth -- no time to figure that out
             var connectHistoryForm = new ConnectHistoryForm();

@@ -17,7 +17,7 @@ namespace Events
 
         public string Text { get; set; }
         public DateTime Date { get; set; }
-        public double Duration { get; set; }
+        public TimeSpan Duration { get; set; }
 
         public Graph<Participant> Participants { get; set; }
 

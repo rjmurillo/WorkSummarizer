@@ -19,7 +19,7 @@ namespace Events.TeamFoundationServer
 
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            var source = new TfsData();
+            var source = new TeamFoundationServerDataProvider();
             return source.PullChangesets(m_teamFoundationServer, m_project, startDateTime, stopDateTime).Select(
                 p =>
                 {
@@ -27,7 +27,7 @@ namespace Events.TeamFoundationServer
                     {
                         Text = p.Comment,
                         Date = p.CreationDate,
-                        Duration = 0d,
+                        Duration = TimeSpan.Zero,
                         Context = p.ChangesetId
                     };
                     e.Participants.Add(new Participant(p.Committer));

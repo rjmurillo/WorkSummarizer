@@ -106,17 +106,21 @@
       <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
       <Name>Graph</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
-      <Project>{F1ECA49B-433E-4A4C-B88A-3D58EB788619}</Project>
-      <Name>TeamDataSource</Name>
+    <ProjectReference Include="..\Renders\Renders.csproj">
+      <Project>{5D85BB42-31CA-4DAA-9076-36AEDD35886D}</Project>
+      <Name>Renders</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TeamFoundationServerDataSource\TeamFoundationServerDataSource.csproj">
+    <ProjectReference Include="..\TeamFoundationServerDataSource\DataSources.TeamFoundationServer.csproj">
       <Project>{D727BDE2-B353-4A2D-AEAA-8407967859DF}</Project>
-      <Name>TeamFoundationServerDataSource</Name>
+      <Name>DataSources.TeamFoundationServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Events.Yammer\Events.Yammer.csproj">
       <Project>{C3B1C9CD-BFCC-4CEE-98E0-1794A48A3856}</Project>
       <Name>Events.Yammer</Name>
+    </ProjectReference>
+    <ProjectReference Include="Renders.Excel\Renders.Excel.csproj">
+      <Project>{5FE75A4B-3C2F-4EF5-9A3E-99E872A8695B}</Project>
+      <Name>Renders.Excel</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

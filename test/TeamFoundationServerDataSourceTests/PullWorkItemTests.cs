@@ -19,7 +19,7 @@ namespace WorkSummarizer.ZZTest.TeamFoundationServerDataSourceTests
         [TestInitialize]
         public void TestInitialize()
         {
-            tfsData = new TfsData();
+            tfsData = new TeamFoundationServerDataProvider();
         }
 
         [TestMethod]

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common;
+using DataSources.Outlook;
 using Graph;
-using OutlookDataSource;
 
 namespace Events.Outlook
 {
@@ -26,7 +26,7 @@ namespace Events.Outlook
                     Text = x.Body,
                     Subject = new Subject() { Text = x.Subject },
                     Date = x.StartUtc,
-                    Duration = x.Duration.TotalMinutes,
+                    Duration = TimeSpan.FromMinutes(x.Duration.TotalMinutes),
                     Participants =
                         x.Recipients.Select(y => new Participant(y)).ToGraph()
                 });

@@ -7,9 +7,9 @@ using DataSources.CodeFlow.CodeFlowDashboardService;
 
 namespace DataSources.CodeFlow
 {
-    public class CodeFlowDataProvider
+    public class CodeFlowDataProvider : IDataPull<CodeFlowReview>
     {
-        public static IEnumerable<CodeFlowReview> PullReviewsAuthored(DateTime startUtcTime, DateTime endUtcTime)
+        public IEnumerable<CodeFlowReview> PullData(DateTime startUtcTime, DateTime endUtcTime)
         {
             using (var codeFlowReviewClient = new ReviewDashboardServiceClient())
             {
