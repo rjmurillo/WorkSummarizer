@@ -102,7 +102,9 @@
                     <ItemsControl ItemsSource="{Binding ReportingSinks}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox Content="{Binding Name}" />
+                                <CheckBox Content="{Binding Name}" 
+                                          IsChecked="{Binding IsSelected}"
+                                          IsEnabled="{Binding IsEnabled}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

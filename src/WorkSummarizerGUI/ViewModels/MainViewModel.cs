@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Threading;
 using Events;
 using Events.CodeFlow;
@@ -11,7 +12,9 @@ using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
 using Renders;
+using Renders.Console;
 using Renders.Excel;
+using Renders.HTML;
 using WorkSummarizer;
 
 namespace WorkSummarizerGUI.ViewModels
@@ -39,7 +42,12 @@ namespace WorkSummarizerGUI.ViewModels
                 new EventSourceViewModel("Yammer", typeof(YammerPlugin)), 
             };
             m_endLocalTime = DateTime.Now;
-            m_reportingSinks = new[] { new ReportingSinkViewModel(), new ReportingSinkViewModel() };
+            m_reportingSinks = new[] 
+            { 
+                new ReportingSinkViewModel("Console", typeof(ConsoleWriteEvents)) { IsSelected = true },
+                new ReportingSinkViewModel("Excel", typeof(ExcelWriteEvents)), 
+                new ReportingSinkViewModel("Web page", typeof(HtmlWriteEvents)), 
+            };
             m_startLocalTime = DateTime.Now.AddMonths(-1);
         }
         
@@ -91,10 +99,14 @@ namespace WorkSummarizerGUI.ViewModels
                                                        .Select(p => p.EventSourceType)
                                                        .ToList();
 
+            var selectedReportingSinkTypes = ReportingSinks.Where(p => p.IsSelected)
+                                                           .Select(p => p.ReportingSinkType)
+                                                           .ToList();
+
             var selectedStartLocalTime = m_startLocalTime;
             var selectedEndLocalTime = m_endLocalTime;
 
-            if (selectedEventSourceTypes.Any())
+            if (selectedEventSourceTypes.Any() && selectedReportingSinkTypes.Any())
             {
                 DispatcherFrame frame = new DispatcherFrame();
                 Dispatcher.CurrentDispatcher.BeginInvoke(
@@ -103,29 +115,33 @@ namespace WorkSummarizerGUI.ViewModels
                     {
                         frame.Continue = false;
 
-                        var pluginRuntime = new PluginRuntime();
-
-                        var renders = new List<IRenderEvents>();
-                        renders.Add(new ExcelWriteEvents());
-
-                        pluginRuntime.Start(selectedEventSourceTypes);
-
-                        foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
+                        try
                         {
-                            Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
-                            var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
+                            var pluginRuntime = new PluginRuntime();
+                            pluginRuntime.Start(selectedEventSourceTypes);
 
-                            foreach (IRenderEvents render in renders)
+                            foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
                             {
-                                render.Render(eventQueryServiceRegistration.Key, evts);
+                                Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
+                                var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
+
+                                // TODO renderers as plugins
+                                foreach (IRenderEvents render in selectedReportingSinkTypes.Select(Activator.CreateInstance))
+                                {
+                                    render.Render(eventQueryServiceRegistration.Key, evts);
+                                }
+
+                                Console.WriteLine();
                             }
 
-                            Console.WriteLine();
+                            if (!pluginRuntime.EventQueryServices.Any())
+                            {
+                                Console.WriteLine("No event query services registered!");
+                            }
                         }
-
-                        if (!pluginRuntime.EventQueryServices.Any())
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("No event query services registered!");
+                            MessageBox.Show("Oh noes!" + Environment.NewLine + Environment.NewLine + ex);
                         }
 
                         return null;
