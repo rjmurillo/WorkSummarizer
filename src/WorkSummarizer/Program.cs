@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Events;
+using Events.Kudos;
 using Events.ManicTime;
 using Events.Outlook;
 using Events.TeamFoundationServer;
@@ -18,6 +19,7 @@ namespace WorkSummarizer
             var plugins = new List<Type>();
 
             plugins.Add(typeof(FakeEventsPlugin));
+            // plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
             //plugins.Add(typeof(OutlookPlugin));
             // plugins.Add(typeof (TeamFoundationServerPlugin));
@@ -59,7 +61,8 @@ namespace WorkSummarizer
                 application.UserControl = true;
             }
 
-            Console.ReadKey();
+            Console.WriteLine("Done.");
+            Console.ReadKey(true);
 
             /* example: grab TFS workitems and build a graph
             var tfs = new TfsData();

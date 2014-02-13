@@ -106,6 +106,10 @@
       <Project>{C3B1C9CD-BFCC-4CEE-98E0-1794A48A3856}</Project>
       <Name>Events.Yammer</Name>
     </ProjectReference>
+    <ProjectReference Include="Events.Kudos\Events.Kudos.csproj">
+      <Project>{51052c51-246e-4032-9172-3322a838b4cd}</Project>
+      <Name>Events.Kudos</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
