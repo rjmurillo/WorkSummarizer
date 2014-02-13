@@ -106,6 +106,10 @@
       <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
       <Name>Graph</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Renders.Console\Renders.Console.csproj">
+      <Project>{B97B4ED9-962C-49BA-B6FD-F6D913773830}</Project>
+      <Name>Renders.Console</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Renders\Renders.csproj">
       <Project>{5D85BB42-31CA-4DAA-9076-36AEDD35886D}</Project>
       <Name>Renders</Name>

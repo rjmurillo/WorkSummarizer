@@ -11,6 +11,7 @@ using Events.TeamFoundationServer;
 using Events.Yammer;
 using Microsoft.Office.Interop.Excel;
 using Renders;
+using Renders.Console;
 using Renders.Excel;
 
 namespace WorkSummarizer
@@ -36,6 +37,7 @@ namespace WorkSummarizer
 
             var renders = new List<IRenderEvents>();
             renders.Add(new ExcelWriteEvents());
+            renders.Add(new ConsoleWriteEvents());
             
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
@@ -46,8 +48,6 @@ namespace WorkSummarizer
                 {
                     render.WriteOut(evts);
                 }
-
-                //  Console.WriteLine("{0} {1}: {2}...", evt.Date.ToLocalTime(), evt.Subject.Text, evt.Text.Substring(0, Math.Min(evt.Text.Length, 30)).Replace("\n", String.Empty));
                 
                 Console.WriteLine();
             }
