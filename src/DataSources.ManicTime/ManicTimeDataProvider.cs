@@ -44,7 +44,7 @@ namespace DataSources.ManicTime
          */
         public static IEnumerable<ManicTimeActivity> PullActivities(DateTime startTimeUtc, DateTime endTimeUtc)
         {
-            var manicTimeDbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Local\\Finkit\\ManicTime");
+            var manicTimeDbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..\\Local\\Finkit\\ManicTime");
 
             if(!Directory.Exists(manicTimeDbPath))
             {
