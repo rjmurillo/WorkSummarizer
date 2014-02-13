@@ -28,6 +28,12 @@ namespace Events
             {
                 return Enumerable.Range(0, 100).Select(p => new Event { Date = startDateTime, EventType = "Fake", Subject = new Subject { Text = "Fake subject " + p }, Text = m_random.Next(100) + " is the meaning of life, the universe and everything" });
             }
+
+
+            public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, string alias)
+            {
+                return Enumerable.Range(0, 100).Select(p => new Event { Date = startDateTime, EventType = "Fake", Subject = new Subject { Text = "Fake subject " + p }, Text = m_random.Next(100) + " is the meaning of life, the universe and everything" });
+            }
         }
     }
 }

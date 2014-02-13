@@ -6,16 +6,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Events;
+using TagCloud;
 
 namespace Renders.HTML
 {
     public class HtmlWriteEvents : IRenderEvents
     {
-        public void Render(string eventType, IEnumerable<Event> events)
+        public void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags)
         {
             var sb = new StringBuilder(events.Count() * 250);
 
-            sb.Append("<html><head><title>" + eventType + "</title></head><body>");
+            sb.Append("<html><head><title>" + eventType + "</title><style type=\"text/css\">");
+            BuildTagCloudCss(sb);
+            sb.Append("</style></head><body>");
+
+            if (weightedTags != null)
+            {
+                BuildTagCloud(sb, weightedTags);
+            }
+
             foreach (var evnt in events)
             {
                 BuildHtmlFragment(sb, evnt);
@@ -65,6 +74,62 @@ namespace Renders.HTML
                 sb.Append("<div>text: <div style=\"border:1px solid #9AF\">" + evnt.Text + "</div></div>");
             }
             sb.Append("</p>");
+        }
+
+        private static void BuildTagCloud(StringBuilder sb, IDictionary<string, int> weightedTags)
+        {
+            var htmlTags =
+                new TagCloud.TagCloud(
+                    weightedTags,
+                    new TagCloudGenerationRules {
+                        MaxNumberOfTags = 100,
+                        Order = TagCloudOrder.WeightDescending,
+                        TagCssClassPrefix = "TagWeight",
+                    }).ToString();
+            sb.Append("<p>" + htmlTags + "</p>");
+        }
+
+        private static void BuildTagCloudCss(StringBuilder sb)
+        {
+            sb.Append(@"
+                .TagCloud			/* Applies to the entire tag cloud */
+                {
+	                font-family:Trebuchet MS;
+	                border:1px solid #888;
+	                padding:3px; 
+	                text-align:center;
+                }
+
+                .TagCloud > span	/* Applies to each tag of the tag cloud */
+                {
+	                margin-right:3px;
+	                text-align:center;
+                }
+
+                .TagCloud > span.TagWeight1	/* Applies to the largest tags */
+                {
+	                font-size:40px;
+                }
+
+                .TagCloud > span.TagWeight2
+                {
+	                font-size:32px;
+                }
+
+                .TagCloud > span.TagWeight3
+                {
+	                font-size:25px;
+                }
+
+                .TagCloud > span.TagWeight4
+                {
+	                font-size:18px;
+                }
+
+                .TagCloud > span.TagWeight5	/* Applies to the smallest tags */
+                {
+	                font-size:12px;
+                }");
         }
     }
 }

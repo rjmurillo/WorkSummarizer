@@ -131,10 +131,12 @@ namespace WorkSummarizerGUI.ViewModels
                                 Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
                                 var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
 
+                                IDictionary<string, int> weightedTags = null; // TODO - pass real tags
+
                                 // TODO renderers as plugins
                                 foreach (IRenderEvents render in selectedReportingSinkTypes.Select(Activator.CreateInstance))
                                 {
-                                    render.Render(eventQueryServiceRegistration.Key.Id, evts);
+                                    render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags);
                                 }
 
                                 Console.WriteLine();
