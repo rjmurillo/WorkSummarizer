@@ -15,7 +15,7 @@ namespace Renders.Excel
             workbook = application.Workbooks.Add();
         }
 
-        public void WriteOut(string eventType, IEnumerable<Event> events)
+        public void Render(string eventType, IEnumerable<Event> events)
         {
             Worksheet sheet = GetSheet(eventType); 
            
