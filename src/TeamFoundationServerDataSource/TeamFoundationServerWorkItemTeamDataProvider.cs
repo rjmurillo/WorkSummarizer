@@ -4,16 +4,18 @@ using System.Linq;
 using Common;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
-namespace DataSources.Team
+namespace DataSources.TeamFoundationServer
 {
-    public class TeamFoundationServerWorkItemTeamDataProvider 
+
+
+    public class TeamFoundationServerWorkItemTeamDataProvider : IInferTeam<WorkItem>
     {
-        public IEnumerable<Participant> InferParticipantsFromWorkItems(IEnumerable<WorkItem> workItems)
+        public IEnumerable<Participant> InferParticipants(IEnumerable<WorkItem> workItems)
         {
-            return InferParticipantsFromWorkItems(workItems, null);
+            return InferParticipants(workItems, null);
         }
 
-        public IEnumerable<Participant> InferParticipantsFromWorkItems(IEnumerable<WorkItem> workItems,
+        public IEnumerable<Participant> InferParticipants(IEnumerable<WorkItem> workItems,
             Func<WorkItem, bool> predicate)
         {
             return InferParticipantsFromWorkItems(workItems, predicate, null);
