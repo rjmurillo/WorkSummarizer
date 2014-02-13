@@ -10,8 +10,11 @@ namespace Events.Yammer
     {
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime)
         {
-            YammerDataProvider.PullSentMessages(startDateTime, endDateTime);
-            return Enumerable.Empty<Event>();
+            return YammerDataProvider.PullSentMessages(startDateTime, endDateTime)
+                .Select(p =>
+                {
+                    return new Event {Date = p.CreatedAt, EventType = "Yammer.SentMessages", Text = p.Body};
+                });
         }
     }
 }

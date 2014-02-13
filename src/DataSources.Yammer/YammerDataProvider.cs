@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Yammer;
-using Yammer.Schema;
 
 namespace DataSources.Yammer
 {
@@ -14,19 +13,7 @@ namespace DataSources.Yammer
             //var session = new YammerSession("");
             Console.WriteLine("Session: " + session.UserToken);
 
-            var messages =
-                PullSentMessages(session, startFilterDate)
-                    .Where(p => p.CreatedAt >= startFilterDate && p.CreatedAt <= endFilterDate)
-                    .ToList();
-
-            foreach (var message in messages)
-            {
-                Console.WriteLine("Sender: {0}", message.Sender);
-                Console.WriteLine("\t{0}", message.Body.Substring(0, Math.Min(message.Body.Length, 70)).Replace("\n", ""));
-                Console.WriteLine();
-            }
-
-            return messages;
+            return PullSentMessages(session, startFilterDate).Where(p => p.CreatedAt >= startFilterDate && p.CreatedAt <= endFilterDate);
         }
 
         private static IEnumerable<YammerMessage> PullSentMessages(YammerSession session, DateTime startDate)
