@@ -29,7 +29,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
         /// <param name="endDate">end of the query time period</param>
         /// <returns>collection of tfs changesets</returns>
         /// <!--<exception cref="TeamFoundationException">Thrown if an error occurs</exception>-->
-        IEnumerable<Changeset> PullChangeSets(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate);
+        IEnumerable<Changeset> PullChangesets(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate);
 
         IEnumerable<Changeset> PullChangesets(Uri tfsConnectionString, IEnumerable<int> changesetIds);
 

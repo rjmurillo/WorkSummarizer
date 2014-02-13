@@ -4,6 +4,7 @@ using System.Linq;
 using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
+using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace WorkSummarizer
 {
@@ -38,7 +39,15 @@ namespace WorkSummarizer
                 Console.WriteLine("No event query services registered!");
             }
 
-            Console.ReadKey(true);
+            Console.ReadKey();
+
+
+            /* example: grab TFS workitems and build a graph
+            var tfs = new TfsData();
+            //var changesets = tfs.PullChangesets(new Uri("http://vstfcodebox:8080/tfs/Engineering_Excellence"), "EE_Engineering", DateTime.Parse("1/1/2014"), DateTime.Today);
+            var workItems = tfs.PullWorkItemsThatChanged(new Uri("http://vstfcodebox:8080/tfs/Engineering_Excellence"), "EE_Engineering", DateTime.Parse("1/22/2014"), DateTime.Today);
+            var graph = TfsHelper.BuildWorkItemGraph(workItems);
+            */
         }
     }
 }

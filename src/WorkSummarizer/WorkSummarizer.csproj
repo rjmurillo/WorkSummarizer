@@ -62,11 +62,11 @@
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Events.Outlook\Events.Outlook.csproj">
-      <Project>{654ABF8B-1EA3-40F4-B8C4-66641A06801D}</Project>
+      <Project>{654abf8b-1ea3-40f4-b8c4-66641a06801d}</Project>
       <Name>Events.Outlook</Name>
     </ProjectReference>
     <ProjectReference Include="..\Events.TeamFoundationServer\Events.TeamFoundationServer.csproj">
-      <Project>{F0DA9875-3397-4E83-91F9-41D4F54B2A2B}</Project>
+      <Project>{f0da9875-3397-4e83-91f9-41d4f54b2a2b}</Project>
       <Name>Events.TeamFoundationServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
@@ -74,8 +74,12 @@
       <Name>Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\Extensibility\Extensibility.csproj">
-      <Project>{5E57807D-9972-4DC0-98AB-220E6C55E82D}</Project>
+      <Project>{5e57807d-9972-4dc0-98ab-220e6c55e82d}</Project>
       <Name>Extensibility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
+      <Name>Graph</Name>
     </ProjectReference>
     <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
       <Project>{F1ECA49B-433E-4A4C-B88A-3D58EB788619}</Project>
@@ -89,6 +93,9 @@
       <Project>{C3B1C9CD-BFCC-4CEE-98E0-1794A48A3856}</Project>
       <Name>Events.Yammer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
