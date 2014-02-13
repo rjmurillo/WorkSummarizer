@@ -7,8 +7,8 @@
     <ProjectGuid>{65827B3B-3C23-440D-958D-9FCC4C692CC0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OutlookDataSource</RootNamespace>
-    <AssemblyName>OutlookDataSource</AssemblyName>
+    <RootNamespace>DataSources.Outlook</RootNamespace>
+    <AssemblyName>DataSources.Outlook</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

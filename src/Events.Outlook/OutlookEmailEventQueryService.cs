@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common;
+using DataSources.Outlook;
 using Graph;
-using OutlookDataSource;
 
 namespace Events.Outlook
 {

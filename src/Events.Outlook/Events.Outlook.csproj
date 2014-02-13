@@ -61,7 +61,7 @@
       <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
       <Name>Graph</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OutlookDataSource\OutlookDataSource.csproj">
+    <ProjectReference Include="..\OutlookDataSource\DataSources.Outlook.csproj">
       <Project>{65827b3b-3c23-440d-958d-9fcc4c692cc0}</Project>
       <Name>OutlookDataSource</Name>
     </ProjectReference>
