@@ -16,7 +16,7 @@ namespace WorkSummarizer
         {
             var plugins = new List<Type>();
 
-            plugins.Add(typeof(OutlookPlugin));
+            //plugins.Add(typeof(OutlookPlugin));
             // plugins.Add(typeof (TeamFoundationServerPlugin));
             // plugins.Add(typeof (YammerPlugin));
 
@@ -38,7 +38,7 @@ namespace WorkSummarizer
                     if (useExcel) 
                          WriteRow(sheet, evt, writingRowNumber++);
                     else
-                        Console.WriteLine("{0} {1}: {2}...", evt.Date, evt.Subject, evt.Text.Substring(0, Math.Min(evt.Text.Length, 30)).Replace("\n", String.Empty));
+                        Console.WriteLine("{0} {1}: {2}...", evt.Date, evt.Subject.Text, evt.Text.Substring(0, Math.Min(evt.Text.Length, 30)).Replace("\n", String.Empty));
                     
                 }
                 
