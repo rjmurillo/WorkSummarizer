@@ -72,8 +72,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextProcessor.cs" />
-    <Compile Include="TfsHelper.cs" />
-    <Compile Include="WorkItemNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -132,6 +130,10 @@
     <ProjectReference Include="..\Renders.Console\Renders.Console.csproj">
       <Project>{B97B4ED9-962C-49BA-B6FD-F6D913773830}</Project>
       <Name>Renders.Console</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Renders.HTML\Renders.HTML.csproj">
+      <Project>{294839D9-1EE4-40A9-A661-5250B01A6B52}</Project>
+      <Name>Renders.HTML</Name>
     </ProjectReference>
     <ProjectReference Include="..\Renders\Renders.csproj">
       <Project>{5D85BB42-31CA-4DAA-9076-36AEDD35886D}</Project>

@@ -1,29 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Events;
 
-namespace Renders
+namespace Renders.HTML
 {
-    public static class EventHtmlFormatter
+    public class HtmlWriteEvents : IRenderEvents
     {
-        public static string BuildHtml(IEnumerable<Event> events)
+        public void Render(string eventType, IEnumerable<Event> events)
         {
             var sb = new StringBuilder(events.Count() * 250);
 
-            sb.Append("<html><head><title>Work Summary</title></head><body>");
+            sb.Append("<html><head><title>" + eventType + "</title></head><body>");
             foreach (var evnt in events)
             {
                 BuildHtmlFragment(sb, evnt);
             }
             sb.Append("</body></html>");
-            return sb.ToString();
+
+            string fileName = string.Format("WorkSummary_{0}.html", eventType);
+            File.WriteAllText(fileName, sb.ToString());
+            Process.Start(fileName);
+
         }
+
         private static void BuildHtmlFragment(StringBuilder sb, Event evnt)
         {
             sb.Append("<p>");
             sb.Append("<div style=\"font-weight:bold;\">type: " + evnt.EventType + "</div>");
-            
+
             sb.Append("<div>date: " + evnt.Date);
             if (evnt.Duration.Ticks > 0)
             {
@@ -55,7 +64,7 @@ namespace Renders
             {
                 sb.Append("<div>text: <div style=\"border:1px solid #9AF\">" + evnt.Text + "</div></div>");
             }
-            sb.Append("</p>");            
+            sb.Append("</p>");
         }
     }
 }

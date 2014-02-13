@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{51052C51-246E-4032-9172-3322A838B4CD}</ProjectGuid>
+    <ProjectGuid>{294839D9-1EE4-40A9-A661-5250B01A6B52}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Events.Kudos</RootNamespace>
-    <AssemblyName>Events.Kudos</AssemblyName>
+    <RootNamespace>Renders.HTML</RootNamespace>
+    <AssemblyName>Renders.HTML</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,7 +32,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,34 +39,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KudosPlugin.cs" />
-    <Compile Include="KudosReceivedEventQueryService.cs" />
+    <Compile Include="HtmlWriteEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
+      <Project>{8D667DE1-CF34-448D-96E1-6B3B4AA5D102}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataSources\DataSources.csproj">
-      <Project>{D5F64C26-0017-4248-A70C-73C8BBFD49E4}</Project>
-      <Name>DataSources</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
-      <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
+      <Project>{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}</Project>
       <Name>Events</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Extensibility\Extensibility.csproj">
-      <Project>{5e57807d-9972-4dc0-98ab-220e6c55e82d}</Project>
-      <Name>Extensibility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DataSources.Kudos\DataSources.Kudos.csproj">
-      <Project>{ae35e238-8d79-4c36-a818-53f85b692c36}</Project>
-      <Name>DataSources.Kudos</Name>
     </ProjectReference>
     <ProjectReference Include="..\Graph\Graph.csproj">
       <Project>{15E4259E-F270-4E1C-B91F-D00A88621301}</Project>
       <Name>Graph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Renders\Renders.csproj">
+      <Project>{5D85BB42-31CA-4DAA-9076-36AEDD35886D}</Project>
+      <Name>Renders</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,13 +8,13 @@ using DataSources.ManicTime;
 
 namespace Events.ManicTime
 {
-    public class ManicTimeActivityEventQueryService : IEventQueryService
+    public class ManicTimeActivityEventQueryService : EventQueryServiceBase
     {
-        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
+        public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event,bool> predicate)
         {
             var m = new ManicTimeDataProvider();
 
-            return m.PullData(startDateTime, stopDateTime).Select(p => 
+            var retval = m.PullData(startDateTime, stopDateTime).Select(p => 
             {
                 var e = new Event
                 {
@@ -26,6 +26,8 @@ namespace Events.ManicTime
                 };
                 return e;
             });
+
+            return (predicate != null) ? retval.Where(predicate) : retval;
         }
     }
 }

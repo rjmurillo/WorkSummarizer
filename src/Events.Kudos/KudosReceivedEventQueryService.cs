@@ -8,13 +8,13 @@ using DataSources.Kudos;
 
 namespace Events.Kudos
 {
-    public class KudosReceivedEventQueryService : IEventQueryService
+    public class KudosReceivedEventQueryService : EventQueryServiceBase
     {
-        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
+        public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event, bool> predicate)
         {
             var kdp = new KudosDataProvider();
 
-            return kdp.PullData(startDateTime, stopDateTime)
+            var retval = kdp.PullData(startDateTime, stopDateTime)
                 .Select(p => 
                 {
                     var e = new Event
@@ -29,6 +29,8 @@ namespace Events.Kudos
 
                     return e;
                 });
+
+            return (predicate != null) ? retval.Where(predicate) : retval;
         }
     }
 }

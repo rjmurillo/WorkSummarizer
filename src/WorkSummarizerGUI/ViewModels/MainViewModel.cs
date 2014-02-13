@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
+using Events;
+using Events.CodeFlow;
+using Events.Connect;
+using Events.Kudos;
+using Events.ManicTime;
+using Events.Outlook;
+using Events.TeamFoundationServer;
 using Events.Yammer;
-using Extensibility;
 using Renders;
+using Renders.Console;
 using Renders.Excel;
+using Renders.HTML;
 using WorkSummarizer;
 
 namespace WorkSummarizerGUI.ViewModels
@@ -24,9 +30,24 @@ namespace WorkSummarizerGUI.ViewModels
 
         public MainViewModel()
         {
-            m_eventSources = new[] {new EventSourceViewModel(), new EventSourceViewModel()};
+            m_eventSources = new[] 
+            {
+                new EventSourceViewModel("Fake", typeof(FakeEventsPlugin)) { IsSelected = true }, 
+                new EventSourceViewModel("CodeFlow", typeof(CodeFlowPlugin)), 
+                new EventSourceViewModel("Connect", typeof(ConnectPlugin)), 
+                new EventSourceViewModel("Kudos", typeof(KudosPlugin)), 
+                new EventSourceViewModel("ManicTime", typeof(ManicTimePlugin)), 
+                new EventSourceViewModel("Outlook", typeof(OutlookPlugin)), 
+                new EventSourceViewModel("Team Foundation Server", typeof(TeamFoundationServerPlugin)), 
+                new EventSourceViewModel("Yammer", typeof(YammerPlugin)), 
+            };
             m_endLocalTime = DateTime.Now;
-            m_reportingSinks = new[] { new ReportingSinkViewModel(), new ReportingSinkViewModel() };
+            m_reportingSinks = new[] 
+            { 
+                new ReportingSinkViewModel("Console", typeof(ConsoleWriteEvents)) { IsSelected = true },
+                new ReportingSinkViewModel("Excel", typeof(ExcelWriteEvents)), 
+                new ReportingSinkViewModel("Web page", typeof(HtmlWriteEvents)), 
+            };
             m_startLocalTime = DateTime.Now.AddMonths(-1);
         }
         
@@ -72,43 +93,66 @@ namespace WorkSummarizerGUI.ViewModels
 
         public void Generate()
         {
-            var plugins = new List<Type>();
+            IsBusy = true;
 
-            //plugins.Add(typeof(FakeEventsPlugin));
-            // plugins.Add(typeof(CodeFlowPlugin));
-            // plugins.Add(typeof(ConnectPlugin));
-            // plugins.Add(typeof(KudosPlugin));
-            // plugins.Add(typeof(ManicTimePlugin));
-            // plugins.Add(typeof(OutlookPlugin));
-            // plugins.Add(typeof(TeamFoundationServerPlugin));
-            plugins.Add(typeof(YammerPlugin));
+            var selectedEventSourceTypes = EventSources.Where(p => p.IsSelected)
+                                                       .Select(p => p.EventSourceType)
+                                                       .ToList();
 
-            var pluginRuntime = new PluginRuntime();
+            var selectedReportingSinkTypes = ReportingSinks.Where(p => p.IsSelected)
+                                                           .Select(p => p.ReportingSinkType)
+                                                           .ToList();
 
-            var renders = new List<IRenderEvents>();
-            renders.Add(new ExcelWriteEvents());
+            var selectedStartLocalTime = m_startLocalTime;
+            var selectedEndLocalTime = m_endLocalTime;
 
-            pluginRuntime.Start(plugins);
-
-            foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
+            if (selectedEventSourceTypes.Any() && selectedReportingSinkTypes.Any())
             {
-                Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
-                var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14));
+                DispatcherFrame frame = new DispatcherFrame();
+                Dispatcher.CurrentDispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                    new DispatcherOperationCallback(o =>
+                    {
+                        frame.Continue = false;
 
-                foreach (IRenderEvents render in renders)
-                {
-                    render.WriteOut(eventQueryServiceRegistration.Key, evts);
-                }
+                        try
+                        {
+                            var pluginRuntime = new PluginRuntime();
+                            pluginRuntime.Start(selectedEventSourceTypes);
 
-                Console.WriteLine();
-            }
+                            foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
+                            {
+                                Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
+                                var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
 
-            if (!pluginRuntime.EventQueryServices.Any())
-            {
-                Console.WriteLine("No event query services registered!");
+                                // TODO renderers as plugins
+                                foreach (IRenderEvents render in selectedReportingSinkTypes.Select(Activator.CreateInstance))
+                                {
+                                    render.Render(eventQueryServiceRegistration.Key, evts);
+                                }
+
+                                Console.WriteLine();
+                            }
+
+                            if (!pluginRuntime.EventQueryServices.Any())
+                            {
+                                Console.WriteLine("No event query services registered!");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Oh noes!" + Environment.NewLine + Environment.NewLine + ex);
+                        }
+
+                        return null;
+                    }), 
+                    frame);
+
+                Dispatcher.PushFrame(frame);
             }
 
             Console.WriteLine("Done.");
+            IsBusy = false;
         }
     }
 }

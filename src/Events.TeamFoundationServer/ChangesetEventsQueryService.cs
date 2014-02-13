@@ -7,7 +7,7 @@ using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace Events.TeamFoundationServer
 {
-    public class ChangesetEventsQueryService : IEventQueryService
+    public class ChangesetEventsQueryService : EventQueryServiceBase
     {
         private readonly Uri m_teamFoundationServer;
         private readonly string m_project;
@@ -18,10 +18,12 @@ namespace Events.TeamFoundationServer
             m_project = projectName;
         }
 
-        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
+        public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event, bool> predicate)
         {
             var source = new TeamFoundationServerChangesetDataProvider(m_teamFoundationServer, m_project);
-            return source.PullData(startDateTime, stopDateTime).Select(
+            var data = source.PullData(startDateTime, stopDateTime);
+
+            var retval = data.Select(
                 p =>
                 {
                     var e = new Event
@@ -34,6 +36,8 @@ namespace Events.TeamFoundationServer
                     e.Participants.Add(new Participant(p.Committer));
                     return e;
                 });
+
+            return (predicate != null) ? retval.Where(predicate) : retval;
         }
     }
 }

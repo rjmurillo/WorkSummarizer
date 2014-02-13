@@ -56,9 +56,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\WorkSummarizer\FakeEventsPlugin.cs">
+      <Link>FakeEventsPlugin.cs</Link>
+    </Compile>
     <Compile Include="..\WorkSummarizer\PluginRuntime.cs">
       <Link>PluginRuntime.cs</Link>
     </Compile>
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="ViewModels\EventSourceViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReportingSinkViewModel.cs" />
@@ -151,6 +155,10 @@
     <ProjectReference Include="..\Renders.Console\Renders.Console.csproj">
       <Project>{b97b4ed9-962c-49ba-b6fd-f6d913773830}</Project>
       <Name>Renders.Console</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Renders.HTML\Renders.HTML.csproj">
+      <Project>{294839D9-1EE4-40A9-A661-5250B01A6B52}</Project>
+      <Name>Renders.HTML</Name>
     </ProjectReference>
     <ProjectReference Include="..\Renders\Renders.csproj">
       <Project>{5d85bb42-31ca-4daa-9076-36aedd35886d}</Project>
