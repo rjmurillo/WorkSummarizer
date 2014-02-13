@@ -39,6 +39,18 @@ namespace Renders
             {
                 sb.Append("<div>context: " + evnt.Context + "</div>");
             }
+            if (evnt.Participants != null)
+            {
+                sb.Append("<div>participants: ");
+                string separator = string.Empty;
+                foreach (var participant in evnt.Participants)
+                {
+                    sb.Append(separator);
+                    separator = ", ";
+                    sb.Append(participant.Value.Alias);
+                }
+                sb.Append("</div>");
+            }
             if (!string.IsNullOrWhiteSpace(evnt.Text))
             {
                 sb.Append("<div>text: <div style=\"border:1px solid #9AF\">" + evnt.Text + "</div></div>");
