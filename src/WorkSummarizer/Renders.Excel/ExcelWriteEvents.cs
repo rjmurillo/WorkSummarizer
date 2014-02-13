@@ -26,8 +26,7 @@ namespace Renders.Excel
             {
                 WriteRow(sheet, evt, writingRowNumber++);
             }
-            Range selectedRange = application.Columns[1, 10];
-            selectedRange.AutoFit();
+            
 
             application.Visible = true;
             application.UserControl = true;
