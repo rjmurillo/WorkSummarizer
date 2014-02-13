@@ -106,10 +106,6 @@
       <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
       <Name>Graph</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TeamDataSource\DataSources.Team.csproj">
-      <Project>{F1ECA49B-433E-4A4C-B88A-3D58EB788619}</Project>
-      <Name>DataSources.Team</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TeamFoundationServerDataSource\DataSources.TeamFoundationServer.csproj">
       <Project>{D727BDE2-B353-4A2D-AEAA-8407967859DF}</Project>
       <Name>DataSources.TeamFoundationServer</Name>
