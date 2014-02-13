@@ -7,8 +7,8 @@
     <ProjectGuid>{D727BDE2-B353-4A2D-AEAA-8407967859DF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TeamFoundationServerDataSource</RootNamespace>
-    <AssemblyName>TeamFoundationServerDataSource</AssemblyName>
+    <RootNamespace>DataSources.TeamFoundationServer</RootNamespace>
+    <AssemblyName>DataSources.TeamFoundationServer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
