@@ -60,6 +60,18 @@
       <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Events.Outlook\Events.Outlook.csproj">
+      <Project>{654abf8b-1ea3-40f4-b8c4-66641a06801d}</Project>
+      <Name>Events.Outlook</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events\Events.csproj">
+      <Project>{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}</Project>
+      <Name>Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OutlookDataSource\OutlookDataSource.csproj">
+      <Project>{65827b3b-3c23-440d-958d-9fcc4c692cc0}</Project>
+      <Name>OutlookDataSource</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TeamDataSource\TeamDataSource.csproj">
       <Project>{F1ECA49B-433E-4A4C-B88A-3D58EB788619}</Project>
       <Name>TeamDataSource</Name>
