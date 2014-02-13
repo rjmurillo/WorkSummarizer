@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21126.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkSummarizer", "WorkSummarizer.csproj", "{730E9457-05E3-4F42-871F-DE09AAD55483}"
 EndProject
@@ -41,6 +41,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSources.Yammer", "..\DataSources.Yammer\DataSources.Yammer.csproj", "{7C1B623D-96E7-4166-953D-0899D6F3F07E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensibility", "..\Extensibility\Extensibility.csproj", "{5E57807D-9972-4DC0-98AB-220E6C55E82D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Render", "Render", "{F580E36B-1FD4-4621-9B2E-F82507D61E2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
