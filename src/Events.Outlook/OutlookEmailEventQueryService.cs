@@ -24,8 +24,7 @@ namespace Events.Outlook
             var retval = meetings.Select(x =>
                 new Event()
                 {
-                    Text = x.Body,
-                    Subject = new Subject() { Text = x.Subject },
+                    Text = (string.IsNullOrWhiteSpace(x.Body))? x.Body : x.Subject,
                     Date = x.StartUtc,
                     Duration = TimeSpan.FromMinutes(x.Duration.TotalMinutes),
                     Participants =
