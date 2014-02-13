@@ -4,7 +4,7 @@ using System.Linq;
 using Common;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
-namespace DataSources.Team
+namespace DataSources.TeamFoundationServer
 {
     public class TeamFoundationServerWorkItemTeamDataProvider 
     {

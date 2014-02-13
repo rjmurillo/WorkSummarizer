@@ -3,27 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Microsoft.TeamFoundation.VersionControl.Client;
-using WorkSummarizer.TeamFoundationServerDataSource;
 
-namespace DataSources.Team
+
+namespace DataSources.TeamFoundationServer
 {
     public class TeamFoundationServerChangesetTeamDataProvider
     {
-        private readonly ITfsData m_data;
-        private readonly Uri m_teamFoundationServerUri;
-        private readonly string m_projectName;
+        private readonly IWorkItemDataPull m_data;
         private readonly TeamFoundationServerWorkItemTeamDataProvider m_workItemTeamDataProvider;
 
         public TeamFoundationServerChangesetTeamDataProvider(
-            ITfsData data, 
-            Uri teamFoundationServerUri, 
-            string projectName,
+            IWorkItemDataPull data,
             TeamFoundationServerWorkItemTeamDataProvider workItemTeamDataProvider
             )
         {
             m_data = data;
-            m_teamFoundationServerUri = teamFoundationServerUri;
-            m_projectName = projectName;
             m_workItemTeamDataProvider = workItemTeamDataProvider;
         }
 
@@ -36,7 +30,7 @@ namespace DataSources.Team
             Func<Changeset, bool> predicate)
         {
             var wid = PullWorkItemIdentitiesFromChangesets(changesets, predicate);
-            var wi = m_data.PullWorkItems(m_teamFoundationServerUri, m_projectName, wid);
+            var wi = m_data.PullWorkItems(wid);
             return m_workItemTeamDataProvider.InferParticipantsFromWorkItems(wi);
         }
 

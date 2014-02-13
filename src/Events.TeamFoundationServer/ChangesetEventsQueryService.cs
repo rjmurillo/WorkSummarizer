@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataSources.TeamFoundationServer;
 using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace Events.TeamFoundationServer
@@ -19,8 +20,8 @@ namespace Events.TeamFoundationServer
 
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            var source = new TeamFoundationServerDataProvider();
-            return source.PullChangesets(m_teamFoundationServer, m_project, startDateTime, stopDateTime).Select(
+            var source = new TeamFoundationServerChangesetDataProvider(m_teamFoundationServer, m_project);
+            return source.PullData(startDateTime, stopDateTime).Select(
                 p =>
                 {
                     var e = new Event
