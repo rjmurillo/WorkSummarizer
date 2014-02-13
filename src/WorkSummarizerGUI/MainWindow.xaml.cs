@@ -20,5 +20,10 @@ namespace WorkSummarizerGUI
         {
             get { return m_mainViewModel; }
         }
+
+        private void OnGenerateClick(object sender, RoutedEventArgs e)
+        {
+            m_mainViewModel.Generate();
+        }
     }
 }
