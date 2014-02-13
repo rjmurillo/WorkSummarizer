@@ -39,9 +39,9 @@ namespace WorkSummarizer
 
             var renders = new List<IRenderEvents>();
             //renders.Add(new ExcelWriteEvents());
-            renders.Add(new HtmlWriteEvents());
             //renders.Add(new ConsoleWriteEvents());
-
+            renders.Add(new HtmlWriteEvents());
+            
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
                 var sb = new StringBuilder();
@@ -54,7 +54,7 @@ namespace WorkSummarizer
                 }
 
                 var textProc = new TextProcessor();
-
+               
                 IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
 
                 foreach (IRenderEvents render in renders)
