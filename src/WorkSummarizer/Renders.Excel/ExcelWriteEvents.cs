@@ -25,9 +25,22 @@ namespace Renders.Excel
             {
                 WriteRow(sheet, evt, writingRowNumber++);
             }
-            
+            MarkUpColumnWidths(sheet);
+
             application.Visible = true;
             application.UserControl = true;
+        }
+
+        private static void MarkUpColumnWidths(Worksheet sheet)
+        {
+            var range = sheet.Range["A1"];
+            range.EntireColumn.AutoFit();
+
+            range = sheet.Range["B1"];
+            range.EntireColumn.AutoFit();
+            
+            range = sheet.Range["C1"];
+            range.EntireColumn.AutoFit();
         }
 
         private Worksheet GetSheet(string eventType)
