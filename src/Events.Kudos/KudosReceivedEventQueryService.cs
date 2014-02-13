@@ -12,16 +12,22 @@ namespace Events.Kudos
     {
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            return KudosDataProvider.PullReceivedKudos(startDateTime, stopDateTime)
+            var kdp = new KudosDataProvider();
+
+            return kdp.PullData(startDateTime, stopDateTime)
                 .Select(p => 
                 {
-                    return new Event
+                    var e = new Event
                     {
                         Date = p.CreatedUtcTime,
                         EventType = "Kudos.Received",
                         Subject = new Subject { Text = p.SenderAlias },
                         Text = p.Message
-                    }; 
+                    };
+
+                    e.Participants.Add(new Participant(p.SenderAlias));
+
+                    return e;
                 });
         }
     }
