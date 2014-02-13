@@ -10,7 +10,9 @@ namespace Events.CodeFlow
     {
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            return CodeFlowDataProvider.PullReviewsAuthored(startDateTime, stopDateTime)
+            var cfdp = new CodeFlowDataProvider();
+
+            return cfdp.PullData(startDateTime, stopDateTime)
                 .Select(p => new Event
                 {
                     Date = p.PublishedUtcDate,
