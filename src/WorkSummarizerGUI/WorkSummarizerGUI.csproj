@@ -53,6 +53,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\WorkSummarizer\PluginRuntime.cs">
+      <Link>PluginRuntime.cs</Link>
+    </Compile>
     <Compile Include="ViewModels\EventSourceViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReportingSinkViewModel.cs" />
@@ -96,6 +99,64 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.CodeFlow\Events.CodeFlow.csproj">
+      <Project>{e4370d41-e906-47ee-b9cb-7c19e17b60c9}</Project>
+      <Name>Events.CodeFlow</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.Connect\Events.Connect.csproj">
+      <Project>{1274a6db-904b-4e39-81b5-77ddf9fd8f7f}</Project>
+      <Name>Events.Connect</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.Kudos\Events.Kudos.csproj">
+      <Project>{51052c51-246e-4032-9172-3322a838b4cd}</Project>
+      <Name>Events.Kudos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.ManicTime\Events.ManicTime.csproj">
+      <Project>{82b4140f-d6b8-45be-aa72-b2d179b8069e}</Project>
+      <Name>Events.ManicTime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.Outlook\Events.Outlook.csproj">
+      <Project>{654abf8b-1ea3-40f4-b8c4-66641a06801d}</Project>
+      <Name>Events.Outlook</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.TeamFoundationServer\Events.TeamFoundationServer.csproj">
+      <Project>{f0da9875-3397-4e83-91f9-41d4f54b2a2b}</Project>
+      <Name>Events.TeamFoundationServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events.Yammer\Events.Yammer.csproj">
+      <Project>{c3b1c9cd-bfcc-4cee-98e0-1794a48a3856}</Project>
+      <Name>Events.Yammer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events\Events.csproj">
+      <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
+      <Name>Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extensibility\Extensibility.csproj">
+      <Project>{5e57807d-9972-4dc0-98ab-220e6c55e82d}</Project>
+      <Name>Extensibility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
+      <Name>Graph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Renders.Console\Renders.Console.csproj">
+      <Project>{b97b4ed9-962c-49ba-b6fd-f6d913773830}</Project>
+      <Name>Renders.Console</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Renders\Renders.csproj">
+      <Project>{5d85bb42-31ca-4daa-9076-36aedd35886d}</Project>
+      <Name>Renders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkSummarizer\Renders.Excel\Renders.Excel.csproj">
+      <Project>{5fe75a4b-3c2f-4ef5-9a3e-99e872a8695b}</Project>
+      <Name>Renders.Excel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

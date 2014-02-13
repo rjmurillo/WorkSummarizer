@@ -110,7 +110,8 @@
                         Height="40"
                         Width="140"
                         HorizontalAlignment="Right"
-                        Margin="0,20,0,0"/>
+                        Margin="0,20,0,0"
+                        Click="OnGenerateClick"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>
