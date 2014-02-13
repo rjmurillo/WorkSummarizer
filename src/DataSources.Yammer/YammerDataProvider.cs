@@ -25,7 +25,7 @@ namespace DataSources.Yammer
                     session.Users.GetCurrentUserAsync().Wait();
                     isSessionValid = true;
                 }
-                catch (AggregateException e)
+                catch (AggregateException)
                 {
                     Console.WriteLine("Session token invalid");
                 }
