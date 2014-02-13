@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Yammer;
 
@@ -9,9 +10,37 @@ namespace DataSources.Yammer
     {
         public static IEnumerable<YammerMessage> PullSentMessages(DateTime startFilterDate, DateTime endFilterDate)
         {
-            YammerSession session = YammerAPI.LoginUserAsync("1GpcB6wgI9wqp8hB17PA", "R33cc1KWZ3uy6juE5DeNHWQKMjqzU3e7nvYkPLREeM", "http://qe");
-            //var session = new YammerSession("");
-            Console.WriteLine("Session: " + session.UserToken);
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            var userTokenConfig = config.AppSettings.Settings["YammerSession.UserToken"];
+            var userToken = userTokenConfig != null ? userTokenConfig.Value : String.Empty;
+            var session = new YammerSession(userToken);
+
+            bool isSessionValid = false;
+            if (!String.IsNullOrWhiteSpace(userToken))
+            {
+                try
+                {
+                    // test the token...
+                    session.Users.GetCurrentUserAsync().Wait();
+                    isSessionValid = true;
+                }
+                catch (AggregateException e)
+                {
+                    Console.WriteLine("Session token invalid");
+                }
+            }
+
+            if(!isSessionValid)
+            {
+                session = YammerAPI.LoginUserAsync("1GpcB6wgI9wqp8hB17PA", "R33cc1KWZ3uy6juE5DeNHWQKMjqzU3e7nvYkPLREeM", "http://qe");
+                config.AppSettings.Settings.Remove("YammerSession.UserToken");
+                config.AppSettings.Settings.Add("YammerSession.UserToken", session.UserToken);
+                config.Save(ConfigurationSaveMode.Full);
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+
+            Console.WriteLine("Session token: " + session.UserToken);
 
             return PullSentMessages(session, startFilterDate).Where(p => p.CreatedAt >= startFilterDate && p.CreatedAt <= endFilterDate);
         }
