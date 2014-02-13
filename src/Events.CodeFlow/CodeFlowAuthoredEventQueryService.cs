@@ -14,7 +14,7 @@ namespace Events.CodeFlow
                 .Select(p => new Event
                 {
                     Date = p.PublishedUtcDate,
-                    Duration = (p.ClosedUtcDate - p.PublishedUtcDate).TotalMinutes,
+                    Duration = p.ClosedUtcDate - p.PublishedUtcDate,
                     Subject = new Subject { Text = p.AuthorLogin },
                     Text = p.Name
                 });

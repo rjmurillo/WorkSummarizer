@@ -28,7 +28,7 @@ namespace Events.Outlook
                     Text = x.Body ?? string.Empty,
                     Subject = new Subject() { Text = x.Subject },
                     Date = x.StartUtc,
-                    Duration = x.Duration.TotalMinutes,
+                    Duration = TimeSpan.FromMinutes(x.Duration.TotalMinutes),
                     Participants =
                         x.Recipients.Select(y => new Participant(y)).ToGraph()
                 });

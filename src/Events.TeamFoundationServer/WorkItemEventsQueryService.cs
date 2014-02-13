@@ -34,7 +34,7 @@ namespace Events.TeamFoundationServer
 
                     e.Participants = new Graph<Participant> { p };
                     e.Date = (DateTime)r.Fields["Changed date"].Value;
-                    e.Duration = 0d;
+                    e.Duration = TimeSpan.Zero;
                     e.Text = (string)r.Fields["History"].Value;
                     e.EventType = r.Index == 0 ? "TFS Work item Created" : "TFS Work item Revision";
 

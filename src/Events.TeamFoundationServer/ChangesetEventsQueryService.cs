@@ -27,7 +27,7 @@ namespace Events.TeamFoundationServer
                     {
                         Text = p.Comment,
                         Date = p.CreationDate,
-                        Duration = 0d,
+                        Duration = TimeSpan.Zero,
                         Context = p.ChangesetId
                     };
                     e.Participants.Add(new Participant(p.Committer));

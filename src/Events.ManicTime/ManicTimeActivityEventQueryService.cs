@@ -17,7 +17,7 @@ namespace Events.ManicTime
                 return new Event
                 {
                     Date = p.StartUtcTime,
-                    Duration = (p.EndUtcTime - p.StartUtcTime).TotalMinutes,
+                    Duration = p.EndUtcTime - p.StartUtcTime,
                     EventType = "ManicTime.Activity",
                     Subject = new Subject { Text = p.GroupDisplayName },
                     Text = p.DisplayName
