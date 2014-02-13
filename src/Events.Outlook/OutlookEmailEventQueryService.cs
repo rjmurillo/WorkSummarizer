@@ -1,26 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
-using OutlookDataSource;
 using Graph;
+using OutlookDataSource;
 
 namespace Events.Outlook
 {
-    public class OutlookMeetingEventQueryService : IEventQueryService
+    public class OutlookEmailEventQueryService : IEventQueryService
     {
         private readonly IOutlookDataProvider m_outlookDataSource;
 
-        public OutlookMeetingEventQueryService()
+        public OutlookEmailEventQueryService()
         {
             m_outlookDataSource = new OutlookDataProvider();
         }
 
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            var meetings = m_outlookDataSource.GetMeetings(startDateTime, stopDateTime);
+            var meetings = m_outlookDataSource.GetEmails(startDateTime, stopDateTime);
 
             return meetings.Select(x =>
                 new Event()

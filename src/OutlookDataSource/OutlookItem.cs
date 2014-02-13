@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OutlookDataSource
 {
-    public class OutlookMeeting
+    public class OutlookItem
     {
         public readonly string m_subject;
         public readonly string m_body;
@@ -12,7 +12,7 @@ namespace OutlookDataSource
         public readonly TimeSpan m_duration;
         public readonly IEnumerable<string> m_recipients;
 
-        public OutlookMeeting(string subject, string body, DateTime startUtc, DateTime endUtc, IEnumerable<string> recipients)
+        public OutlookItem(string subject, string body, DateTime startUtc, DateTime endUtc, IEnumerable<string> recipients)
         {
             m_subject = subject;
             m_body = body;

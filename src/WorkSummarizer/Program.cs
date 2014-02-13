@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Events.Outlook;
-using Events.TeamFoundationServer;
-using Events.Yammer;
-using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace WorkSummarizer
 {
