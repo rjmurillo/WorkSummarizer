@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataSources.ManicTime
 {
-    public class ManicTimeDataProvider
+    public class ManicTimeDataProvider : IDataPull<ManicTimeActivity>
     {
         /***
          * CREATE TABLE [Activity] (
@@ -42,7 +42,7 @@ namespace DataSources.ManicTime
             , [SkipColor] bit NOT NULL
             );
          */
-        public static IEnumerable<ManicTimeActivity> PullActivities(DateTime startTimeUtc, DateTime endTimeUtc)
+        public IEnumerable<ManicTimeActivity> PullData(DateTime startTimeUtc, DateTime endTimeUtc)
         {
             var manicTimeDbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..\\Local\\Finkit\\ManicTime");
 

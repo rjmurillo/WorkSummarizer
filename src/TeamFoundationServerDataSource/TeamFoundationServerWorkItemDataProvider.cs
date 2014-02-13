@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,49 +6,26 @@ using System.Linq;
 using System.Net;
 using Microsoft.TeamFoundation;
 using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using WorkSummarizer.TeamFoundationServerDataSource;
 
-namespace WorkSummarizer.TeamFoundationServerDataSource
+namespace DataSources.TeamFoundationServer
 {
-    public partial class TfsData : ITfsData
+    public class TeamFoundationServerWorkItemDataProvider : IDataPull<WorkItem>
     {
-        public IEnumerable<Changeset> PullChangesets(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate)
+
+        public TeamFoundationServerWorkItemDataProvider(Uri tfsConnectionString, string projectName)
         {
-            try
-            {
-                VersionSpec versionFrom = new DateVersionSpec(startDate);
-                VersionSpec versionTo = new DateVersionSpec(endDate);
-
-                TfsTeamProjectCollection projectCollection =
-                    TfsTeamProjectCollectionFactory.GetTeamProjectCollection(tfsConnectionstring);
-                VersionControlServer versionControlServer = (VersionControlServer)projectCollection.GetService(typeof(VersionControlServer));
-                
-                IEnumerable changesetHistory =
-                    versionControlServer.QueryHistory("$/" + projectName + "/", VersionSpec.Latest, 0,
-                                                      RecursionType.Full, null, versionFrom, versionTo, int.MaxValue,
-                                                      false, false);
-
-                return changesetHistory.Cast<Changeset>().ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new TeamFoundationException("Unable to get versionControlServer for TFS server " + tfsConnectionstring.AbsoluteUri, ex);
-            }
+            TeamFoundationServer = tfsConnectionString;
+            Project = projectName;
         }
 
-        public IEnumerable<Changeset> PullChangesets(Uri tfsConnectionString, IEnumerable<int> changesetIds)
+        public Uri TeamFoundationServer { get; private set; }
+        public string Project { get; private set; }
+
+        public IEnumerable<WorkItem> PullData(DateTime startDate, DateTime endDate)
         {
-            TfsTeamProjectCollection projectCollection =
-                   TfsTeamProjectCollectionFactory.GetTeamProjectCollection(tfsConnectionString);
-            VersionControlServer versionControlServer = (VersionControlServer)projectCollection.GetService(typeof(VersionControlServer));
-            
-            return changesetIds.Select(versionControlServer.GetChangeset);
-        }
-        
-        public IEnumerable<WorkItem> PullWorkItemsThatChanged(Uri tfsConnectionstring, string projectName, DateTime startDate, DateTime endDate)
-        {
-            WorkItemStore workItemStore = GetWorkItemStore(tfsConnectionstring);
+            WorkItemStore workItemStore = GetWorkItemStore(TeamFoundationServer);
 
             const string queryTemplate = @"
                 SELECT ID, Title, [Team Project], [Microsoft.VSTS.Common.Priority], System.ChangedDate, [System.AssignedTo], [System.IterationPath], [System.AreaPath], [System.State], [CodeBox.UserVotes]
@@ -61,7 +36,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
                     and System.ChangedDate < @endDate
                 ";
             IDictionary paramsDictionary = new Dictionary<string, object>();
-            paramsDictionary["projectName"] = projectName;
+            paramsDictionary["projectName"] = Project;
 
             //TFS will throw an error if you use the time in query and it defaults to midnight on the day sent in so we 
             //have to use the previous day's date.
@@ -95,9 +70,9 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
         }
 
 
-        public IEnumerable<WorkItem> PullWorkItems(Uri tfsConnectionString, string projectName, IEnumerable<int> workItemIds)
+        public IEnumerable<WorkItem> PullWorkItems(IEnumerable<int> workItemIds)
         {
-            WorkItemStore workItemStore = GetWorkItemStore(tfsConnectionString);
+            WorkItemStore workItemStore = GetWorkItemStore(TeamFoundationServer);
 
             const string queryTemplate = @"
                 SELECT ID, Title, [Team Project], [Microsoft.VSTS.Common.Priority], System.ChangedDate, [System.AssignedTo], [System.IterationPath], [System.AreaPath], [System.State], [CodeBox.UserVotes]
@@ -112,7 +87,7 @@ namespace WorkSummarizer.TeamFoundationServerDataSource
             var query = (string.Format(CultureInfo.InvariantCulture, queryTemplate, thing));
 
             IDictionary paramsDictionary = new Dictionary<string, object>();
-            paramsDictionary["projectName"] = projectName;
+            paramsDictionary["projectName"] = Project;
 
             WorkItemCollection tfsWorkItemCollection = workItemStore.Query(query, paramsDictionary);
             return tfsWorkItemCollection.Cast<WorkItem>().ToList();

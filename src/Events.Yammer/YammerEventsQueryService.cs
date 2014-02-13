@@ -11,7 +11,9 @@ namespace Events.Yammer
     {
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime)
         {
-            return YammerDataProvider.PullSentMessages(startDateTime, endDateTime)
+            var dp = new YammerDataProvider();
+
+            return dp.PullData(startDateTime, endDateTime)
                 .Select(p =>
                 {
                     var e = new Event

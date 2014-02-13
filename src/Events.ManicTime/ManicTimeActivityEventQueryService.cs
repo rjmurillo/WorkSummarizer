@@ -12,16 +12,19 @@ namespace Events.ManicTime
     {
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            return ManicTimeDataProvider.PullActivities(startDateTime, stopDateTime).Select(p => 
+            var m = new ManicTimeDataProvider();
+
+            return m.PullData(startDateTime, stopDateTime).Select(p => 
             {
-                return new Event
+                var e = new Event
                 {
                     Date = p.StartUtcTime,
-                    Duration = (p.EndUtcTime - p.StartUtcTime).TotalMinutes,
+                    Duration = p.EndUtcTime - p.StartUtcTime,
                     EventType = "ManicTime.Activity",
                     Subject = new Subject { Text = p.GroupDisplayName },
                     Text = p.DisplayName
                 };
+                return e;
             });
         }
     }

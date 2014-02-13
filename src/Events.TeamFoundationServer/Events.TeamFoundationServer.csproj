@@ -81,6 +81,10 @@
       <Project>{8D667DE1-CF34-448D-96E1-6B3B4AA5D102}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataSources\DataSources.csproj">
+      <Project>{D5F64C26-0017-4248-A70C-73C8BBFD49E4}</Project>
+      <Name>DataSources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
       <Project>{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}</Project>
       <Name>Events</Name>
@@ -93,9 +97,9 @@
       <Project>{15E4259E-F270-4E1C-B91F-D00A88621301}</Project>
       <Name>Graph</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TeamFoundationServerDataSource\TeamFoundationServerDataSource.csproj">
+    <ProjectReference Include="..\TeamFoundationServerDataSource\DataSources.TeamFoundationServer.csproj">
       <Project>{D727BDE2-B353-4A2D-AEAA-8407967859DF}</Project>
-      <Name>TeamFoundationServerDataSource</Name>
+      <Name>DataSources.TeamFoundationServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

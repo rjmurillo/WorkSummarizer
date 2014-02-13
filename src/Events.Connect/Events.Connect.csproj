@@ -48,6 +48,10 @@
       <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataSources\DataSources.csproj">
+      <Project>{d5f64c26-0017-4248-a70c-73c8bbfd49e4}</Project>
+      <Name>DataSources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
       <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
       <Name>Events</Name>

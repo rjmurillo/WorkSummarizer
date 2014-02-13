@@ -6,9 +6,9 @@ using Yammer;
 
 namespace DataSources.Yammer
 {
-    public class YammerDataProvider
+    public class YammerDataProvider : IDataPull<YammerMessage>
     {
-        public static IEnumerable<YammerMessage> PullSentMessages(DateTime startFilterDate, DateTime endFilterDate)
+        public IEnumerable<YammerMessage> PullData(DateTime startFilterDate, DateTime endFilterDate)
         {
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 

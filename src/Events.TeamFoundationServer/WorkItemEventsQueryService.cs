@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Common;
+using DataSources.TeamFoundationServer;
 using Graph;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using WorkSummarizer.TeamFoundationServerDataSource;
@@ -20,8 +21,8 @@ namespace Events.TeamFoundationServer
 
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime)
         {
-            var source = new TfsData();
-            var wis = source.PullWorkItemsThatChanged(TeamFoundationServer, Project, startDateTime, endDateTime);
+            var source = new TeamFoundationServerWorkItemDataProvider(TeamFoundationServer, Project);
+            var wis = source.PullData(startDateTime, endDateTime);
 
             // Convert WI to Event
             var retval = new List<Event>();
@@ -34,7 +35,7 @@ namespace Events.TeamFoundationServer
 
                     e.Participants = new Graph<Participant> { p };
                     e.Date = (DateTime)r.Fields["Changed date"].Value;
-                    e.Duration = 0d;
+                    e.Duration = TimeSpan.Zero;
                     e.Text = (string)r.Fields["History"].Value;
                     e.EventType = r.Index == 0 ? "TFS Work item Created" : "TFS Work item Revision";
 
