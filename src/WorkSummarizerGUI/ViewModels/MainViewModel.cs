@@ -132,11 +132,13 @@ namespace WorkSummarizerGUI.ViewModels
                                 var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
 
                                 IDictionary<string, int> weightedTags = null; // TODO - pass real tags
+                                IDictionary<string, int> weightedPeople = null; // TODO
+                                IEnumerable<string> importantSentences = null; // TODO
 
                                 // TODO renderers as plugins
                                 foreach (IRenderEvents render in selectedReportingSinkTypes.Select(Activator.CreateInstance))
                                 {
-                                    render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags);
+                                    render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
                                 }
 
                                 Console.WriteLine();
