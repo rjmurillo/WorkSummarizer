@@ -6,11 +6,24 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+    public static class IdentityUtility
+    {
+        public static string Sanitize(string input)
+        {
+            if (input.IndexOf("\\", StringComparison.Ordinal) > 0)
+            {
+                return input.Split(new[] { "\\" }, StringSplitOptions.RemoveEmptyEntries).Last();
+            }
+
+            return input;
+        }
+    }
+
     public class Participant : IEquatable<Participant>
     {
         public Participant(string alias)
         {
-            Alias = alias;
+            Alias = IdentityUtility.Sanitize(alias);
         }
 
         public string Alias { get; private set; }

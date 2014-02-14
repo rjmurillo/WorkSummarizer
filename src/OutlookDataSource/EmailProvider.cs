@@ -25,7 +25,7 @@ namespace DataSources.Outlook
                     .Select(
                         mail =>
                             new OutlookItem(mail.Subject ?? String.Empty, mail.Body ?? String.Empty, mail.CreationTime,
-                                mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.AddressEntry.GetContact().Account)))
+                                mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.Name)))
                     .ToList();
         }
     }
