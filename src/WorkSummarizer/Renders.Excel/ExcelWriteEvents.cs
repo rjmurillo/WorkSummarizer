@@ -7,12 +7,12 @@ namespace Renders.Excel
 {
     public class ExcelWriteEvents : IRenderEvents
     {
-        readonly Application application = new Application();
-        private readonly Workbook workbook;
+        private Application application;
+        private Workbook workbook;
 
         public ExcelWriteEvents()
         {
-            workbook = application.Workbooks.Add();
+           
         }
 
         public void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags, IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences)
@@ -45,6 +45,12 @@ namespace Renders.Excel
 
         private Worksheet GetSheet(string eventType)
         {
+            if (application == null)
+            {
+                application = new Application();
+                workbook = application.Workbooks.Add();
+            }
+
             Worksheet sheet;
             if (workbook.Sheets.Count == 1 && string.Equals(((Worksheet)workbook.Sheets[1]).Name, "Sheet1"))
                 sheet = workbook.Sheets[1];
