@@ -8,7 +8,7 @@ namespace Processing.Text
 {
     public class TextProcessor
     {
-        private readonly IEnumerable<string> m_stopWords = GetStopWords();
+        private readonly HashSet<string> m_stopWords = GetStopWords();
         private static readonly Regex s_sanitizeRegex = new Regex(@"[^0-9a-zA-Z\s\u00E9-\u00F8]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex s_normalizeWhitespaceRegex = new Regex(@"\s+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex HtmlToTextRegex = new Regex("<[^>]+>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -27,6 +27,11 @@ namespace Processing.Text
             return text.ToUpperInvariant();
         }
 
+        public HashSet<string> StopWords
+        {
+            get { return m_stopWords; }
+        }
+
         public IEnumerable<string> Tokenize(string input)
         {
             var sanitizedInput = Sanitize(input);
@@ -35,7 +40,7 @@ namespace Processing.Text
 
             var tokenized = tokenizer.Tokenize(sanitizedInput);
 
-            var output = tokenized.Where(token => !m_stopWords.Any(x => x.Equals(token, StringComparison.OrdinalIgnoreCase))).ToList();
+            var output = tokenized.Where(token => !m_stopWords.Contains(token.ToUpperInvariant())).ToList();
 
             return output;
         }
@@ -44,7 +49,9 @@ namespace Processing.Text
         {
             var tokens = Tokenize(input).Distinct().ToArray();
             var tagger = new OpenNLP.Tools.PosTagger.EnglishMaximumEntropyPosTagger("Resources/EnglishPOS.nbin", "Resources/tagdict");
+
             var tags = tagger.Tag(tokens);
+
             return tokens.Zip(tags, (s, s1) => new Tuple<string, string>(s, s1));
         }
 
@@ -126,15 +133,15 @@ namespace Processing.Text
             return HtmlToTextRegex.Replace(html, "");
         }
 
-        private static IEnumerable<string> GetStopWords()
+        private static HashSet<string> GetStopWords()
         {
-            var stopWords = new List<string>();
+            var stopWords = new HashSet<string>();
             using (var sr = new StreamReader("Resources/en-US_Stopwords.txt"))
             {
                 string word;
                 while ((word = sr.ReadLine()) != null)
                 {
-                    stopWords.Add(word);
+                    stopWords.Add(word.ToUpperInvariant());
                 }
             }
 

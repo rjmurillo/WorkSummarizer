@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
         Title="Work Summarizer"
-        Height="550"
+        Height="580"
         MinWidth="640"
         Width="640"
         MaxWidth="640"
@@ -39,9 +39,64 @@
                     Value="#222222" />
         </Style>
     </Window.Resources>
-
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="X"
+                                     Storyboard.TargetName="TitleTranslateTransform"
+                                     From="20"
+                                     To="0"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="X"
+                                     Storyboard.TargetName="ContentTranslateTransform"
+                                     From="40"
+                                     To="0"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="Height"
+                                     Storyboard.TargetName="FooterStage"
+                                     From="0"
+                                     To="30"
+                                     Duration="0:0:0.3"
+                                     BeginTime="0:0:1">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                     Storyboard.TargetName="TitleStage"
+                                     From="0.8"
+                                     To="1"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                     Storyboard.TargetName="ContentStage"
+                                     From="0.8"
+                                     To="1"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -49,11 +104,63 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0"
+               Content="{Binding ProgressStatus, Mode=OneWay}"
+               Height="0"
+               Foreground="White"
+               Background="#444444">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsBusy}"
+                                     Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Height"
+                                                         From="0"
+                                                         To="30"
+                                                         Duration="0:0:0.4">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Height"
+                                                         From="30"
+                                                         To="0"
+                                                         Duration="0:0:0.4"
+                                                         BeginTime="0:0:3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <Label x:Name="TitleStage" 
+               Grid.Row="1"
                Content="WORK SUMMARIZER"
                FontSize="42"
-               FontWeight="Bold" />
+               FontWeight="Bold"
+               Opacity="0.8">
+            <Label.RenderTransform>
+                <TranslateTransform x:Name="TitleTranslateTransform"
+                                    X="20" />
+            </Label.RenderTransform>
+        </Label>
 
-        <Grid Grid.Row="1"
+        <Grid Grid.Row="2"
               Height="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="67*" />
@@ -66,8 +173,15 @@
                          Grid.ColumnSpan="2" />
         </Grid>
 
-        <ScrollViewer Grid.Row="2"
-                      VerticalScrollBarVisibility="Auto">
+        <ScrollViewer x:Name="ContentStage" 
+                      Grid.Row="3"
+                      VerticalScrollBarVisibility="Auto"
+                      Opacity="0.8">
+            <ScrollViewer.RenderTransform>
+                <TranslateTransform x:Name="ContentTranslateTransform"
+                                    X="40" />
+            </ScrollViewer.RenderTransform>
+            
             <Grid Margin="0,-10,0,0"
                   IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}">
                 <Grid.ColumnDefinitions>
@@ -91,7 +205,8 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <CheckBox Content="{Binding Name}"
-                                              IsChecked="{Binding IsSelected}" />
+                                              IsChecked="{Binding IsSelected}"
+                                              ToolTip="{Binding HelpText}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -149,10 +264,27 @@
                             Grid.Row="0"
                             Margin="40,0,10,0">
                     <StackPanel>
-                        <Label Content="reporting"
+                        <Label Content="processing"
                                FontFamily="Segoe UI"
                                FontSize="22"
                                FontWeight="Bold" />
+                        <CheckBox Content="Top people"
+                                  IsChecked="True" 
+                                  IsEnabled="False" />
+                        <CheckBox Content="Top words"
+                                  IsChecked="True"
+                                  IsEnabled="False" />
+                        <CheckBox Content="Important events"
+                                  IsChecked="True"
+                                  IsEnabled="False" />
+                    </StackPanel>
+                    
+                    <StackPanel>
+                        <Label Content="reporting"
+                               FontFamily="Segoe UI"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Margin="0,10,0,0" />
                         <ItemsControl ItemsSource="{Binding ReportingSinks}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -188,18 +320,23 @@
                         Click="OnGenerateClickAsync" />
             </Grid>
         </ScrollViewer>
-        <StatusBar Grid.Row="3"
-                   Background="#444444">
-            <StatusBarItem>
-                <Label Content="By benb, edkotows, jocarrie, mattwest, rimuri"
-                       FontSize="10" 
-                       Foreground="White"/>
-            </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right">
-                <Label Content="{Binding Version, Mode=OneTime}"
-                       FontSize="10"
-                       Foreground="White" />
-            </StatusBarItem>
-        </StatusBar>
+        <Grid Grid.Row="4"
+              Height="30">
+            <StatusBar x:Name="FooterStage" 
+                       Background="#444444"
+                       Height="0"
+                       VerticalAlignment="Bottom">
+                <StatusBarItem>
+                    <Label Content="By benb, edkotows, jocarrie, mattwest, rimuri"
+                           FontSize="10" 
+                           Foreground="White"/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <Label Content="{Binding Version, Mode=OneTime}"
+                           FontSize="10"
+                           Foreground="White" />
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
     </Grid>
 </Window>

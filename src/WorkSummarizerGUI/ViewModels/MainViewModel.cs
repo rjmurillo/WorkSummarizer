@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Threading;
+using DataSources.Who;
 using Events;
 using Events.CodeFlow;
 using Events.Connect;
@@ -18,6 +19,7 @@ using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
 using Extensibility;
+using FUSE.Weld.Base;
 using Processing.Text;
 using Renders;
 using Renders.Console;
@@ -39,6 +41,7 @@ namespace WorkSummarizerGUI.ViewModels
         private bool m_isGenerateSummaryEnabled;
         private DateTime m_startLocalTime;
         private int m_progressPercentage;
+        private string m_progressStatus;
         private string m_reportingDuration;
 
         public MainViewModel()
@@ -63,7 +66,7 @@ namespace WorkSummarizerGUI.ViewModels
             m_eventSources =
                 pluginRuntime.EventQueryServices
                              .GroupBy(p => p.Key.Family)
-                             .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()))
+                             .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()) { HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))})
                              .ToList();
 
             EndLocalTime = DateTime.Now;
@@ -125,6 +128,16 @@ namespace WorkSummarizerGUI.ViewModels
             }
         }
 
+        public string ProgressStatus
+        {
+            get { return m_progressStatus; }
+            private set
+            {
+                m_progressStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int ProgressPercentage
         {
             get { return m_progressPercentage; }
@@ -168,9 +181,6 @@ namespace WorkSummarizerGUI.ViewModels
 
         public async Task GenerateAsync()
         {
-            IsBusy = true;
-            ProgressPercentage = 0;
-
             var selectedEventSourceIds = EventSources.Where(p => p.IsSelected)
                                                      .SelectMany(p => p.ServiceIds)
                                                      .ToList();
@@ -187,6 +197,10 @@ namespace WorkSummarizerGUI.ViewModels
 
             if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any() && (selectedIsGeneratePerSourceEnabled || selectedIsGeneratePerSummaryEnabled))
             {
+                IsBusy = true;
+                ProgressPercentage = 0;
+                ProgressStatus = String.Empty;
+
                 var uiDispatcher = Dispatcher.CurrentDispatcher;
                 await Task.Run(() =>
                 {
@@ -207,23 +221,26 @@ namespace WorkSummarizerGUI.ViewModels
                         var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
                         var summaryImportantSentences = new List<string>();
 
-                        var totalProgressSteps = eventQueryServiceRegistrations.Count();
+                        var eventQueryServiceRegistrationsCount = eventQueryServiceRegistrations.Count();
+                        var totalProgressSteps = eventQueryServiceRegistrationsCount;
 
                         if (selectedIsGeneratePerSourceEnabled)
                         {
-                            totalProgressSteps += eventQueryServiceRegistrations.Count();
+                            totalProgressSteps += eventQueryServiceRegistrationsCount;
                         }
 
                         if (selectedIsGeneratePerSummaryEnabled)
                         {
-                            totalProgressSteps += 1;
+                            totalProgressSteps += eventQueryServiceRegistrationsCount; // uhh nice padding for summary generation
                         }
 
                         var progressIncrement = 100 / Math.Max(totalProgressSteps, 1);
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
-                            IEnumerable<Event> evts = Enumerable.Empty<Event>();
                             KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
+                            uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Pulling data for {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
+
+                            IEnumerable<Event> evts = Enumerable.Empty<Event>();
                             Action pullEventsDelegate = () =>
                             {
                                 evts = registration1.Value.PullEvents(selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), Environment.UserName);
@@ -238,7 +255,7 @@ namespace WorkSummarizerGUI.ViewModels
                                 pullEventsDelegate();
                             }
                             
-                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
+                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; ProgressStatus = String.Format("Summarizing data for {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
 
                             var textProc = new TextProcessor();
                             var peopleProc = new PeopleProcessor();
@@ -250,17 +267,25 @@ namespace WorkSummarizerGUI.ViewModels
                                 sb.Append(String.Format(" {0} {1} ", evt.Subject.Text.Replace("\n", String.Empty).Replace("\r", String.Empty), evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty)));
                             }
 
+
+                            IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
+
+                            var customStopList = IdentityUtility.GetIdentityAttributes();
+
+                            textProc.StopWords.AddRange(customStopList);
+
                             var nouns = textProc.GetNouns(sb.ToString());
                             IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
                             IEnumerable<string> importantSentences = textProc.GetImportanEvents(evts.Select(x => x.Text), nouns);
-                            IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
 
                             if (selectedIsGeneratePerSourceEnabled)
                             {
                                 foreach (var render in renderServiceRegistrations)
                                 {
-                                    KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
                                     KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
+                                    uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Rendering data for {0} - {1} with {2} - {3}...", registration1.Key.Family, registration1.Key.Name, render1.Key.Family, render1.Key.Name); });
+
+                                    KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
                                     Action renderEventsDelegate = () => render1.Value.Render(registration.Key.Id, selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), evts, weightedTags, weightedPeople, importantSentences);
                                     if (render.Key.InvokeOnShellDispatcher)
                                     {
@@ -297,6 +322,8 @@ namespace WorkSummarizerGUI.ViewModels
                             {
                                 KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
                                 Action renderEventsDelegate = () => render1.Value.Render("Summary", selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
+                                uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Rendering summary data with {0} - {1}...", render1.Key.Family, render1.Key.Name); });
+
                                 if (render.Key.InvokeOnShellDispatcher)
                                 {
                                     uiDispatcher.Invoke(renderEventsDelegate);
@@ -315,9 +342,10 @@ namespace WorkSummarizerGUI.ViewModels
                         MessageBox.Show("Oh noes!" + Environment.NewLine + Environment.NewLine + ex);
                     }
                 });
-            }
 
             IsBusy = false;
+                ProgressStatus = "...done.";
+            }
         }
         
         private void UpdateReportingDuration()

@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConversationHistoryProvider.cs" />
     <Compile Include="TeamProvider.cs" />
     <Compile Include="MeetingProvider.cs" />
     <Compile Include="OutlookItem.cs" />

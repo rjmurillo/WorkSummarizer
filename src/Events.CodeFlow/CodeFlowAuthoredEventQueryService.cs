@@ -30,10 +30,7 @@ namespace Events.CodeFlow
                     e.Participants.Add(IdentityUtility.Create(p.AuthorLogin));
 
                     return e;
-                });
-        
-
-    
+                }).ToList();
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

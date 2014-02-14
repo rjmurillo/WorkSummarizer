@@ -37,7 +37,7 @@ namespace Events.TeamFoundationServer
                     };
                     e.Participants.Add(IdentityUtility.Create(p.Committer));
                     return e;
-                });
+                }).ToList();
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

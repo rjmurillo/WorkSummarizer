@@ -13,8 +13,6 @@ namespace DataSources.Who
 
         public static string Sanitize(string input)
         {
-            
-
             if (!m_exclusions.Contains(input, StringComparer.OrdinalIgnoreCase))
             {
                 if (input.IndexOf("\\", StringComparison.Ordinal) > 0)
@@ -46,6 +44,11 @@ namespace DataSources.Who
         {
             return m_cache.Get(input);
         }
+
+        public static IEnumerable<string> GetIdentityAttributes()
+        {
+            return m_cache.GetKeys();
+        }
     }
 
     internal sealed class IdentityCache
@@ -53,6 +56,11 @@ namespace DataSources.Who
         private const int MaximumSize = 512;
 
         private readonly ClockCache<string, Participant> m_identitiesByAlias;
+
+        public HashSet<string> GetKeys()
+        {
+            return m_identitiesByAlias.Keys;
+        }
 
         public IdentityCache()
         {

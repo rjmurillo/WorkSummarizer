@@ -25,7 +25,7 @@ namespace Events.ManicTime
                     Text = p.DisplayName
                 };
                 return e;
-            });
+            }).ToList();
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

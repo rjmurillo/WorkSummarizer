@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Security.Policy;
 using System.Threading;
 
 namespace Common
@@ -40,6 +42,7 @@ namespace Common
         private MemoryCacheEntry<TKey, TValue> m_beforeClockHand;
         private int m_currentSize;
         private bool m_disposed;
+        private HashSet<TKey> m_keys = new HashSet<TKey>(); 
 
         public ClockCache(int maxSize)
             : this(null, maxSize)
@@ -94,6 +97,30 @@ namespace Common
             set
             {
                 AddHelper(key, value, true);
+            }
+        }
+
+        public HashSet<TKey> Keys
+        {
+            get
+            {
+                while (!m_readerWriterLock.TryEnterReadLock(0))
+                {
+                }
+
+                try
+                {
+                    foreach(var key in m_dictionary.Keys)
+                    {
+                        m_keys.Add(key);
+                    }
+
+                    return m_keys;
+                }
+                finally
+                {
+                    m_readerWriterLock.ExitReadLock();
+                }
             }
         }
 
