@@ -52,13 +52,20 @@ namespace Renders.Excel
             }
 
             Worksheet sheet;
-            if (workbook.Sheets.Count == 1 && string.Equals(((Worksheet)workbook.Sheets[1]).Name, "Sheet1"))
+            if (workbook.Sheets.Count == 1 && string.Equals(((Worksheet)workbook.Sheets[1]).Name, "Sheet1", StringComparison.OrdinalIgnoreCase))
                 sheet = workbook.Sheets[1];
             else
                 sheet = workbook.Sheets.Add();
 
-            sheet.Name = eventType;
-
+            try
+            {
+                sheet.Name = eventType;
+            }
+            catch (Exception)
+            {
+                // don't do the neame change, but the sheet is still valid and can be used
+            }
+            
             return sheet;
         }
 
