@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Events;
 using TagCloud;
 
@@ -17,33 +15,39 @@ namespace Renders.HTML
             var sb = new StringBuilder(events.Count() * 250);
 
             sb.Append("<html><head><title>" + HtmlEscape(eventType) + "</title><style type=\"text/css\">");
+            sb.Append("h1,h2 { font-family:arial;}");
             BuildTagCloudCss(sb);
             sb.Append("</style></head><body>");
+            sb.Append("<h1>Work Summary</h1>");
 
             if (weightedTags != null)
             {
+                sb.Append("<h2>Top words:</h2>");
                 BuildTagCloud(sb, weightedTags);
             }
 
             if (importantSentences != null)
             {
-                sb.Append("<p><div style=\"font-weight:bold;\">Important Sentences:</div>");
+                sb.Append("<h2>Important Sentences:</h2>");
                 foreach (var sentence in importantSentences)
                 {
                     sb.Append("<p>" + HtmlEscape(sentence) + "</p>");
                 }
-                sb.Append("</p>");
             }
 
             if (weightedPeople != null)
             {
-                sb.Append("<div style=\"font-weight:bold;\">People:</div>");
+                sb.Append("<h2>People:</h2>");
                 BuildTagCloud(sb, weightedPeople);
             }
 
-            foreach (var evnt in events)
+            if (events != null)
             {
-                BuildHtmlFragment(sb, evnt);
+                sb.Append("<h2>Events:</h2>");
+                foreach (var evnt in events)
+                {
+                    BuildEventHtml(sb, evnt);
+                }
             }
             sb.Append("</body></html>");
 
@@ -53,7 +57,7 @@ namespace Renders.HTML
 
         }
 
-        private static void BuildHtmlFragment(StringBuilder sb, Event evnt)
+        private static void BuildEventHtml(StringBuilder sb, Event evnt)
         {
             sb.Append("<p>");
             sb.Append("<div style=\"font-weight:bold;\">type: " + HtmlEscape(evnt.EventType) + "</div>");
