@@ -39,6 +39,7 @@ namespace WorkSummarizerGUI.ViewModels
         private bool m_isGenerateSummaryEnabled;
         private DateTime m_startLocalTime;
         private int m_progressPercentage;
+        private string m_progressStatus;
         private string m_reportingDuration;
 
         public MainViewModel()
@@ -125,6 +126,16 @@ namespace WorkSummarizerGUI.ViewModels
             }
         }
 
+        public string ProgressStatus
+        {
+            get { return m_progressStatus; }
+            private set
+            {
+                m_progressStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int ProgressPercentage
         {
             get { return m_progressPercentage; }
@@ -170,6 +181,7 @@ namespace WorkSummarizerGUI.ViewModels
         {
             IsBusy = true;
             ProgressPercentage = 0;
+            ProgressStatus = String.Empty;
 
             var selectedEventSourceIds = EventSources.Where(p => p.IsSelected)
                                                      .SelectMany(p => p.ServiceIds)
@@ -207,23 +219,26 @@ namespace WorkSummarizerGUI.ViewModels
                         var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
                         var summaryImportantSentences = new List<string>();
 
-                        var totalProgressSteps = eventQueryServiceRegistrations.Count();
+                        var eventQueryServiceRegistrationsCount = eventQueryServiceRegistrations.Count();
+                        var totalProgressSteps = eventQueryServiceRegistrationsCount;
 
                         if (selectedIsGeneratePerSourceEnabled)
                         {
-                            totalProgressSteps += eventQueryServiceRegistrations.Count();
+                            totalProgressSteps += eventQueryServiceRegistrationsCount;
                         }
 
                         if (selectedIsGeneratePerSummaryEnabled)
                         {
-                            totalProgressSteps += 1;
+                            totalProgressSteps += eventQueryServiceRegistrationsCount; // uhh nice padding for summary generation
                         }
 
                         var progressIncrement = 100 / Math.Max(totalProgressSteps, 1);
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
-                            IEnumerable<Event> evts = Enumerable.Empty<Event>();
                             KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
+                            uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Running {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
+
+                            IEnumerable<Event> evts = Enumerable.Empty<Event>();
                             Action pullEventsDelegate = () =>
                             {
                                 evts = registration1.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
@@ -237,8 +252,8 @@ namespace WorkSummarizerGUI.ViewModels
                             {
                                 pullEventsDelegate();
                             }
-                            
-                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
+
+                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; ProgressStatus = String.Format("Processing {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
 
                             var textProc = new TextProcessor();
                             var peopleProc = new PeopleProcessor();
@@ -293,6 +308,8 @@ namespace WorkSummarizerGUI.ViewModels
 
                         if (selectedIsGeneratePerSummaryEnabled)
                         {
+                            uiDispatcher.Invoke(() => { ProgressStatus = "Rendering summary..."; });
+
                             foreach (var render in renderServiceRegistrations)
                             {
                                 KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
@@ -318,6 +335,7 @@ namespace WorkSummarizerGUI.ViewModels
             }
 
             IsBusy = false;
+            ProgressStatus = "...done.";
         }
         
         private void UpdateReportingDuration()

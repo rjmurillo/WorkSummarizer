@@ -28,6 +28,7 @@ namespace Events.Outlook
                     Text = String.Format("{0} {1}", x.Subject ?? String.Empty, x.Body ?? string.Empty),
                     Date = x.StartUtc,
                     Duration = TimeSpan.FromMinutes(x.Duration.TotalMinutes),
+                    EventType = "Outlook.Email",
                     Participants =
                         x.Recipients.Select(IdentityUtility.Create).ToGraph()
                 }).ToList();

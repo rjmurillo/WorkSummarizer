@@ -14,6 +14,7 @@ namespace WorkSummarizer
             var p = events
                     .SelectMany(s => s.Participants.Nodes)
                     .Select(s => s.Value.Alias)
+                    .Where(predicate=>!predicate.Equals(Environment.UserName))
                     .GroupBy(c=>c)
                     .ToDictionary(ks=>ks.Key, e=>e.Count());
 

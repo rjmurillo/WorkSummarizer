@@ -23,7 +23,8 @@ namespace Events.CodeFlow
                         Date = p.PublishedUtcDate,
                         Duration = p.ClosedUtcDate - p.PublishedUtcDate,
                         Text = p.Name,
-                        Participants = p.Reviewers.ToGraph()
+                        Participants = p.Reviewers.ToGraph(),
+                        EventType = "CodeFlow.Author"
                     };
 
                     e.Participants.Add(IdentityUtility.Create(p.AuthorLogin));

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.Office.Interop.Outlook;
 
 namespace DataSources.Outlook
@@ -32,10 +34,33 @@ namespace DataSources.Outlook
                     continue;
                 }
 
-                itemsList.Add(new OutlookItem(mail.Subject ?? String.Empty, mail.Body ?? String.Empty, mail.SentOn,
-                    mail.SentOn, mail.Recipients.Cast<Recipient>().Select(x => x.Name).Union(new[] { mail.Sender.Name })));
+                try
+                {
+                    if (mail.Class != OlObjectClass.olMobile)
+                    {
 
-                ((Microsoft.Office.Interop.Outlook._MailItem)mail).Close(OlInspectorClose.olDiscard);
+                        try
+                        {
+                            itemsList.Add(new OutlookItem(mail.Subject ?? String.Empty, mail.Body ?? String.Empty,
+                                mail.CreationTime,
+                                mail.CreationTime,
+                                mail.Recipients.Cast<Recipient>()
+                                    .Select(x => x.Name)
+                                    .Union(new[] {mail.Sender != null ? mail.Sender.Name : null})));
+                        }
+                        catch (COMException e)
+                        {
+                            if (e.HResult != -2147352573)
+                            {
+                                throw;
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    ((Microsoft.Office.Interop.Outlook._MailItem) mail).Close(OlInspectorClose.olDiscard);
+                }
             }
 
             return itemsList;

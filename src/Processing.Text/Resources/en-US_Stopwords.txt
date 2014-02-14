@@ -55,6 +55,16 @@ sept
 oct
 nov
 dec
+monday
+mon
+tuesday
+tue
+wednesday
+wed
+thursday
+thur
+friday
+fri
 VS
 Regarding
 Thanks
