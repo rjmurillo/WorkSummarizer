@@ -66,7 +66,7 @@
       <Link>PluginRuntime.cs</Link>
     </Compile>
     <Compile Include="Converters\InverseBooleanConverter.cs" />
-    <Compile Include="ViewModels\EventSourceViewModel.cs" />
+    <Compile Include="ViewModels\ServiceViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReportingSinkViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

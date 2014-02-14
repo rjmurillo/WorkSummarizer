@@ -12,7 +12,7 @@ namespace Renders.HTML
 {
     public class HtmlWriteEvents : IRenderEvents
     {
-        public void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags)
+        public void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags, IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences)
         {
             var sb = new StringBuilder(events.Count() * 250);
 
@@ -23,6 +23,22 @@ namespace Renders.HTML
             if (weightedTags != null)
             {
                 BuildTagCloud(sb, weightedTags);
+            }
+
+            if (importantSentences != null)
+            {
+                sb.Append("<p><div style=\"font-weight:bold;\">Important Sentences:</div>");
+                foreach (var sentence in importantSentences)
+                {
+                    sb.Append("<p>" + sentence + "</p>");
+                }
+                sb.Append("</p>");
+            }
+
+            if (weightedPeople != null)
+            {
+                sb.Append("<div style=\"font-weight:bold;\">People:</div>");
+                BuildTagCloud(sb, weightedPeople);
             }
 
             foreach (var evnt in events)
@@ -83,7 +99,7 @@ namespace Renders.HTML
                     weightedTags,
                     new TagCloudGenerationRules {
                         MaxNumberOfTags = 100,
-                        Order = TagCloudOrder.WeightDescending,
+                        Order = TagCloudOrder.Centralized,
                         TagCssClassPrefix = "TagWeight",
                     }).ToString();
             sb.Append("<p>" + htmlTags + "</p>");
