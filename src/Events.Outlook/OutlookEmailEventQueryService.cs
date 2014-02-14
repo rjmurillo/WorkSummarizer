@@ -30,7 +30,7 @@ namespace Events.Outlook
                     Duration = TimeSpan.FromMinutes(x.Duration.TotalMinutes),
                     Participants =
                         x.Recipients.Select(IdentityUtility.Create).ToGraph()
-                });
+                }).ToList();
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

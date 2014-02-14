@@ -29,7 +29,7 @@ namespace Events.Kudos
                     e.Participants.Add(IdentityUtility.Create(p.SenderAlias));
 
                     return e;
-                });
+                }).ToList();
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

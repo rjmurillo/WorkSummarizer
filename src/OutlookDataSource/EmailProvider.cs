@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Office.Interop.Outlook;
@@ -12,13 +13,13 @@ namespace DataSources.Outlook
             Application oApp = new Application();
             var mapiNamespace = oApp.GetNamespace("MAPI");
 
-            var calendarFolder =
+            var emailSentFolder =
                 mapiNamespace.GetDefaultFolder(OlDefaultFolders.olFolderSentMail);
 
             var filter = "[SentOn] >= \"" + startDateUtc.ToShortDateString() + "\" and [SentOn] <=\"" +
                          endDateUtc.ToShortDateString() + "\"";
 
-            Items restrictedItems = calendarFolder.Items.Restrict(filter);
+            Items restrictedItems = emailSentFolder.Items.Restrict(filter);
 
             var itemsList = new List<OutlookItem>();
 
@@ -31,8 +32,8 @@ namespace DataSources.Outlook
                     continue;
                 }
 
-                itemsList.Add(new OutlookItem(mail.Subject ?? String.Empty, mail.Body ?? String.Empty, mail.CreationTime,
-                    mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.Name).Union(new[] { mail.Sender.Name })));
+                itemsList.Add(new OutlookItem(mail.Subject ?? String.Empty, mail.Body ?? String.Empty, mail.SentOn,
+                    mail.SentOn, mail.Recipients.Cast<Recipient>().Select(x => x.Name).Union(new[] { mail.Sender.Name })));
 
                 ((Microsoft.Office.Interop.Outlook._MailItem)mail).Close(OlInspectorClose.olDiscard);
             }

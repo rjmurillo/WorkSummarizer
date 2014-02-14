@@ -21,7 +21,7 @@ namespace Events.Connect
                         EventType = "Connect.Submission",
                         Text = p.Title
                     };
-                });
+                }).ToList();
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

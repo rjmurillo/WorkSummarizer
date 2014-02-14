@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
 using DataSources;
 using DataSources.Outlook;
 using DataSources.Who;
@@ -11,13 +8,13 @@ using Graph;
 
 namespace Events.Outlook
 {
-    public class OutlookMeetingEventQueryService : EventQueryServiceBase
+    public class OutlookConversationHistoryEventQueryService : EventQueryServiceBase
     {
         private readonly IDataPull<OutlookItem> m_outlookDataSource;
 
-        public OutlookMeetingEventQueryService()
+        public OutlookConversationHistoryEventQueryService()
         {
-            m_outlookDataSource = new MeetingProvider();
+            m_outlookDataSource = new ConversationHistoryProvider();
         }
 
         public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event, bool> predicate)
