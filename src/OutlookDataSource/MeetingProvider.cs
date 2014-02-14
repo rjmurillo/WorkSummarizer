@@ -39,7 +39,7 @@ namespace DataSources.Outlook
                     appointmentItem.EndUTC,
                     appointmentItem.Recipients.Cast<Recipient>().Select(x => x.Name)));
 
-                appointmentItem.Close(OlInspectorClose.olDiscard);
+                ((Microsoft.Office.Interop.Outlook._AppointmentItem)appointmentItem).Close(OlInspectorClose.olDiscard);
 
                 item = calendarItems.FindNext();
             }

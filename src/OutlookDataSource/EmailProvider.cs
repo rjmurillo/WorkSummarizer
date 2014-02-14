@@ -34,7 +34,7 @@ namespace DataSources.Outlook
                 itemsList.Add(new OutlookItem(mail.Subject ?? String.Empty, mail.Body ?? String.Empty, mail.CreationTime,
                     mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.Name)));
 
-                mail.Close(OlInspectorClose.olDiscard);
+                ((Microsoft.Office.Interop.Outlook._MailItem)mail).Close(OlInspectorClose.olDiscard);
             }
 
             return itemsList;
