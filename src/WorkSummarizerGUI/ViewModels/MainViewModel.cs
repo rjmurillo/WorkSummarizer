@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
@@ -33,6 +34,7 @@ namespace WorkSummarizerGUI.ViewModels
         private DateTime m_endLocalTime;
         private bool m_isBusy;
         private DateTime m_startLocalTime;
+        private int m_progressPercentage;
 
         public MainViewModel()
         {
@@ -95,6 +97,16 @@ namespace WorkSummarizerGUI.ViewModels
             }
         }
 
+        public int ProgressPercentage
+        {
+            get { return m_progressPercentage; }
+            private set 
+            { 
+                m_progressPercentage = value;
+                OnPropertyChanged();
+            }
+        }
+
         public IEnumerable<ServiceViewModel> ReportingSinks
         {
             get { return m_reportingSinks; }
@@ -118,6 +130,7 @@ namespace WorkSummarizerGUI.ViewModels
         public async Task GenerateAsync()
         {
             IsBusy = true;
+            ProgressPercentage = 0;
 
             var selectedEventSourceIds = EventSources.Where(p => p.IsSelected)
                                                      .SelectMany(p => p.ServiceIds)
@@ -152,6 +165,7 @@ namespace WorkSummarizerGUI.ViewModels
                         var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
                         var summaryImportantSentences = new List<string>();
 
+                        var progressIncrement = 100/((eventQueryServiceRegistrations.Count() + 1) * 2); // increment 1 for summary, *2 for two increments per service registration
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
                             IEnumerable<Event> evts = Enumerable.Empty<Event>();
@@ -169,6 +183,8 @@ namespace WorkSummarizerGUI.ViewModels
                             {
                                 pullEventsDelegate();
                             }
+                            
+                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
 
                             IDictionary<string, int> weightedTags = new Dictionary<string, int>(); // TODO - pass real tags
                             IDictionary<string, int> weightedPeople = new Dictionary<string, int>(); // TODO
@@ -203,6 +219,8 @@ namespace WorkSummarizerGUI.ViewModels
                             }
 
                             summaryImportantSentences.AddRange(importantSentences);
+
+                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
                         }
 
                         foreach (var render in renderServiceRegistrations)
@@ -218,6 +236,8 @@ namespace WorkSummarizerGUI.ViewModels
                                 renderEventsDelegate();
                             }
                         }
+
+                        uiDispatcher.Invoke(() => { ProgressPercentage = 100; });
                     }
                     catch (Exception ex)
                     {

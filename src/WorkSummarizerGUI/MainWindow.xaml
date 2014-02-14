@@ -37,7 +37,8 @@
               Height="3">
             <ProgressBar Height="3"
                          Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
-                         IsIndeterminate="True"/>
+                         Value="{Binding ProgressPercentage}"
+                         Maximum="100"/>
         </Grid>
 
         <ScrollViewer Grid.Row="2"
