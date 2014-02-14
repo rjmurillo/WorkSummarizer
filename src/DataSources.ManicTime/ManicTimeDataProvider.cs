@@ -51,36 +51,48 @@ namespace DataSources.ManicTime
                 manicTimeDbPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             }
 
-            using(var conn = new SqlCeConnection("Data Source = " + Path.Combine(manicTimeDbPath, "ManicTime.sdf") + ";Persist Security Info=False"))
-            {                
-                conn.Open();
-
-                SqlCeCommand cmd = conn.CreateCommand();
-                cmd.CommandText = 
-                    "SELECT act.[DisplayName], act.[StartUtcTime], act.[EndUtcTime], act.[TextData], grp.[DisplayName] GroupDisplayName"
-                    + " FROM [Activity] act"
-                    + " INNER JOIN [Group] grp ON act.GroupId = grp.GroupId"
-                    + " WHERE act.DisplayName <> '' "
-                    + " AND act.StartUtcTime >= '" + startTimeUtc.ToString("yyyy/MM/dd HH:mm:ss") + "'" // REVIEW localized date parsing and parameter substitution
-                    + " AND act.EndUtcTime <= '" + endTimeUtc.ToString("yyyy/MM/dd HH:mm:ss") + "'"
-                    + " ORDER BY act.EndUtcTime DESC";
-                
-                var reader = cmd.ExecuteReader();
-                var activities = new List<ManicTimeActivity>();
-                while (reader.Read())
+            try
+            {
+                using (
+                    var conn =
+                        new SqlCeConnection("Data Source = " + Path.Combine(manicTimeDbPath, "ManicTime.sdf") +
+                                            ";Persist Security Info=False"))
                 {
-                    activities.Add(new ManicTimeActivity 
-                    {
-                        DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
-                        TextData = reader.GetString(reader.GetOrdinal("TextData")),
-                        GroupDisplayName = reader.GetString(reader.GetOrdinal("GroupDisplayName")),
-                        StartUtcTime = reader.GetDateTime(reader.GetOrdinal("StartUtcTime")),
-                        EndUtcTime = reader.GetDateTime(reader.GetOrdinal("EndUtcTime"))
-                    });
-                }
+                    conn.Open();
 
-                return activities;
+                    SqlCeCommand cmd = conn.CreateCommand();
+                    cmd.CommandText =
+                        "SELECT act.[DisplayName], act.[StartUtcTime], act.[EndUtcTime], act.[TextData], grp.[DisplayName] GroupDisplayName"
+                        + " FROM [Activity] act"
+                        + " INNER JOIN [Group] grp ON act.GroupId = grp.GroupId"
+                        + " WHERE act.DisplayName <> '' "
+                        + " AND act.StartUtcTime >= '" + startTimeUtc.ToString("yyyy/MM/dd HH:mm:ss") + "'"
+                            // REVIEW localized date parsing and parameter substitution
+                        + " AND act.EndUtcTime <= '" + endTimeUtc.ToString("yyyy/MM/dd HH:mm:ss") + "'"
+                        + " ORDER BY act.EndUtcTime DESC";
+
+                    var reader = cmd.ExecuteReader();
+                    var activities = new List<ManicTimeActivity>();
+                    while (reader.Read())
+                    {
+                        activities.Add(new ManicTimeActivity
+                        {
+                            DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                            TextData = reader.GetString(reader.GetOrdinal("TextData")),
+                            GroupDisplayName = reader.GetString(reader.GetOrdinal("GroupDisplayName")),
+                            StartUtcTime = reader.GetDateTime(reader.GetOrdinal("StartUtcTime")),
+                            EndUtcTime = reader.GetDateTime(reader.GetOrdinal("EndUtcTime"))
+                        });
+                    }
+
+                    return activities;
+                }
             }
+            catch (SqlCeException)
+            {
+                // no ManicTime data to get, that's ok just don't crash
+            }
+            return new List<ManicTimeActivity>();
         }
     }
 }
