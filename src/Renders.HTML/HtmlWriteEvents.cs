@@ -154,7 +154,7 @@ namespace Renders.HTML
 
         private static string HtmlEscape(string text)
         {
-            return text.Replace("<", "&lt;").Replace(">", "&gt;");
+            return text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
         }
     }
 }
