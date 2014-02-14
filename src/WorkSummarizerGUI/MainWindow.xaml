@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
         Title="Work Summarizer"
-        Height="520"
+        Height="550"
         MinWidth="640"
         Width="640"
         MaxWidth="640"
@@ -110,6 +110,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <Label Grid.Column="0"
@@ -131,6 +132,16 @@
                                         SelectedDate="{Binding EndLocalTime}"
                                         DisplayDateStart="{Binding StartLocalTime}"
                                         Margin="0,6,0,0" />
+
+                            <Label Grid.Column="0"
+                                   Grid.Row="2"
+                                   Content="Duration"
+                                   Margin="0,6,0,0" />
+
+                            <Label Grid.Column="1"
+                                   Grid.Row="2"
+                                   Content="{Binding ReportingDuration, Mode=OneWay}"
+                                   Margin="0,6,0,0" />
                         </Grid>
                     </StackPanel>
                 </StackPanel>
