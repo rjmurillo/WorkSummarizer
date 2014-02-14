@@ -8,6 +8,6 @@ namespace Extensibility
     public interface IPluginRuntime
     {
         // REVIEW expose service registration as a service...
-        IDictionary<string, IEventQueryService> EventQueryServices { get; }
+        IDictionary<ServiceRegistration, IEventQueryService> EventQueryServices { get; }
     }
 }

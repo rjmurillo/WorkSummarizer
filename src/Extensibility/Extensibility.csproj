@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="IPluginRuntime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceRegistration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Events\Events.csproj">

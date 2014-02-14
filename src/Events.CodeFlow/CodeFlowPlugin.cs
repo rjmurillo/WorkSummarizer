@@ -11,7 +11,7 @@ namespace Events.CodeFlow
     {
         public CodeFlowPlugin(IPluginRuntime pluginRuntime)
         {
-            pluginRuntime.EventQueryServices["CodeFlow.Authored"] = new CodeFlowAuthoredEventQueryService();
+            pluginRuntime.EventQueryServices[new ServiceRegistration("CodeFlow.Authored", "CodeFlow", "Authored")] = new CodeFlowAuthoredEventQueryService();
         }
     }
 }

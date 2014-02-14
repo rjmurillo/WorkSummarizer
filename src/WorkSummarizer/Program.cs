@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Events;
 using Events.CodeFlow;
 using Events.Connect;
@@ -14,7 +13,6 @@ using Microsoft.Office.Interop.Excel;
 using Renders;
 using Renders.Console;
 using Renders.Excel;
-using Renders.HTML;
 
 namespace WorkSummarizer
 {
@@ -38,28 +36,17 @@ namespace WorkSummarizer
             pluginRuntime.Start(plugins);
 
             var renders = new List<IRenderEvents>();
-            //renders.Add(new ExcelWriteEvents());
+            renders.Add(new ExcelWriteEvents());
             //renders.Add(new ConsoleWriteEvents());
-            renders.Add(new HtmlWriteEvents());
             
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
-                var sb = new StringBuilder();
                 Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
-                var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14)).ToList();
-
-                foreach (var evt in evts)
-                {
-                    sb.Append(String.Format(" {0} {1} ", evt.Subject.Text.Replace("\n", String.Empty).Replace("\r", String.Empty), evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty)));
-                }
-
-                var textProc = new TextProcessor();
+                var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14));
                
-                IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
-
                 foreach (IRenderEvents render in renders)
                 {
-                    render.Render(eventQueryServiceRegistration.Key, evts, weightedTags);
+                    render.WriteOut(eventQueryServiceRegistration.Key, evts);
                 }
                 
                 Console.WriteLine();
