@@ -41,7 +41,7 @@ namespace WorkSummarizer
 
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(plugins);
-            
+
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
                 var sb = new StringBuilder();
@@ -54,10 +54,11 @@ namespace WorkSummarizer
                 }
 
                 var textProc = new TextProcessor();
+                var peopleProc = new PeopleProcessor();
                
                 IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
-                IDictionary<string, int> weightedPeople = null; // TODO
                 IEnumerable<string> importantSentences = textProc.GetImportantSentences(sb.ToString());
+                IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
 
                 foreach (IRenderEvents render in pluginRuntime.RenderEventServices.Values)
                 {

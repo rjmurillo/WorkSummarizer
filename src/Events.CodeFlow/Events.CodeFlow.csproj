@@ -52,9 +52,9 @@
       <Project>{fe7e3eb9-4e5a-4cf4-84dd-f41e9dc65544}</Project>
       <Name>DataSources.CodeFlow</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataSources\DataSources.csproj">
-      <Project>{D5F64C26-0017-4248-A70C-73C8BBFD49E4}</Project>
-      <Name>DataSources</Name>
+    <ProjectReference Include="..\DataSources.Who\DataSources.Who.csproj">
+      <Project>{67FFE75C-C82D-4890-B932-58D2EBF26E0D}</Project>
+      <Name>DataSources.Who</Name>
     </ProjectReference>
     <ProjectReference Include="..\Events\Events.csproj">
       <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>

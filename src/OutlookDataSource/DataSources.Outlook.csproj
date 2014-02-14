@@ -63,9 +63,9 @@
       <Project>{8D667DE1-CF34-448D-96E1-6B3B4AA5D102}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataSources\DataSources.csproj">
-      <Project>{D5F64C26-0017-4248-A70C-73C8BBFD49E4}</Project>
-      <Name>DataSources</Name>
+    <ProjectReference Include="..\DataSources.Who\DataSources.Who.csproj">
+      <Project>{67FFE75C-C82D-4890-B932-58D2EBF26E0D}</Project>
+      <Name>DataSources.Who</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
