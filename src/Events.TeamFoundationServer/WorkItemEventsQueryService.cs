@@ -68,7 +68,10 @@ namespace Events.TeamFoundationServer
                         continue;
                     }
 
-                    retval.Add(e);
+                    if (e.Date.Ticks > startDateTime.Ticks && e.Date.Ticks < endDateTime.Ticks)
+                    {
+                        retval.Add(e);
+                    }
                 }
             }
 
