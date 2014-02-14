@@ -194,6 +194,7 @@ namespace Renders.HTML
             var cssMain = LoadResource("main.css");
             var cssTagCloud = BuildTagCloudCss();
             var jsMain = LoadResource("main.js");
+            var jsOther = BuildOtherJs(weightedTags);
 
             var htmlFinal = string.Format(
                 CultureInfo.InvariantCulture,
@@ -202,12 +203,30 @@ namespace Renders.HTML
                 cssNormalize + cssMain + cssTagCloud,
                 string.Empty,
                 sb,
-                jsMain);
+                jsMain + jsOther);
 
             string fileName = string.Format("WorkSummarizer_{0}.html", eventType);
             File.WriteAllText(fileName, htmlFinal);
             Process.Start(fileName);
 
+        }
+
+        private string BuildOtherJs(IDictionary<string, int> weightedTags)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("$('#important_events').wrapInTag({");
+sb.AppendLine("    tag: 'strong',");
+sb.Append("    words: [");
+            foreach (var t in weightedTags.Keys)
+            {
+                sb.Append("'" + t + "',");
+            }
+            sb.Append("'blargelfarf'");
+            sb.AppendLine("]");
+sb.AppendLine("});");
+
+            return sb.ToString();
         }
 
         private string DetermineHeader(string p)
@@ -242,6 +261,8 @@ namespace Renders.HTML
                     return "Work Items Created";
                 case "Yammer.SentMessages":
                     return "Yams Sent";
+                case "ManicTime.Activity":
+                    return "ManicTime Activities";
                 default:
                     return p;
             }
