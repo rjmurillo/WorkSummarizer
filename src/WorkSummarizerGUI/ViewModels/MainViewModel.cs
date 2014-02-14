@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Threading;
 using Events;
 using Events.CodeFlow;
@@ -148,21 +150,43 @@ namespace WorkSummarizerGUI.ViewModels
                                     .RenderEventServices
                                     .Where(p => selectedReportingSinkTypes.Contains(p.Key.Id));
 
+                            var summaryEvents = new List<Event>();
+                            var summaryWeightedTags = new ConcurrentDictionary<string, int>();
+                            var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
+                            var summaryImportantSentences = new List<string>();
+
                             foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                             {
-                                Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
                                 var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
 
-                                IDictionary<string, int> weightedTags = null; // TODO - pass real tags
-                                IDictionary<string, int> weightedPeople = null; // TODO
-                                IEnumerable<string> importantSentences = null; // TODO
+                                IDictionary<string, int> weightedTags = new Dictionary<string, int>(); // TODO - pass real tags
+                                IDictionary<string, int> weightedPeople = new Dictionary<string, int>(); // TODO
+                                IEnumerable<string> importantSentences = new List<string>(); // TODO
 
                                 foreach (var render in renderServiceRegistrations)
                                 {
                                     render.Value.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
                                 }
 
-                                Console.WriteLine();
+                                summaryEvents.AddRange(evts);
+                                foreach (var weightedTagEntry in weightedTags)
+                                {
+                                    summaryWeightedTags.AddOrUpdate(weightedTagEntry.Key, weightedTagEntry.Value,
+                                        (s, i) => i + weightedTagEntry.Value);
+                                }
+
+                                foreach (var weightedPersonEntry in weightedPeople)
+                                {
+                                    summaryWeightedPeople.AddOrUpdate(weightedPersonEntry.Key, weightedPersonEntry.Value,
+                                        (s, i) => i + weightedPersonEntry.Value);
+                                }
+
+                                summaryImportantSentences.AddRange(importantSentences);
+                            }
+
+                            foreach (var render in renderServiceRegistrations)
+                            {
+                                render.Value.Render("Summary", summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
                             }
                         }
                         catch (Exception ex)
@@ -177,7 +201,6 @@ namespace WorkSummarizerGUI.ViewModels
                 Dispatcher.PushFrame(frame);
             }
 
-            Console.WriteLine("Done.");
             IsBusy = false;
         }
     }
