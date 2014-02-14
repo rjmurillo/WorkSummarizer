@@ -272,7 +272,7 @@ namespace WorkSummarizerGUI.ViewModels
 
                             var customStopList = IdentityUtility.GetIdentityAttributes();
 
-                            textProc.StopWords.AddRange(customStopList);
+                            textProc.AddStopWords(customStopList);
 
                             var nouns = textProc.GetNouns(sb.ToString());
                             IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
