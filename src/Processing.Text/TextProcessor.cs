@@ -32,8 +32,12 @@ namespace Processing.Text
             var sanitizedInput = Sanitize(input);
 
             var tokenizer = new OpenNLP.Tools.Tokenize.EnglishMaximumEntropyTokenizer("Resources/EnglishTok.nbin");
-            
-            return tokenizer.Tokenize(sanitizedInput).Except(m_stopWords);
+
+            var tokenized = tokenizer.Tokenize(sanitizedInput);
+
+            var output = tokenized.Where(token => !m_stopWords.Any(x => x.Equals(token, StringComparison.OrdinalIgnoreCase))).ToList();
+
+            return output;
         }
 
         public IEnumerable<Tuple<string, string>> Tag(string input)

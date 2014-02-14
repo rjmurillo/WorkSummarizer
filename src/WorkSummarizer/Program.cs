@@ -26,14 +26,14 @@ namespace WorkSummarizer
         {
             var plugins = new List<Type>();
 
-            plugins.Add(typeof(FakeEventsPlugin));
+            //plugins.Add(typeof(FakeEventsPlugin));
             // plugins.Add(typeof(CodeFlowPlugin));
             // plugins.Add(typeof(ConnectPlugin));
             // plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
             // plugins.Add(typeof(OutlookPlugin));
             // plugins.Add(typeof(TeamFoundationServerPlugin));
-            // plugins.Add(typeof(YammerPlugin));
+            plugins.Add(typeof(YammerPlugin));
             
             //plugins.Add(typeof(ConsoleRenderPlugin));
             //plugins.Add(typeof(ExcelRenderPlugin));
@@ -57,7 +57,7 @@ namespace WorkSummarizer
                
                 IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
                 IDictionary<string, int> weightedPeople = null; // TODO
-                IEnumerable<string> importantSentences = null; // TODO
+                IEnumerable<string> importantSentences = textProc.GetImportantSentences(sb.ToString());
 
                 foreach (IRenderEvents render in pluginRuntime.RenderEventServices.Values)
                 {
