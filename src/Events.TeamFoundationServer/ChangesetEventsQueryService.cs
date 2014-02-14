@@ -32,7 +32,8 @@ namespace Events.TeamFoundationServer
                         Text = p.Comment,
                         Date = p.CreationDate,
                         Duration = TimeSpan.Zero,
-                        Context = p.ChangesetId
+                        Context = p.ChangesetId,
+                        EventType = "TeamFoundationServer.Changeset"
                     };
                     e.Participants.Add(IdentityUtility.Create(p.Committer));
                     return e;
