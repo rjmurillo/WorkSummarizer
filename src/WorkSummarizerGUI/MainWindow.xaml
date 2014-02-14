@@ -39,7 +39,61 @@
                     Value="#222222" />
         </Style>
     </Window.Resources>
-
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="X"
+                                     Storyboard.TargetName="TitleTranslateTransform"
+                                     From="20"
+                                     To="0"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="X"
+                                     Storyboard.TargetName="ContentTranslateTransform"
+                                     From="40"
+                                     To="0"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="Height"
+                                     Storyboard.TargetName="FooterStage"
+                                     From="0"
+                                     To="30"
+                                     Duration="0:0:0.3"
+                                     BeginTime="0:0:1">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                     Storyboard.TargetName="TitleStage"
+                                     From="0.8"
+                                     To="1"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                     Storyboard.TargetName="ContentStage"
+                                     From="0.8"
+                                     To="1"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -93,10 +147,17 @@
             </Label.Style>
         </Label>
 
-        <Label Grid.Row="1"
+        <Label x:Name="TitleStage" 
+               Grid.Row="1"
                Content="WORK SUMMARIZER"
                FontSize="42"
-               FontWeight="Bold" />
+               FontWeight="Bold"
+               Opacity="0.8">
+            <Label.RenderTransform>
+                <TranslateTransform x:Name="TitleTranslateTransform"
+                                    X="20" />
+            </Label.RenderTransform>
+        </Label>
 
         <Grid Grid.Row="2"
               Height="3">
@@ -111,8 +172,15 @@
                          Grid.ColumnSpan="2" />
         </Grid>
 
-        <ScrollViewer Grid.Row="3"
-                      VerticalScrollBarVisibility="Auto">
+        <ScrollViewer x:Name="ContentStage" 
+                      Grid.Row="3"
+                      VerticalScrollBarVisibility="Auto"
+                      Opacity="0.8">
+            <ScrollViewer.RenderTransform>
+                <TranslateTransform x:Name="ContentTranslateTransform"
+                                    X="40" />
+            </ScrollViewer.RenderTransform>
+            
             <Grid Margin="0,-10,0,0"
                   IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}">
                 <Grid.ColumnDefinitions>
@@ -233,18 +301,23 @@
                         Click="OnGenerateClickAsync" />
             </Grid>
         </ScrollViewer>
-        <StatusBar Grid.Row="4"
-                   Background="#444444">
-            <StatusBarItem>
-                <Label Content="By benb, edkotows, jocarrie, mattwest, rimuri"
-                       FontSize="10" 
-                       Foreground="White"/>
-            </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right">
-                <Label Content="{Binding Version, Mode=OneTime}"
-                       FontSize="10"
-                       Foreground="White" />
-            </StatusBarItem>
-        </StatusBar>
+        <Grid Grid.Row="4"
+              Height="30">
+            <StatusBar x:Name="FooterStage" 
+                       Background="#444444"
+                       Height="0"
+                       VerticalAlignment="Bottom">
+                <StatusBarItem>
+                    <Label Content="By benb, edkotows, jocarrie, mattwest, rimuri"
+                           FontSize="10" 
+                           Foreground="White"/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <Label Content="{Binding Version, Mode=OneTime}"
+                           FontSize="10"
+                           Foreground="White" />
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
     </Grid>
 </Window>
