@@ -322,7 +322,8 @@ namespace WorkSummarizerGUI.ViewModels
         private void UpdateReportingDuration()
         {
             var duration = m_endLocalTime - m_startLocalTime;
-            ReportingDuration = String.Format("{0} weeks, {1} days", (int)duration.TotalDays / 7, duration.TotalDays % 7);
+            var upperWeeks = (int)(Math.Ceiling(duration.TotalDays * 5/7) / 7);
+            ReportingDuration = String.Format("About {0} work weeks", upperWeeks);
         }
     }
 }
