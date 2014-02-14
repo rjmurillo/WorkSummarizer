@@ -166,7 +166,7 @@ namespace Renders.HTML
             if (importantSentences != null)
             {
                 sb.AppendLine("<h2>Important events</h2>");
-                sb.AppendLine("<ul>");
+                sb.AppendLine("<ul id=\"important_events\">");
                 foreach (var sentence in importantSentences)
                 {
                     sb.AppendLine("<li>" + HtmlEscape(sentence) + "</li>");
