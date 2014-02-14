@@ -42,7 +42,7 @@ namespace DataSources.Yammer
 
             Console.WriteLine("Session token: " + session.UserToken);
 
-            return PullSentMessages(session, startFilterDate).Where(p => p.CreatedAt >= startFilterDate && p.CreatedAt <= endFilterDate);
+            return PullSentMessages(session, startFilterDate).Where(p => p.CreatedAt >= startFilterDate && p.CreatedAt <= endFilterDate).ToList();
         }
 
         private static IEnumerable<YammerMessage> PullSentMessages(YammerSession session, DateTime startDate)
@@ -52,7 +52,7 @@ namespace DataSources.Yammer
 
             while (hasNext)
             {
-                var result = session.Messages.GetSentAsync(OlderThan: lastMessageId, Threaded: YammerMessages.Threaded.Extended).Result;
+                var result = session.Messages.GetSentAsync(OlderThan: lastMessageId, Threaded: YammerMessages.Threaded.Extended, Limit: 100).Result;
                 var references = result.references.ToLookup(p => p.id);
 
                 hasNext = result.messages.Any();
