@@ -95,9 +95,9 @@ namespace Renders.Excel
         {
             if (application == null)
             {
-                application = new Application();
-                workbook = application.Workbooks.Add();
+                application = new Application();               
             }
+            workbook = application.Workbooks.Add();
 
             Worksheet sheet;
             if (workbook.Sheets.Count == 1 && string.Equals(((Worksheet)workbook.Sheets[1]).Name, "Sheet1", StringComparison.OrdinalIgnoreCase))
