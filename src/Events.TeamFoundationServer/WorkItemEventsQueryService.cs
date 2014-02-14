@@ -62,6 +62,12 @@ namespace Events.TeamFoundationServer
                     }
 
                     e.Context = wi.Id;
+
+                    if (e.Text.Contains("TFS AUTO UPDATE"))
+                    {
+                        continue;
+                    }
+
                     retval.Add(e);
                 }
             }
