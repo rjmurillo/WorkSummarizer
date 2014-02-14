@@ -1,10 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using OpenNLP.Tools.Coreference.Resolver;
 
-namespace WorkSummarizer
+namespace Processing.Text
 {
     public class TextProcessor
     {

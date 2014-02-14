@@ -46,18 +46,6 @@
     <Reference Include="Microsoft.TeamFoundation.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.TeamFoundation.VersionControl.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="OpenNLP">
-      <HintPath>..\Lib\OpenNLP.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpEntropy">
-      <HintPath>..\Lib\SharpEntropy.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpEntropySqlite">
-      <HintPath>..\Lib\SharpEntropySqlite.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpWordNet">
-      <HintPath>..\Lib\SharpWordNet.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -71,23 +59,10 @@
     <Compile Include="PluginRuntime.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="Resources\EnglishPOS.nbin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\EnglishTok.nbin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="packages.config" />
-    <Content Include="Resources\tagdict">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\EnglishSD.nbin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
@@ -129,6 +104,10 @@
     <ProjectReference Include="..\Graph\Graph.csproj">
       <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
       <Name>Graph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Processing.Text\Processing.Text.csproj">
+      <Project>{93ff4ed2-840e-46d9-af8d-f6f588e40485}</Project>
+      <Name>Processing.Text</Name>
     </ProjectReference>
     <ProjectReference Include="..\Renders.Console\Renders.Console.csproj">
       <Project>{B97B4ED9-962C-49BA-B6FD-F6D913773830}</Project>

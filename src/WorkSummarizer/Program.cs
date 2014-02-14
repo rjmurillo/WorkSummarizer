@@ -11,6 +11,7 @@ using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
 using Microsoft.Office.Interop.Excel;
+using Processing.Text;
 using Renders;
 using Renders.Console;
 using Renders.Excel;
