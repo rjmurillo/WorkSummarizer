@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataSources.CodeFlow.CodeFlowDashboardService;
+using DataSources.Who;
 
 namespace DataSources.CodeFlow
 {
@@ -38,7 +39,8 @@ namespace DataSources.CodeFlow
                                      AuthorLogin = p.AuthorLogin,
                                      PublishedUtcDate = p.CreatedOn.ToUniversalTime(),
                                      ClosedUtcDate = p.CompletedOn.ToUniversalTime(),
-                                     Name = p.Name
+                                     Name = p.Name,
+                                     Reviewers = p.Reviewers.Select(s=>IdentityUtility.Create(s.Name))
                                  };
                              })
                              .ToList();
