@@ -30,6 +30,8 @@ namespace Extensibility
             get { return m_name; }
         }
 
+        public bool InvokeOnShellDispatcher { get; set; }
+
         public string HelpText { get; set; }
         
         public override bool Equals(object obj)

@@ -27,12 +27,12 @@ namespace WorkSummarizer
             var plugins = new List<Type>();
 
             //plugins.Add(typeof(FakeEventsPlugin));
-            // plugins.Add(typeof(CodeFlowPlugin));
+            plugins.Add(typeof(CodeFlowPlugin));
             // plugins.Add(typeof(ConnectPlugin));
-            // plugins.Add(typeof(KudosPlugin));
+            plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
-            // plugins.Add(typeof(OutlookPlugin));
-            // plugins.Add(typeof(TeamFoundationServerPlugin));
+            plugins.Add(typeof(OutlookPlugin));
+            plugins.Add(typeof(TeamFoundationServerPlugin));
             plugins.Add(typeof(YammerPlugin));
             
             //plugins.Add(typeof(ConsoleRenderPlugin));
@@ -41,12 +41,12 @@ namespace WorkSummarizer
 
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(plugins);
-            
+
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
                 var sb = new StringBuilder();
                 Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
-                var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14)).ToList();
+                var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14), Environment.UserName).ToList();
 
                 foreach (var evt in evts)
                 {
@@ -54,10 +54,11 @@ namespace WorkSummarizer
                 }
 
                 var textProc = new TextProcessor();
+                var peopleProc = new PeopleProcessor();
                
                 IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
-                IDictionary<string, int> weightedPeople = null; // TODO
                 IEnumerable<string> importantSentences = textProc.GetImportantSentences(sb.ToString());
+                IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
 
                 foreach (IRenderEvents render in pluginRuntime.RenderEventServices.Values)
                 {

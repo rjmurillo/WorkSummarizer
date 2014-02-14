@@ -19,7 +19,7 @@
                     Value="#222222" />
         </Style>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -37,12 +37,14 @@
               Height="3">
             <ProgressBar Height="3"
                          Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
-                         IsIndeterminate="True"/>
+                         Value="{Binding ProgressPercentage}"
+                         Maximum="100"/>
         </Grid>
 
         <ScrollViewer Grid.Row="2"
                       VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="10,0,10,0">
+            <StackPanel Margin="10,0,10,0"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}">
                 <StackPanel>
                     <Label Content="sources"
                            FontFamily="Segoe UI"
@@ -116,8 +118,7 @@
                         Width="140"
                         HorizontalAlignment="Right"
                         Margin="0,20,0,0"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
-                        Click="OnGenerateClick"/>
+                        Click="OnGenerateClickAsync"/>
             </StackPanel>
         </ScrollViewer>
         <StatusBar Grid.Row="3">

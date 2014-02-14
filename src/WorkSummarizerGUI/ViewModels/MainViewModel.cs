@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Threading;
 using Events;
 using Events.CodeFlow;
@@ -13,6 +18,7 @@ using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
 using Extensibility;
+using Processing.Text;
 using Renders;
 using Renders.Console;
 using Renders.Excel;
@@ -30,6 +36,7 @@ namespace WorkSummarizerGUI.ViewModels
         private DateTime m_endLocalTime;
         private bool m_isBusy;
         private DateTime m_startLocalTime;
+        private int m_progressPercentage;
 
         public MainViewModel()
         {
@@ -92,6 +99,16 @@ namespace WorkSummarizerGUI.ViewModels
             }
         }
 
+        public int ProgressPercentage
+        {
+            get { return m_progressPercentage; }
+            private set 
+            { 
+                m_progressPercentage = value;
+                OnPropertyChanged();
+            }
+        }
+
         public IEnumerable<ServiceViewModel> ReportingSinks
         {
             get { return m_reportingSinks; }
@@ -112,9 +129,10 @@ namespace WorkSummarizerGUI.ViewModels
             get { return "v" + Assembly.GetExecutingAssembly().GetName().Version; }
         }
 
-        public void Generate()
+        public async Task GenerateAsync()
         {
             IsBusy = true;
+            ProgressPercentage = 0;
 
             var selectedEventSourceIds = EventSources.Where(p => p.IsSelected)
                                                      .SelectMany(p => p.ServiceIds)
@@ -129,56 +147,118 @@ namespace WorkSummarizerGUI.ViewModels
 
             if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any())
             {
-                DispatcherFrame frame = new DispatcherFrame();
-                Dispatcher.CurrentDispatcher.BeginInvoke(
-                    DispatcherPriority.Background,
-                    new DispatcherOperationCallback(o =>
+                var uiDispatcher = Dispatcher.CurrentDispatcher;
+                await Task.Run(() =>
+                {
+                    try
                     {
-                        frame.Continue = false;
+                        var eventQueryServiceRegistrations =
+                            m_pluginRuntime
+                                .EventQueryServices
+                                .Where(p => selectedEventSourceIds.Contains(p.Key.Id));
 
-                        try
+                        var renderServiceRegistrations =
+                            m_pluginRuntime
+                                .RenderEventServices
+                                .Where(p => selectedReportingSinkTypes.Contains(p.Key.Id));
+
+                        var summaryEvents = new List<Event>();
+                        var summaryWeightedTags = new ConcurrentDictionary<string, int>();
+                        var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
+                        var summaryImportantSentences = new List<string>();
+
+                        var progressIncrement = 100/((eventQueryServiceRegistrations.Count() + 1) * 2); // increment 1 for summary, *2 for two increments per service registration
+                        foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
-                            var eventQueryServiceRegistrations =
-                                m_pluginRuntime
-                                    .EventQueryServices
-                                    .Where(p => selectedEventSourceIds.Contains(p.Key.Id));
-
-                            var renderServiceRegistrations =
-                                m_pluginRuntime
-                                    .RenderEventServices
-                                    .Where(p => selectedReportingSinkTypes.Contains(p.Key.Id));
-
-                            foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
+                            IEnumerable<Event> evts = Enumerable.Empty<Event>();
+                            KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
+                            Action pullEventsDelegate = () =>
                             {
-                                Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
-                                var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
+                                evts = registration1.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
+                            };
 
-                                IDictionary<string, int> weightedTags = null; // TODO - pass real tags
-                                IDictionary<string, int> weightedPeople = null; // TODO
-                                IEnumerable<string> importantSentences = null; // TODO
+                            if (eventQueryServiceRegistration.Key.InvokeOnShellDispatcher)
+                            {
+                                uiDispatcher.Invoke(pullEventsDelegate);
+                            }
+                            else
+                            {
+                                pullEventsDelegate();
+                            }
+                            
+                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
 
-                                foreach (var render in renderServiceRegistrations)
+                            var textProc = new TextProcessor();
+                            var peopleProc = new PeopleProcessor();
+
+                            var sb = new StringBuilder();
+
+                            foreach (var evt in evts)
+                            {
+                                sb.Append(String.Format(" {0} {1} ", evt.Subject.Text.Replace("\n", String.Empty).Replace("\r", String.Empty), evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty)));
+                            }
+
+                            IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
+                            IEnumerable<string> importantSentences = textProc.GetImportantSentences(sb.ToString());
+                            IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
+
+                            foreach (var render in renderServiceRegistrations)
+                            {
+                                KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
+                                KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
+                                Action renderEventsDelegate = () => render1.Value.Render(registration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
+                                if (render.Key.InvokeOnShellDispatcher)
                                 {
-                                    render.Value.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
+                                    uiDispatcher.Invoke(renderEventsDelegate);
                                 }
+                                else
+                                {
+                                    renderEventsDelegate();
+                                }
+                            }
 
-                                Console.WriteLine();
+                            summaryEvents.AddRange(evts);
+                            foreach (var weightedTagEntry in weightedTags)
+                            {
+                                summaryWeightedTags.AddOrUpdate(weightedTagEntry.Key, weightedTagEntry.Value,
+                                    (s, i) => i + weightedTagEntry.Value);
+                            }
+
+                            foreach (var weightedPersonEntry in weightedPeople)
+                            {
+                                summaryWeightedPeople.AddOrUpdate(weightedPersonEntry.Key, weightedPersonEntry.Value,
+                                    (s, i) => i + weightedPersonEntry.Value);
+                            }
+
+                            summaryImportantSentences.AddRange(importantSentences);
+
+                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
+                        }
+
+                        foreach (var render in renderServiceRegistrations)
+                        {
+                            KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
+                            Action renderEventsDelegate = () => render1.Value.Render("Summary", summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
+                            if (render.Key.InvokeOnShellDispatcher)
+                            {
+                                uiDispatcher.Invoke(renderEventsDelegate);
+                            }
+                            else
+                            {
+                                renderEventsDelegate();
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Oh noes!" + Environment.NewLine + Environment.NewLine + ex);
-                        }
 
-                        return null;
-                    }), 
-                    frame);
+                        uiDispatcher.Invoke(() => { ProgressPercentage = 100; });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Oh noes!" + Environment.NewLine + Environment.NewLine + ex);
+                    }
+                });
 
-                Dispatcher.PushFrame(frame);
+                IsBusy = false;
             }
-
-            Console.WriteLine("Done.");
-            IsBusy = false;
         }
     }
 }

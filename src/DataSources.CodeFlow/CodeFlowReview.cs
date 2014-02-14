@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Common;
 
 namespace DataSources.CodeFlow
 {
@@ -8,5 +11,7 @@ namespace DataSources.CodeFlow
         public string Name { get; set; }
         public DateTime PublishedUtcDate { get; set; }
         public DateTime ClosedUtcDate { get; set; }
+
+        public IEnumerable<Participant> Reviewers { get; set; }
     }
 }
