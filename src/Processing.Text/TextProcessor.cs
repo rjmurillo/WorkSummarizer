@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -7,19 +8,10 @@ namespace Processing.Text
 {
     public class TextProcessor
     {
-        private static readonly Regex s_sanitizeRegex = new Regex(@"[^0-9a-zA-Z\s\u00E9-\u00F8]");
-        private static readonly Regex s_normalizeWhitespaceRegex = new Regex(@"\s+");
+        private readonly IEnumerable<string> m_stopWords = GetStopWords();
+        private static readonly Regex s_sanitizeRegex = new Regex(@"[^0-9a-zA-Z\s\u00E9-\u00F8]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex s_normalizeWhitespaceRegex = new Regex(@"\s+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex HtmlToTextRegex = new Regex("<[^>]+>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-        private static string HtmlToPlainText(string html)
-        {
-            if (string.IsNullOrWhiteSpace(html))
-            {
-                return String.Empty;
-            }
-
-            return HtmlToTextRegex.Replace(html, "");
-        }
 
         public static string Sanitize(string text)
         {
@@ -39,10 +31,9 @@ namespace Processing.Text
         {
             var sanitizedInput = Sanitize(input);
 
-            var path = "Resources/EnglishTok.nbin";
-            var tokenizer = new OpenNLP.Tools.Tokenize.EnglishMaximumEntropyTokenizer(path);
-
-            return tokenizer.Tokenize(sanitizedInput);
+            var tokenizer = new OpenNLP.Tools.Tokenize.EnglishMaximumEntropyTokenizer("Resources/EnglishTok.nbin");
+            
+            return tokenizer.Tokenize(sanitizedInput).Except(m_stopWords);
         }
 
         public IEnumerable<Tuple<string, string>> Tag(string input)
@@ -63,6 +54,7 @@ namespace Processing.Text
             var tokens = Tokenize(input);
 
             var wordLookup = new Dictionary<string, int>();
+
             foreach (var token in tokens)
             {
                 int value;
@@ -121,6 +113,31 @@ namespace Processing.Text
         {
             var sentenceDetect = new OpenNLP.Tools.SentenceDetect.EnglishMaximumEntropySentenceDetector("Resources/EnglishSD.nbin");
             return sentenceDetect.SentenceDetect(input);
+        }
+
+        private static string HtmlToPlainText(string html)
+        {
+            if (string.IsNullOrWhiteSpace(html))
+            {
+                return String.Empty;
+            }
+
+            return HtmlToTextRegex.Replace(html, "");
+        }
+
+        private static IEnumerable<string> GetStopWords()
+        {
+            var stopWords = new List<string>();
+            using (var sr = new StreamReader("Resources/en-US_Stopwords.txt"))
+            {
+                string word;
+                while ((word = sr.ReadLine()) != null)
+                {
+                    stopWords.Add(word);
+                }
+            }
+
+            return stopWords;
         }
     }
 }
