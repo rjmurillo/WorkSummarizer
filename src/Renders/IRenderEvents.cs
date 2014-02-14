@@ -9,6 +9,6 @@ namespace Renders
 {
     public interface IRenderEvents
     {
-        void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags, IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences);
+        void Render(string eventType, DateTime startDateTime, DateTime endDateTime, IEnumerable<Event> events, IDictionary<string, int> weightedTags, IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences);
     }
 }

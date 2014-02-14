@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Events;
 using Events.CodeFlow;
 using Events.Connect;
@@ -46,7 +47,9 @@ namespace WorkSummarizer
             {
                 var sb = new StringBuilder();
                 Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
-                var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14), Environment.UserName).ToList();
+                var beg = DateTime.Today.AddDays(-21);
+                var end = DateTime.Today;
+                var evts = eventQueryServiceRegistration.Value.PullEvents(beg, end, Environment.UserName).ToList();
 
                 foreach (var evt in evts)
                 {
@@ -63,7 +66,7 @@ namespace WorkSummarizer
 
                 foreach (IRenderEvents render in pluginRuntime.RenderEventServices.Values)
                 {
-                    render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
+                    render.Render(eventQueryServiceRegistration.Key.Id, beg, end, evts, weightedTags, weightedPeople, importantSentences);
                 }
                 
                 Console.WriteLine();

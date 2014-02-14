@@ -226,7 +226,7 @@ namespace WorkSummarizerGUI.ViewModels
                             KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
                             Action pullEventsDelegate = () =>
                             {
-                                evts = registration1.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
+                                evts = registration1.Value.PullEvents(selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), Environment.UserName);
                             };
 
                             if (eventQueryServiceRegistration.Key.InvokeOnShellDispatcher)
@@ -261,7 +261,7 @@ namespace WorkSummarizerGUI.ViewModels
                                 {
                                     KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
                                     KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
-                                    Action renderEventsDelegate = () => render1.Value.Render(registration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
+                                    Action renderEventsDelegate = () => render1.Value.Render(registration.Key.Id, selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), evts, weightedTags, weightedPeople, importantSentences);
                                     if (render.Key.InvokeOnShellDispatcher)
                                     {
                                         uiDispatcher.Invoke(renderEventsDelegate);
@@ -296,7 +296,7 @@ namespace WorkSummarizerGUI.ViewModels
                             foreach (var render in renderServiceRegistrations)
                             {
                                 KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
-                                Action renderEventsDelegate = () => render1.Value.Render("Summary", summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
+                                Action renderEventsDelegate = () => render1.Value.Render("Summary", selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
                                 if (render.Key.InvokeOnShellDispatcher)
                                 {
                                     uiDispatcher.Invoke(renderEventsDelegate);

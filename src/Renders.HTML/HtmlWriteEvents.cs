@@ -1,22 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using Events;
 using TagCloud;
 
 namespace Renders.HTML
 {
+    public static class TimeSpanExtensions
+    {
+        public static int GetYears(this TimeSpan timespan)
+        {
+            return (int)((double)timespan.TotalDays / 365.2425);
+        }
+        public static int GetMonths(this TimeSpan timespan)
+        {
+            return (int)((double)timespan.TotalDays / 30.436875);
+        }
+
+        public static int GetWeeks(this TimeSpan timespan)
+        {
+            return (int)((double)timespan.TotalDays / 7);
+        }
+    }
+
     public class HtmlWriteEvents : IRenderEvents
     {
-        private string LoadResource(string name)
+        private static string LoadResource(string name)
         {
             var a = Assembly.GetExecutingAssembly();
             using (var s = a.GetManifestResourceStream("Renders.HTML." + name))
             {
+                Debug.Assert(s != null);
                 using (var r = new StreamReader(s))
                 {
                     return r.ReadToEnd();
@@ -24,37 +44,115 @@ namespace Renders.HTML
             }
         }
 
-        public void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags, IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences)
+        public void Render(string eventType, DateTime startDateTime, DateTime endDateTime, IEnumerable<Event> events, IDictionary<string, int> weightedTags, IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences)
         {
             var sb = new StringBuilder(events.Count() * 250);
 
-            
-            
-            sb.Append("<h1>Work Summary</h1>");
+            if (!eventType.Equals("Summary"))
+            {
+                sb.AppendLine("<h1>Work Summary - " + HtmlEscape(eventType) + "</h1>");
+            }
+            else
+            {
+                sb.AppendLine("<h1>Work Summary</h1>");
+
+                var ts = endDateTime - startDateTime;
+
+                var g = from e in events
+                    group e by e.EventType
+                    into grp
+                    select new
+                    {
+                        key = grp.Key, 
+                        count = grp.Count(),
+                        avgDays = grp.Count() / ts.TotalDays,
+                        avgHours = grp.Count() / (ts.TotalHours * 0.33d),
+                        hours = grp.Sum(s=>s.Duration.Hours)
+                    };
+
+                DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+                Calendar cal = dfi.Calendar;
+
+                var g1 = from e in events
+                    group e by new
+                    {
+                        type = e.EventType,
+                        month = e.Date.Month
+                    }
+                    into grp
+                    select new
+                    {
+                        type = grp.Key.type,
+                        month = grp.Key.month,
+                        monthCount = grp.Count()
+                    };
+
+                var g2 = from e in events
+                    group e by new
+                    {
+                        type = e.EventType,
+                        week = cal.GetWeekOfYear(e.Date, dfi.CalendarWeekRule, dfi.FirstDayOfWeek)
+                    }
+                    into grp
+                    select new
+                    {
+                        type = grp.Key.type,
+                        week = grp.Key.week,
+                        weekCount = grp.Count()
+                    };
+
+                var g3 = from e in events
+                    group e by new
+                    {
+                        type = e.EventType,
+                        day = e.Date.Date
+                    }
+                    into grp
+                    select new
+                    {
+                        type = grp.Key.type,
+                        day = grp.Key.day,
+                        dayCount = grp.Count()
+                    };
+
+                
+                
+                
+                sb.AppendLine("<table id=\"overall_summary\"><thead><tr><th>Event Type</th><th>Count</th><th>Total Hours<th><th>Avg / Day</th><th>Avg / Hour</th></tr></thead><tbody>");
+                foreach (var r in g.OrderByDescending(ks=>ks.count))
+                {
+                    sb.AppendLine("<tr><td>" + r.key + "</td><td>" + r.count + "</td><td>" + r.hours + "</td><td>" + r.avgDays + "</td><td>" + r.avgHours + "</td></tr>");
+                }
+                sb.AppendLine("</tbody></table>");
+
+                
+                
+
+            }
 
             if (weightedPeople != null)
             {
-                sb.Append("<h2>People:</h2>");
+                sb.AppendLine("<h2>People:</h2>");
                 BuildTagCloud(sb, weightedPeople);
             }
 
             if (weightedTags != null)
             {
-                sb.Append("<h2>Top words:</h2>");
+                sb.AppendLine("<h2>Top words:</h2>");
                 BuildTagCloud(sb, weightedTags);
             }
 
             if (importantSentences != null)
             {
-                sb.Append("<h2>Important events:</h2>");
+                sb.AppendLine("<h2>Important events:</h2>");
                 foreach (var sentence in importantSentences)
                 {
-                    sb.Append("<p>" + HtmlEscape(sentence) + "</p>");
+                    sb.AppendLine("<p>" + HtmlEscape(sentence) + "</p>");
                 }
             }
             if (events != null)
             {
-                sb.Append("<h2>Events:</h2>");
+                sb.AppendLine("<h2>Events:</h2>");
                 foreach (var evnt in events)
                 {
                     BuildEventHtml(sb, evnt);
@@ -80,11 +178,10 @@ namespace Renders.HTML
                 HtmlEscape(eventType),
                 cssNormalize + cssMain + cssTagCloud,
                 string.Empty,
-                sb.ToString(),
+                sb,
                 jsMain);
 
-
-            string fileName = string.Format("WorkSummary_{0}.html", eventType);
+            string fileName = string.Format("WorkSummarizer_{0}.html", eventType);
             File.WriteAllText(fileName, htmlFinal);
             Process.Start(fileName);
 

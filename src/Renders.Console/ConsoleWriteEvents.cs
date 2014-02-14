@@ -6,7 +6,7 @@ namespace Renders.Console
 {
     public class ConsoleWriteEvents : IRenderEvents
     {
-        public void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags, IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences)
+        public void Render(string eventType,DateTime startDateTime, DateTime endDateTime, IEnumerable<Event> events, IDictionary<string, int> weightedTags, IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences)
         {
             foreach (Event evt in events)
             {
