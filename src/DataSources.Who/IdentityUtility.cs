@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Common;
 
 namespace DataSources.Who
@@ -20,6 +21,10 @@ namespace DataSources.Who
                     return input.Split(new[] { "\\" }, StringSplitOptions.RemoveEmptyEntries).Last();
                 }
 
+                var pattern = "\\([^()]*\\)";
+                var regex = new Regex(pattern, RegexOptions.Compiled);
+                input = regex.Replace(input, string.Empty);
+                
 
                 var tp = new TeamProvider();
                 input = tp.ResolveDisplayName(input);
