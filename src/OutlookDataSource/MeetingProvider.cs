@@ -28,16 +28,19 @@ namespace DataSources.Outlook
             var itemsList = new List<OutlookItem>();
             while (item != null)
             {
-                var foo = item as Microsoft.Office.Interop.Outlook.AppointmentItem;
-                if (foo == null)
+                var appointmentItem = item as Microsoft.Office.Interop.Outlook.AppointmentItem;
+                if (appointmentItem == null)
                 {
                     item = calendarItems.FindNext();
                     continue;
                 }
 
-                itemsList.Add(new OutlookItem(foo.Subject ?? String.Empty, foo.Body ?? String.Empty, foo.StartUTC,
-                    foo.EndUTC,
-                    foo.Recipients.Cast<Recipient>().Select(x => x.Name)));
+                itemsList.Add(new OutlookItem(appointmentItem.Subject ?? String.Empty, appointmentItem.Body ?? String.Empty, appointmentItem.StartUTC,
+                    appointmentItem.EndUTC,
+                    appointmentItem.Recipients.Cast<Recipient>().Select(x => x.Name)));
+
+                appointmentItem.Close(OlInspectorClose.olDiscard);
+
                 item = calendarItems.FindNext();
             }
 
