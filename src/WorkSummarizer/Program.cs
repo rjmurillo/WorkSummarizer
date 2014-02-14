@@ -34,14 +34,13 @@ namespace WorkSummarizer
             // plugins.Add(typeof(OutlookPlugin));
             // plugins.Add(typeof(TeamFoundationServerPlugin));
             // plugins.Add(typeof(YammerPlugin));
+            
+            //plugins.Add(typeof(ConsoleRenderPlugin));
+            //plugins.Add(typeof(ExcelRenderPlugin));
+            plugins.Add(typeof(HtmlRenderPlugin));
 
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(plugins);
-
-            var renders = new List<IRenderEvents>();
-            //renders.Add(new ExcelWriteEvents());
-            //renders.Add(new ConsoleWriteEvents());
-            renders.Add(new HtmlWriteEvents());
             
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
@@ -60,7 +59,7 @@ namespace WorkSummarizer
                 IDictionary<string, int> weightedPeople = null; // TODO
                 IEnumerable<string> importantSentences = null; // TODO
 
-                foreach (IRenderEvents render in renders)
+                foreach (IRenderEvents render in pluginRuntime.RenderEventServices.Values)
                 {
                     render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
                 }

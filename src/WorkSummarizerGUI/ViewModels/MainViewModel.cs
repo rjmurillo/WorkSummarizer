@@ -25,7 +25,7 @@ namespace WorkSummarizerGUI.ViewModels
     {
         private readonly IEnumerable<ServiceViewModel> m_eventSources;
         private readonly IPluginRuntime m_pluginRuntime;
-        private readonly IEnumerable<ReportingSinkViewModel> m_reportingSinks;
+        private readonly IEnumerable<ServiceViewModel> m_reportingSinks;
 
         private DateTime m_endLocalTime;
         private bool m_isBusy;
@@ -42,7 +42,11 @@ namespace WorkSummarizerGUI.ViewModels
                 typeof(ManicTimePlugin),
                 typeof(OutlookPlugin),
                 typeof(TeamFoundationServerPlugin),
-                typeof(YammerPlugin)
+                typeof(YammerPlugin),
+
+                typeof(ConsoleRenderPlugin),
+                typeof(ExcelRenderPlugin),
+                typeof(HtmlRenderPlugin),
             });
 
             m_pluginRuntime = pluginRuntime;
@@ -54,12 +58,12 @@ namespace WorkSummarizerGUI.ViewModels
                              .ToList();
 
             m_endLocalTime = DateTime.Now;
-            m_reportingSinks = new[] 
-            { 
-                new ReportingSinkViewModel("Console", typeof(ConsoleWriteEvents)) { IsSelected = true },
-                new ReportingSinkViewModel("Excel", typeof(ExcelWriteEvents)), 
-                new ReportingSinkViewModel("Web page", typeof(HtmlWriteEvents)), 
-            };
+            
+            m_reportingSinks = pluginRuntime.RenderEventServices
+                             .GroupBy(p => p.Key.Family)
+                             .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()))
+                             .ToList();
+
             m_startLocalTime = DateTime.Now.AddMonths(-1);
         }
         
@@ -88,7 +92,7 @@ namespace WorkSummarizerGUI.ViewModels
             }
         }
 
-        public IEnumerable<ReportingSinkViewModel> ReportingSinks
+        public IEnumerable<ServiceViewModel> ReportingSinks
         {
             get { return m_reportingSinks; }
         }
@@ -117,7 +121,7 @@ namespace WorkSummarizerGUI.ViewModels
                                                      .ToList();
 
             var selectedReportingSinkTypes = ReportingSinks.Where(p => p.IsSelected)
-                                                           .Select(p => p.ReportingSinkType)
+                                                           .SelectMany(p => p.ServiceIds)
                                                            .ToList();
 
             var selectedStartLocalTime = m_startLocalTime;
@@ -139,6 +143,11 @@ namespace WorkSummarizerGUI.ViewModels
                                     .EventQueryServices
                                     .Where(p => selectedEventSourceIds.Contains(p.Key.Id));
 
+                            var renderServiceRegistrations =
+                                m_pluginRuntime
+                                    .RenderEventServices
+                                    .Where(p => selectedReportingSinkTypes.Contains(p.Key.Id));
+
                             foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                             {
                                 Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
@@ -148,10 +157,9 @@ namespace WorkSummarizerGUI.ViewModels
                                 IDictionary<string, int> weightedPeople = null; // TODO
                                 IEnumerable<string> importantSentences = null; // TODO
 
-                                // TODO renderers as plugins
-                                foreach (IRenderEvents render in selectedReportingSinkTypes.Select(Activator.CreateInstance))
+                                foreach (var render in renderServiceRegistrations)
                                 {
-                                    render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
+                                    render.Value.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
                                 }
 
                                 Console.WriteLine();

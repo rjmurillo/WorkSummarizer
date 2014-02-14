@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelWriteEvents.cs" />
+    <Compile Include="ExcelRenderPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +55,10 @@
     <ProjectReference Include="..\..\Events\Events.csproj">
       <Project>{0b3597c6-a419-4ecd-9d7b-8d9b7f12b508}</Project>
       <Name>Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Extensibility\Extensibility.csproj">
+      <Project>{5E57807D-9972-4DC0-98AB-220E6C55E82D}</Project>
+      <Name>Extensibility</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Renders\Renders.csproj">
       <Project>{5d85bb42-31ca-4daa-9076-36aedd35886d}</Project>

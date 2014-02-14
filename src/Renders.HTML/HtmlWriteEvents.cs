@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Events;
 using TagCloud;
 
@@ -16,34 +14,40 @@ namespace Renders.HTML
         {
             var sb = new StringBuilder(events.Count() * 250);
 
-            sb.Append("<html><head><title>" + eventType + "</title><style type=\"text/css\">");
+            sb.Append("<html><head><title>" + HtmlEscape(eventType) + "</title><style type=\"text/css\">");
+            sb.Append("h1,h2 { font-family:arial;}");
             BuildTagCloudCss(sb);
             sb.Append("</style></head><body>");
+            sb.Append("<h1>Work Summary</h1>");
 
             if (weightedTags != null)
             {
+                sb.Append("<h2>Top words:</h2>");
                 BuildTagCloud(sb, weightedTags);
             }
 
             if (importantSentences != null)
             {
-                sb.Append("<p><div style=\"font-weight:bold;\">Important Sentences:</div>");
+                sb.Append("<h2>Important Sentences:</h2>");
                 foreach (var sentence in importantSentences)
                 {
-                    sb.Append("<p>" + sentence + "</p>");
+                    sb.Append("<p>" + HtmlEscape(sentence) + "</p>");
                 }
-                sb.Append("</p>");
             }
 
             if (weightedPeople != null)
             {
-                sb.Append("<div style=\"font-weight:bold;\">People:</div>");
+                sb.Append("<h2>People:</h2>");
                 BuildTagCloud(sb, weightedPeople);
             }
 
-            foreach (var evnt in events)
+            if (events != null)
             {
-                BuildHtmlFragment(sb, evnt);
+                sb.Append("<h2>Events:</h2>");
+                foreach (var evnt in events)
+                {
+                    BuildEventHtml(sb, evnt);
+                }
             }
             sb.Append("</body></html>");
 
@@ -53,10 +57,10 @@ namespace Renders.HTML
 
         }
 
-        private static void BuildHtmlFragment(StringBuilder sb, Event evnt)
+        private static void BuildEventHtml(StringBuilder sb, Event evnt)
         {
             sb.Append("<p>");
-            sb.Append("<div style=\"font-weight:bold;\">type: " + evnt.EventType + "</div>");
+            sb.Append("<div style=\"font-weight:bold;\">type: " + HtmlEscape(evnt.EventType) + "</div>");
 
             sb.Append("<div>date: " + evnt.Date);
             if (evnt.Duration.Ticks > 0)
@@ -67,11 +71,11 @@ namespace Renders.HTML
 
             if (evnt.Subject != null && !string.IsNullOrWhiteSpace(evnt.Subject.Text))
             {
-                sb.Append("<div>subject: " + evnt.Subject.Text + "</div>");
+                sb.Append("<div>subject: " + HtmlEscape(evnt.Subject.Text) + "</div>");
             }
             if (evnt.Context != null)
             {
-                sb.Append("<div>context: " + evnt.Context + "</div>");
+                sb.Append("<div>context: " + HtmlEscape(evnt.Context.ToString()) + "</div>");
             }
             if (evnt.Participants != null)
             {
@@ -81,13 +85,13 @@ namespace Renders.HTML
                 {
                     sb.Append(separator);
                     separator = ", ";
-                    sb.Append(participant.Value.Alias);
+                    sb.Append(HtmlEscape(participant.Value.Alias));
                 }
                 sb.Append("</div>");
             }
             if (!string.IsNullOrWhiteSpace(evnt.Text))
             {
-                sb.Append("<div>text: <div style=\"border:1px solid #9AF\">" + evnt.Text + "</div></div>");
+                sb.Append("<div>text: <div style=\"border:1px solid #9AF\">" + HtmlEscape(evnt.Text) + "</div></div>");
             }
             sb.Append("</p>");
         }
@@ -146,6 +150,11 @@ namespace Renders.HTML
                 {
 	                font-size:12px;
                 }");
+        }
+
+        private static string HtmlEscape(string text)
+        {
+            return text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
         }
     }
 }
