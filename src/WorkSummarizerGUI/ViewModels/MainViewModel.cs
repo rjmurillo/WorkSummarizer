@@ -236,7 +236,7 @@ namespace WorkSummarizerGUI.ViewModels
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
                             KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
-                            uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Running {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
+                            uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Pulling data for {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
 
                             IEnumerable<Event> evts = Enumerable.Empty<Event>();
                             Action pullEventsDelegate = () =>
@@ -253,7 +253,7 @@ namespace WorkSummarizerGUI.ViewModels
                                 pullEventsDelegate();
                             }
 
-                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; ProgressStatus = String.Format("Processing {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
+                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; ProgressStatus = String.Format("Summarizing data for {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
 
                             var textProc = new TextProcessor();
                             var peopleProc = new PeopleProcessor();
@@ -275,7 +275,7 @@ namespace WorkSummarizerGUI.ViewModels
                                 foreach (var render in renderServiceRegistrations)
                                 {
                                     KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
-                                    uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Rendering {0} - {1} with {2} - {3}...", registration1.Key.Family, registration1.Key.Name, render1.Key.Family, render1.Key.Name); });
+                                    uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Rendering data for {0} - {1} with {2} - {3}...", registration1.Key.Family, registration1.Key.Name, render1.Key.Family, render1.Key.Name); });
 
                                     KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
                                     Action renderEventsDelegate = () => render1.Value.Render(registration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
@@ -314,7 +314,7 @@ namespace WorkSummarizerGUI.ViewModels
                             {
                                 KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
                                 Action renderEventsDelegate = () => render1.Value.Render("Summary", summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
-                                uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Rendering summary with {0} - {1}...", render1.Key.Family, render1.Key.Name); });
+                                uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Rendering summary data with {0} - {1}...", render1.Key.Family, render1.Key.Name); });
 
                                 if (render.Key.InvokeOnShellDispatcher)
                                 {

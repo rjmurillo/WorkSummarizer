@@ -133,7 +133,8 @@
                                         <DoubleAnimation Storyboard.TargetProperty="Height"
                                                          From="30"
                                                          To="0"
-                                                         Duration="0:0:0.4">
+                                                         Duration="0:0:0.4"
+                                                         BeginTime="0:0:3">
                                             <DoubleAnimation.EasingFunction>
                                                 <CubicEase />
                                             </DoubleAnimation.EasingFunction>
@@ -263,10 +264,27 @@
                             Grid.Row="0"
                             Margin="40,0,10,0">
                     <StackPanel>
-                        <Label Content="reporting"
+                        <Label Content="processing"
                                FontFamily="Segoe UI"
                                FontSize="22"
                                FontWeight="Bold" />
+                        <CheckBox Content="Top people"
+                                  IsChecked="True" 
+                                  IsEnabled="False" />
+                        <CheckBox Content="Top words"
+                                  IsChecked="True"
+                                  IsEnabled="False" />
+                        <CheckBox Content="Important events"
+                                  IsChecked="True"
+                                  IsEnabled="False" />
+                    </StackPanel>
+                    
+                    <StackPanel>
+                        <Label Content="reporting"
+                               FontFamily="Segoe UI"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Margin="0,10,0,0" />
                         <ItemsControl ItemsSource="{Binding ReportingSinks}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
