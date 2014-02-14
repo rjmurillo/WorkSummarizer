@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Events;
 using Events.CodeFlow;
 using Events.Connect;
@@ -13,6 +14,7 @@ using Microsoft.Office.Interop.Excel;
 using Renders;
 using Renders.Console;
 using Renders.Excel;
+using Renders.HTML;
 
 namespace WorkSummarizer
 {
@@ -23,30 +25,41 @@ namespace WorkSummarizer
         {
             var plugins = new List<Type>();
 
-            //plugins.Add(typeof(FakeEventsPlugin));
+            plugins.Add(typeof(FakeEventsPlugin));
             // plugins.Add(typeof(CodeFlowPlugin));
             // plugins.Add(typeof(ConnectPlugin));
             // plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
             // plugins.Add(typeof(OutlookPlugin));
             // plugins.Add(typeof(TeamFoundationServerPlugin));
-             plugins.Add(typeof(YammerPlugin));
+            // plugins.Add(typeof(YammerPlugin));
 
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(plugins);
 
             var renders = new List<IRenderEvents>();
-            renders.Add(new ExcelWriteEvents());
+            //renders.Add(new ExcelWriteEvents());
             //renders.Add(new ConsoleWriteEvents());
+            renders.Add(new HtmlWriteEvents());
             
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
+                var sb = new StringBuilder();
                 Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
-                var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14));
+                var evts = eventQueryServiceRegistration.Value.PullEvents(new DateTime(2014, 1, 1), new DateTime(2014, 2, 14)).ToList();
+
+                foreach (var evt in evts)
+                {
+                    sb.Append(String.Format(" {0} {1} ", evt.Subject.Text.Replace("\n", String.Empty).Replace("\r", String.Empty), evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty)));
+                }
+
+                var textProc = new TextProcessor();
                
+                IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
+
                 foreach (IRenderEvents render in renders)
                 {
-                    render.WriteOut(eventQueryServiceRegistration.Key, evts);
+                    render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags);
                 }
                 
                 Console.WriteLine();
