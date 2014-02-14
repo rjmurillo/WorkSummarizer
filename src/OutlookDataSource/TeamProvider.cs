@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Common;
+using DataSources.Who;
 
 namespace DataSources.Outlook
 {
@@ -15,7 +16,7 @@ namespace DataSources.Outlook
 
         public IEnumerable<Participant> InferParticipants(IEnumerable<OutlookItem> data, Func<OutlookItem, bool> predicate)
         {
-            return data.SelectMany(s => s.Recipients.Select(s1 => new Participant(s1)));
+            return data.SelectMany(s => s.Recipients.Select(IdentityUtility.Create));
         }
     }
 }

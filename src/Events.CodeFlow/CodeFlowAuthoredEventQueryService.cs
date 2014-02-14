@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using DataSources.CodeFlow;
+using DataSources.Who;
 
 namespace Events.CodeFlow
 {
@@ -23,7 +24,7 @@ namespace Events.CodeFlow
                         Text = p.Name
                     };
 
-                    e.Participants.Add(new Participant(p.AuthorLogin));
+                    e.Participants.Add(IdentityUtility.Create(p.AuthorLogin));
 
                     return e;
                 });

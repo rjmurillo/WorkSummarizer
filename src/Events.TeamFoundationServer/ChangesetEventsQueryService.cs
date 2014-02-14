@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataSources.TeamFoundationServer;
+using DataSources.Who;
 using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace Events.TeamFoundationServer
@@ -33,7 +34,7 @@ namespace Events.TeamFoundationServer
                         Duration = TimeSpan.Zero,
                         Context = p.ChangesetId
                     };
-                    e.Participants.Add(new Participant(p.Committer));
+                    e.Participants.Add(IdentityUtility.Create(p.Committer));
                     return e;
                 });
 

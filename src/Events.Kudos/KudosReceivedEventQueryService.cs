@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using DataSources.Kudos;
+using DataSources.Who;
 
 namespace Events.Kudos
 {
@@ -25,7 +26,7 @@ namespace Events.Kudos
                         Text = p.Message
                     };
 
-                    e.Participants.Add(new Participant(p.SenderAlias));
+                    e.Participants.Add(IdentityUtility.Create(p.SenderAlias));
 
                     return e;
                 });

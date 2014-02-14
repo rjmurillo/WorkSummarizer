@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Common;
 using DataSources;
 using DataSources.Outlook;
+using DataSources.Who;
 using Graph;
 
 namespace Events.Outlook
@@ -31,7 +32,7 @@ namespace Events.Outlook
                     Date = x.StartUtc,
                     Duration = TimeSpan.FromMinutes(x.Duration.TotalMinutes),
                     Participants =
-                        x.Recipients.Select(y => new Participant(y)).ToGraph()
+                        x.Recipients.Select(IdentityUtility.Create).ToGraph()
                 });
 
             return (predicate != null) ? retval.Where(predicate) : retval;

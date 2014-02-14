@@ -16,7 +16,7 @@ namespace WorkSummarizer
         }
 
         public IDictionary<ServiceRegistration, IEventQueryService> EventQueryServices { get; private set; }
-
+        
         public IDictionary<ServiceRegistration, IRenderEvents> RenderEventServices { get; private set; }
 
         // REVIEW plugin discovery if we were fancy.
