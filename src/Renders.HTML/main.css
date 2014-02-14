@@ -130,12 +130,12 @@ textarea {
     *text-indent: -9999px;
 }
 
-.ir:before {
-    content: "";
-    display: block;
-    width: 0;
-    height: 150%;
-}
+    .ir:before {
+        content: "";
+        display: block;
+        width: 0;
+        height: 150%;
+    }
 
 /*
  * Hide from both screenreaders and browsers: h5bp.com/u
@@ -161,20 +161,20 @@ textarea {
     width: 1px;
 }
 
-/*
+    /*
  * Extends the .visuallyhidden class to allow the element to be focusable
  * when navigated to via the keyboard: h5bp.com/p
  */
 
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
-    clip: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    position: static;
-    width: auto;
-}
+    .visuallyhidden.focusable:active,
+    .visuallyhidden.focusable:focus {
+        clip: auto;
+        height: auto;
+        margin: 0;
+        overflow: visible;
+        position: static;
+        width: auto;
+    }
 
 /*
  * Hide visually and from screenreaders, but maintain layout
@@ -225,10 +225,7 @@ textarea {
     /* Style adjustments for viewports that meet the condition */
 }
 
-@media print,
-       (-o-min-device-pixel-ratio: 5/4),
-       (-webkit-min-device-pixel-ratio: 1.25),
-       (min-resolution: 120dpi) {
+@media print, (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
     /* Style adjustments for high resolution devices */
 }
 
@@ -251,9 +248,9 @@ textarea {
         text-decoration: underline;
     }
 
-    a[href]:after {
-        content: " (" attr(href) ")";
-    }
+        a[href]:after {
+            content: " (" attr(href) ")";
+        }
 
     abbr[title]:after {
         content: " (" attr(title) ")";
@@ -303,4 +300,114 @@ textarea {
     h3 {
         page-break-after: avoid;
     }
+}
+
+div {
+    display: block;
+}
+
+h1 {
+    -ms-opacity: 0.8;
+    opacity: 0.8;
+    color: #222222;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+h2 {
+    -ms-opacity: 0.8;
+    opacity: 0.8;
+    color: #222222;
+    text-transform: lowercase;
+    font-weight: bold;
+}
+
+.container {
+    width: 1024px;
+    height: 260px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.hours {
+    background: url(https://www.atlassian.com/dms/wac/images/landing/time-wasters/1024/31-hours-box.png) scroll no-repeat 0 0;
+    width: 258px;
+    height: 236px;
+    float: left;
+    position: relative;
+    /*top: 217px;*/
+    margin-right: 45px;
+    top: 19px;
+    z-index: 100;
+}
+
+.time-wasted {
+    background: url(https://www.atlassian.com/dms/wac/images/landing/time-wasters/1024/2-Time-wasted-Box.png) scroll no-repeat 0 0;
+    width: 275px;
+    height: 252px;
+    float: left;
+    position: relative;
+    /*top: 198px;*/
+    margin-right: 45px;
+    z-index: 100;
+}
+
+.meetings-attended {
+    background: url(https://www.atlassian.com/dms/wac/images/landing/time-wasters/1024/62-Meetings-Box.png) scroll no-repeat 0 0;
+    width: 289px;
+    height: 253px;
+    float: left;
+    position: relative;
+    /*top: 198px;*/
+    margin-left: 30px;
+    margin-right: 45px;
+    z-index: 100;
+}
+
+
+
+.hours span {
+    margin: 32px 0 0 30px;
+}
+
+.hours h2 {
+    margin-top: 30px;
+    margin-left: 14px;
+    font-size: 35px;
+    line-height: 34px;
+    text-align: center;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+.container p, .time-wasted p, .hours p {
+    font-size: 18px;
+    line-height: 24px;
+    margin-left: 34px;
+    text-align: center;
+    text-transform: lowercase;
+}
+
+.container h2 {
+    margin-top: 10px;
+    margin-left: 54px;
+    font-size: 42px;
+    line-height: 34px;
+    text-align: center;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    color: #222222;
+    text-transform: lowercase;
+}
+
+.meetings-attended h2 {
+    margin-top: 35px;
+    margin-left: 45px;
+}
+
+.meetings-attended span, .time-wasted span, .hours span {
+    color: #fff;
+    display: inline-block;
+    font-size: 53px;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    margin: 30px 0 0 20px;
 }

@@ -31,7 +31,26 @@ namespace DataSources.Who
         {
             var wsr = EnsurePeopleStoreSoapClient();
             var ctx = wsr.FindPersonContextByAlias(alias);
-            return ctx.DirectsChains.Select(s => s.Manager.Alias);
+            return ctx.DirectsChains.Select(s => s.Manager.Alias).Where(x => !x.Equals(String.Empty, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public IEnumerable<string> PullPeers(string alias)
+        {
+            var directManager = PullManager(alias);
+            var skipLevel = PullManager(directManager);
+
+            var peers = new List<string>();
+
+            foreach (var manager in PullDirectReports(skipLevel))
+            {
+                var reports = PullDirectReports(manager);
+                if (reports != null)
+                {
+                    peers.AddRange(reports);
+                }
+            }
+
+            return peers;
         }
 
         public string ResolveDisplayName(string displayName)
