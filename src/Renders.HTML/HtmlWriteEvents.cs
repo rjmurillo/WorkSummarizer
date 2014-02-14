@@ -223,7 +223,7 @@ namespace Renders.HTML
                 case "ManicTime Activities":
                     return "ManicTime Activities";
                 case "Outlook.ConversationHistory":
-                    return "Lync Conversations";
+                    return "Lync Chats";
                 case "Outlook.Email":
                     return "Email Sent";
                 case "Outlook.Meeting":
