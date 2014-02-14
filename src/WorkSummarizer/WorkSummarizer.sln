@@ -81,6 +81,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Processing.Text", "..\Proce
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Processing", "Processing", "{CE1413F3-3B19-4329-883A-D102CB4706F1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{71901591-513F-4B27-B8B3-11A72B666CAD}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,5 +228,8 @@ Global
 		{294839D9-1EE4-40A9-A661-5250B01A6B52} = {F580E36B-1FD4-4621-9B2E-F82507D61E2B}
 		{57D5B54E-B854-4EA1-B709-C03408811499} = {611C092D-4CC2-4FC3-A9F4-16758FFB1176}
 		{93FF4ED2-840E-46D9-AF8D-F6F588E40485} = {CE1413F3-3B19-4329-883A-D102CB4706F1}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
