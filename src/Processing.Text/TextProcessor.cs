@@ -27,9 +27,9 @@ namespace Processing.Text
             return text.ToUpperInvariant();
         }
 
-        public HashSet<string> StopWords
+        public void AddStopWords(IEnumerable<string> stopWords)
         {
-            get { return m_stopWords; }
+            stopWords.ToList().ForEach(x => m_stopWords.Add(x));
         }
 
         public IEnumerable<string> Tokenize(string input)
