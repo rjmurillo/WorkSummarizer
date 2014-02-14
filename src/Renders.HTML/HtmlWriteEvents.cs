@@ -54,7 +54,7 @@ namespace Renders.HTML
             }
             else
             {
-                sb.AppendLine("<h1>Work Summary</h1>");
+                sb.AppendLine("<h1>Work Summary - " + startDateTime.ToShortDateString() + " to " + endDateTime.ToShortDateString() + "</h1>");
 
                 var ts = endDateTime - startDateTime;
 
@@ -222,7 +222,7 @@ namespace Renders.HTML
                     return "Kudos Recieved";
                 case "ManicTime Activities":
                     return "ManicTime Activities";
-                case "Outlook.Conversation":
+                case "Outlook.ConversationHistory":
                     return "Lync Conversations";
                 case "Outlook.Email":
                     return "Email Sent";
@@ -238,6 +238,8 @@ namespace Renders.HTML
                     return "Work Items Closed";
                 case "TeamFoundationServer.WorkItem.Activated":
                     return "Work Items Activated";
+                case "TeamFoundationServer.WorkItem.Created":
+                    return "Work Items Created";
                 case "Yammer.SentMessages":
                     return "Yams Sent";
                 default:
