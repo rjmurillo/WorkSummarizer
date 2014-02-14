@@ -99,7 +99,7 @@ namespace Renders.HTML
                     weightedTags,
                     new TagCloudGenerationRules {
                         MaxNumberOfTags = 100,
-                        Order = TagCloudOrder.WeightDescending,
+                        Order = TagCloudOrder.Centralized,
                         TagCssClassPrefix = "TagWeight",
                     }).ToString();
             sb.Append("<p>" + htmlTags + "</p>");
