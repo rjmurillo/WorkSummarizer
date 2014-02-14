@@ -24,6 +24,7 @@ namespace Events.Outlook
             var retval = meetings.Select(x =>
                 new Event()
                 {
+                    EventType = "Outlook.ConversationHistory",
                     Text = String.Format("{0} {1}", x.Subject ?? String.Empty, x.Body ?? string.Empty),
                     Date = x.StartUtc,
                     Duration = TimeSpan.FromMinutes(x.Duration.TotalMinutes),

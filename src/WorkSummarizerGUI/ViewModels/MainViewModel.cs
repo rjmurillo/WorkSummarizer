@@ -264,7 +264,7 @@ namespace WorkSummarizerGUI.ViewModels
 
                             foreach (var evt in evts)
                             {
-                                sb.Append(String.Format(" {0} {1} ", evt.Subject.Text.Replace("\n", String.Empty).Replace("\r", String.Empty), evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty)));
+                                sb.Append(evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty));
                             }
 
 
@@ -272,11 +272,18 @@ namespace WorkSummarizerGUI.ViewModels
 
                             var customStopList = IdentityUtility.GetIdentityAttributes();
 
-                            textProc.AddStopWords(customStopList);
+                            var splitCustomStopList = new List<string>();
+
+                            foreach (var token in customStopList)
+                            {
+                                splitCustomStopList.AddRange(token.Split(' '));
+                            }
+
+                            textProc.AddStopWords(splitCustomStopList);
 
                             var nouns = textProc.GetNouns(sb.ToString());
                             IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
-                            IEnumerable<string> importantSentences = textProc.GetImportanEvents(evts.Select(x => x.Text), nouns);
+                            IEnumerable<string> importantSentences = textProc.GetImportantEvents(evts.Select(x => x.Text), nouns);
 
                             if (selectedIsGeneratePerSourceEnabled)
                             {
