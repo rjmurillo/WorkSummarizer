@@ -35,8 +35,11 @@ namespace WorkSummarizerGUI.ViewModels
 
         private DateTime m_endLocalTime;
         private bool m_isBusy;
+        private bool m_isGeneratePerSourceEnabled;
+        private bool m_isGenerateSummaryEnabled;
         private DateTime m_startLocalTime;
         private int m_progressPercentage;
+        private string m_reportingDuration;
 
         public MainViewModel()
         {
@@ -51,7 +54,6 @@ namespace WorkSummarizerGUI.ViewModels
                 typeof(TeamFoundationServerPlugin),
                 typeof(YammerPlugin),
 
-                typeof(ConsoleRenderPlugin),
                 typeof(ExcelRenderPlugin),
                 typeof(HtmlRenderPlugin),
             });
@@ -64,14 +66,17 @@ namespace WorkSummarizerGUI.ViewModels
                              .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()))
                              .ToList();
 
-            m_endLocalTime = DateTime.Now;
+            EndLocalTime = DateTime.Now;
             
             m_reportingSinks = pluginRuntime.RenderEventServices
                              .GroupBy(p => p.Key.Family)
                              .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()))
                              .ToList();
 
-            m_startLocalTime = DateTime.Now.AddMonths(-1);
+            m_reportingSinks.Last().IsSelected = true;
+
+            StartLocalTime = DateTime.Now.AddMonths(-1);
+            m_isGenerateSummaryEnabled = true;
         }
         
         public DateTime EndLocalTime
@@ -80,6 +85,7 @@ namespace WorkSummarizerGUI.ViewModels
             set 
             {
                 m_endLocalTime = value;
+                UpdateReportingDuration();
                 OnPropertyChanged();
             }
         }
@@ -88,7 +94,7 @@ namespace WorkSummarizerGUI.ViewModels
         {
             get { return m_eventSources; }
         }
-
+        
         public bool IsBusy
         {
             get { return m_isBusy; }
@@ -99,12 +105,42 @@ namespace WorkSummarizerGUI.ViewModels
             }
         }
 
+        public bool IsGeneratePerSourceEnabled
+        {
+            get { return m_isGeneratePerSourceEnabled; }
+            private set
+            {
+                m_isGeneratePerSourceEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsGenerateSummaryEnabled
+        {
+            get { return m_isGenerateSummaryEnabled; }
+            private set
+            {
+                m_isGenerateSummaryEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int ProgressPercentage
         {
             get { return m_progressPercentage; }
             private set 
             { 
                 m_progressPercentage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ReportingDuration
+        {
+            get { return m_reportingDuration; }
+            private set 
+            { 
+                m_reportingDuration = value;
                 OnPropertyChanged();
             }
         }
@@ -120,6 +156,7 @@ namespace WorkSummarizerGUI.ViewModels
             set 
             {
                 m_startLocalTime = value;
+                UpdateReportingDuration();
                 OnPropertyChanged();
             }
         }
@@ -145,7 +182,10 @@ namespace WorkSummarizerGUI.ViewModels
             var selectedStartLocalTime = m_startLocalTime;
             var selectedEndLocalTime = m_endLocalTime;
 
-            if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any())
+            var selectedIsGeneratePerSourceEnabled = m_isGeneratePerSourceEnabled;
+            var selectedIsGeneratePerSummaryEnabled = m_isGenerateSummaryEnabled;
+
+            if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any() && (selectedIsGeneratePerSourceEnabled || selectedIsGeneratePerSummaryEnabled))
             {
                 var uiDispatcher = Dispatcher.CurrentDispatcher;
                 await Task.Run(() =>
@@ -167,7 +207,19 @@ namespace WorkSummarizerGUI.ViewModels
                         var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
                         var summaryImportantSentences = new List<string>();
 
-                        var progressIncrement = 100/((eventQueryServiceRegistrations.Count() + 1) * 2); // increment 1 for summary, *2 for two increments per service registration
+                        var totalProgressSteps = eventQueryServiceRegistrations.Count();
+
+                        if (selectedIsGeneratePerSourceEnabled)
+                        {
+                            totalProgressSteps += eventQueryServiceRegistrations.Count();
+                        }
+
+                        if (selectedIsGeneratePerSummaryEnabled)
+                        {
+                            totalProgressSteps += 1;
+                        }
+
+                        var progressIncrement = 100 / Math.Max(totalProgressSteps, 1);
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
                             IEnumerable<Event> evts = Enumerable.Empty<Event>();
@@ -198,22 +250,26 @@ namespace WorkSummarizerGUI.ViewModels
                                 sb.Append(String.Format(" {0} {1} ", evt.Subject.Text.Replace("\n", String.Empty).Replace("\r", String.Empty), evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty)));
                             }
 
+                            var nouns = textProc.GetNouns(sb.ToString());
                             IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
-                            IEnumerable<string> importantSentences = textProc.GetImportantSentences(sb.ToString());
+                            IEnumerable<string> importantSentences = textProc.GetImportanEvents(evts.Select(x => x.Text), nouns);
                             IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
 
-                            foreach (var render in renderServiceRegistrations)
+                            if (selectedIsGeneratePerSourceEnabled)
                             {
-                                KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
-                                KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
-                                Action renderEventsDelegate = () => render1.Value.Render(registration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
-                                if (render.Key.InvokeOnShellDispatcher)
+                                foreach (var render in renderServiceRegistrations)
                                 {
-                                    uiDispatcher.Invoke(renderEventsDelegate);
-                                }
-                                else
-                                {
-                                    renderEventsDelegate();
+                                    KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
+                                    KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
+                                    Action renderEventsDelegate = () => render1.Value.Render(registration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
+                                    if (render.Key.InvokeOnShellDispatcher)
+                                    {
+                                        uiDispatcher.Invoke(renderEventsDelegate);
+                                    }
+                                    else
+                                    {
+                                        renderEventsDelegate();
+                                    }
                                 }
                             }
 
@@ -235,17 +291,20 @@ namespace WorkSummarizerGUI.ViewModels
                             uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
                         }
 
-                        foreach (var render in renderServiceRegistrations)
+                        if (selectedIsGeneratePerSummaryEnabled)
                         {
-                            KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
-                            Action renderEventsDelegate = () => render1.Value.Render("Summary", summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
-                            if (render.Key.InvokeOnShellDispatcher)
+                            foreach (var render in renderServiceRegistrations)
                             {
-                                uiDispatcher.Invoke(renderEventsDelegate);
-                            }
-                            else
-                            {
-                                renderEventsDelegate();
+                                KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
+                                Action renderEventsDelegate = () => render1.Value.Render("Summary", summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
+                                if (render.Key.InvokeOnShellDispatcher)
+                                {
+                                    uiDispatcher.Invoke(renderEventsDelegate);
+                                }
+                                else
+                                {
+                                    renderEventsDelegate();
+                                }
                             }
                         }
 
@@ -256,9 +315,16 @@ namespace WorkSummarizerGUI.ViewModels
                         MessageBox.Show("Oh noes!" + Environment.NewLine + Environment.NewLine + ex);
                     }
                 });
-
-                IsBusy = false;
             }
+
+            IsBusy = false;
+        }
+        
+        private void UpdateReportingDuration()
+        {
+            var duration = m_endLocalTime - m_startLocalTime;
+            var upperWeeks = (int)(Math.Ceiling(duration.TotalDays * 5/7) / 7);
+            ReportingDuration = String.Format("About {0} work weeks", upperWeeks);
         }
     }
 }
