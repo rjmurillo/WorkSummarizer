@@ -31,7 +31,7 @@ namespace Events.Outlook
                     EventType = "Outlook.Email",
                     Participants =
                         x.Recipients.Select(IdentityUtility.Create).ToGraph()
-                });
+                }).ToList();
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

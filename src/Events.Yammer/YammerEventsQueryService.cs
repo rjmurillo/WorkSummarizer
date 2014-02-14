@@ -25,7 +25,7 @@ namespace Events.Yammer
                     };
                     e.Participants.Add(IdentityUtility.Create(p.Sender));
                     return e;
-                });
+                }).ToList();
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

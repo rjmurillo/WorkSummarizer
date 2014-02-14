@@ -26,7 +26,7 @@ namespace Events.Connect
                     e.Participants.Add(IdentityUtility.Create(Environment.UserName));
 
                     return e;
-                });
+                }).ToList();
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

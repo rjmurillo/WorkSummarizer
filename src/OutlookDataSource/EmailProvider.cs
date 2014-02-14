@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,13 +15,13 @@ namespace DataSources.Outlook
             Application oApp = new Application();
             var mapiNamespace = oApp.GetNamespace("MAPI");
 
-            var calendarFolder =
+            var emailSentFolder =
                 mapiNamespace.GetDefaultFolder(OlDefaultFolders.olFolderSentMail);
 
             var filter = "[SentOn] >= \"" + startDateUtc.ToShortDateString() + "\" and [SentOn] <=\"" +
                          endDateUtc.ToShortDateString() + "\"";
 
-            Items restrictedItems = calendarFolder.Items.Restrict(filter);
+            Items restrictedItems = emailSentFolder.Items.Restrict(filter);
 
             var itemsList = new List<OutlookItem>();
 
