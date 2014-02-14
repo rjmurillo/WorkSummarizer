@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FakeEventsPlugin.cs" />
+    <Compile Include="PeopleProcessor.cs" />
     <Compile Include="PluginRuntime.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -54,9 +54,10 @@ namespace WorkSummarizer
                 }
 
                 var textProc = new TextProcessor();
+                var peopleProc = new PeopleProcessor();
                
                 IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
-                IDictionary<string, int> weightedPeople = null; // TODO
+                IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
                 IEnumerable<string> importantSentences = null; // TODO
 
                 foreach (IRenderEvents render in renders)
