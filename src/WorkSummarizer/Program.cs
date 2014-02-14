@@ -61,7 +61,7 @@ namespace WorkSummarizer
 
                 var nouns = textProc.GetNouns(sb.ToString());
                 IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
-                IEnumerable<string> importantSentences = textProc.GetImportanEvents(evts.Select(x => x.Text), nouns);
+                IEnumerable<string> importantSentences = textProc.GetImportantEvents(evts.Select(x => x.Text), nouns);
                 IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
 
                 foreach (IRenderEvents render in pluginRuntime.RenderEventServices.Values)

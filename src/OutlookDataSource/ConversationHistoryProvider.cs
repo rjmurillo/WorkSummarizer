@@ -15,7 +15,6 @@ namespace DataSources.Outlook
             Folders folders = mapiNamespace.Folders;
 
             MAPIFolder conversationFolder = null;
-            MAPIFolder mapiFolder;
             foreach (MAPIFolder folder in folders)
             {
                 var convFolder = FindConversationFolder(folder);

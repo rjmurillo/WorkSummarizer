@@ -24,7 +24,7 @@ namespace Processing.Text
             text = s_sanitizeRegex.Replace(text, " ");
             text = text.Trim();
             text = s_normalizeWhitespaceRegex.Replace(text, " ");
-            return text.ToUpperInvariant();
+            return text;
         }
 
         public void AddStopWords(IEnumerable<string> stopWords)
@@ -40,7 +40,7 @@ namespace Processing.Text
 
             var tokenized = tokenizer.Tokenize(sanitizedInput);
 
-            var output = tokenized.Where(token => !m_stopWords.Contains(token.ToUpperInvariant())).ToList();
+            var output = tokenized.Where(token => !m_stopWords.Contains(token)).ToList();
 
             return output;
         }
@@ -102,14 +102,16 @@ namespace Processing.Text
             return nounLookup.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         }
 
-        public IEnumerable<string> GetImportanEvents(IEnumerable<string> eventText, IDictionary<string, int> nouns)
+        public IEnumerable<string> GetImportantEvents(IEnumerable<string> eventText, IDictionary<string, int> nouns)
         {
             var outputSentences = new HashSet<string>();
             foreach (var noun in nouns.Keys.Take(nouns.Keys.Count / 10))
             {
+                var sanitizedEventText = eventText.Select(Sanitize);
+
                 var nounKey = noun;
 
-                var foundSentences = eventText.Where(x => x.IndexOf(nounKey, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+                var foundSentences = sanitizedEventText.Where(x => x.IndexOf(nounKey, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
 
                 foundSentences.ForEach(y => outputSentences.Add(y));
             }
@@ -135,13 +137,13 @@ namespace Processing.Text
 
         private static HashSet<string> GetStopWords()
         {
-            var stopWords = new HashSet<string>();
+            var stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             using (var sr = new StreamReader("Resources/en-US_Stopwords.txt"))
             {
                 string word;
                 while ((word = sr.ReadLine()) != null)
                 {
-                    stopWords.Add(word.ToUpperInvariant());
+                    stopWords.Add(word);
                 }
             }
 
