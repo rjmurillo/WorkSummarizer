@@ -7,21 +7,21 @@ namespace WorkSummarizerGUI.ViewModels
 {
     public class ServiceViewModel : ViewModelBase
     {
-        private readonly IEnumerable<string> m_eventSourceIds;
+        private readonly IEnumerable<string> m_serviceIds;
         private readonly string m_name;
         private bool m_isEnabled;
         private bool m_isSelected;
 
-        public ServiceViewModel(string name, IEnumerable<string> eventSourceIds)
+        public ServiceViewModel(string name, IEnumerable<string> serviceIds)
         {
-            m_eventSourceIds = eventSourceIds;
+            m_serviceIds = serviceIds;
             m_name = name;
             m_isEnabled = true;
         }
 
         public IEnumerable<string> ServiceIds
         {
-            get { return m_eventSourceIds; }
+            get { return m_serviceIds; }
         }
 
         public bool IsEnabled

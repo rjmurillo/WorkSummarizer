@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Events;
+using Renders;
 
 namespace Extensibility
 {
@@ -9,5 +10,7 @@ namespace Extensibility
     {
         // REVIEW expose service registration as a service...
         IDictionary<ServiceRegistration, IEventQueryService> EventQueryServices { get; }
+
+        IDictionary<ServiceRegistration, IRenderEvents> RenderEventServices { get; }
     }
 }

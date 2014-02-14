@@ -48,6 +48,10 @@
       <Project>{0B3597C6-A419-4ECD-9D7B-8D9B7F12B508}</Project>
       <Name>Events</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Renders\Renders.csproj">
+      <Project>{5d85bb42-31ca-4daa-9076-36aedd35886d}</Project>
+      <Name>Renders</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
