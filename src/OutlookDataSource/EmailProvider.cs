@@ -13,9 +13,9 @@ namespace DataSources.Outlook
             var mapiNamespace = oApp.GetNamespace("MAPI");
 
             var calendarFolder =
-                mapiNamespace.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
+                mapiNamespace.GetDefaultFolder(OlDefaultFolders.olFolderSentMail);
 
-            var filter = "[CreationTime] >= \"" + startDateUtc.ToShortDateString() + "\" and [CreationTime] <=\"" +
+            var filter = "[SentOn] >= \"" + startDateUtc.ToShortDateString() + "\" and [SentOn] <=\"" +
                          endDateUtc.ToShortDateString() + "\"";
 
             Items restrictedItems = calendarFolder.Items.Restrict(filter);
@@ -32,7 +32,7 @@ namespace DataSources.Outlook
                 }
 
                 itemsList.Add(new OutlookItem(mail.Subject ?? String.Empty, mail.Body ?? String.Empty, mail.CreationTime,
-                    mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.Name)));
+                    mail.CreationTime, mail.Recipients.Cast<Recipient>().Select(x => x.Name).Union(new[] { mail.Sender.Name })));
 
                 ((Microsoft.Office.Interop.Outlook._MailItem)mail).Close(OlInspectorClose.olDiscard);
             }

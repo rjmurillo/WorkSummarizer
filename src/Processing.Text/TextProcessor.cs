@@ -95,17 +95,14 @@ namespace Processing.Text
             return nounLookup.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         }
 
-        public IEnumerable<string> GetImportantSentences(string input)
+        public IEnumerable<string> GetImportanEvents(IEnumerable<string> eventText, IDictionary<string, int> nouns)
         {
-            var nouns = GetNouns(input);
-            var sentences = GetSentences(input).ToList();
-
             var outputSentences = new HashSet<string>();
             foreach (var noun in nouns.Keys.Take(nouns.Keys.Count / 10))
             {
                 var nounKey = noun;
 
-                var foundSentences = sentences.Where(x => x.IndexOf(nounKey, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+                var foundSentences = eventText.Where(x => x.IndexOf(nounKey, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
 
                 foundSentences.ForEach(y => outputSentences.Add(y));
             }

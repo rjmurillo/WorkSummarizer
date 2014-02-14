@@ -27,13 +27,13 @@ namespace WorkSummarizer
             var plugins = new List<Type>();
 
             //plugins.Add(typeof(FakeEventsPlugin));
-            plugins.Add(typeof(CodeFlowPlugin));
+            //plugins.Add(typeof(CodeFlowPlugin));
             // plugins.Add(typeof(ConnectPlugin));
-            plugins.Add(typeof(KudosPlugin));
+            //plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
             plugins.Add(typeof(OutlookPlugin));
-            plugins.Add(typeof(TeamFoundationServerPlugin));
-            plugins.Add(typeof(YammerPlugin));
+            //plugins.Add(typeof(TeamFoundationServerPlugin));
+            //plugins.Add(typeof(YammerPlugin));
             
             //plugins.Add(typeof(ConsoleRenderPlugin));
             //plugins.Add(typeof(ExcelRenderPlugin));
@@ -50,14 +50,15 @@ namespace WorkSummarizer
 
                 foreach (var evt in evts)
                 {
-                    sb.Append(String.Format(" {0} {1} ", evt.Subject.Text.Replace("\n", String.Empty).Replace("\r", String.Empty), evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty)));
+                    sb.Append(evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty));
                 }
 
                 var textProc = new TextProcessor();
                 var peopleProc = new PeopleProcessor();
-               
+
+                var nouns = textProc.GetNouns(sb.ToString());
                 IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
-                IEnumerable<string> importantSentences = textProc.GetImportantSentences(sb.ToString());
+                IEnumerable<string> importantSentences = textProc.GetImportanEvents(evts.Select(x => x.Text), nouns);
                 IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
 
                 foreach (IRenderEvents render in pluginRuntime.RenderEventServices.Values)
