@@ -35,6 +35,8 @@ namespace WorkSummarizerGUI.ViewModels
 
         private DateTime m_endLocalTime;
         private bool m_isBusy;
+        private bool m_isGeneratePerSourceEnabled;
+        private bool m_isGenerateSummaryEnabled;
         private DateTime m_startLocalTime;
         private int m_progressPercentage;
 
@@ -51,7 +53,6 @@ namespace WorkSummarizerGUI.ViewModels
                 typeof(TeamFoundationServerPlugin),
                 typeof(YammerPlugin),
 
-                typeof(ConsoleRenderPlugin),
                 typeof(ExcelRenderPlugin),
                 typeof(HtmlRenderPlugin),
             });
@@ -71,7 +72,10 @@ namespace WorkSummarizerGUI.ViewModels
                              .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()))
                              .ToList();
 
+            m_reportingSinks.Last().IsSelected = true;
+
             m_startLocalTime = DateTime.Now.AddMonths(-1);
+            m_isGenerateSummaryEnabled = true;
         }
         
         public DateTime EndLocalTime
@@ -88,13 +92,33 @@ namespace WorkSummarizerGUI.ViewModels
         {
             get { return m_eventSources; }
         }
-
+        
         public bool IsBusy
         {
             get { return m_isBusy; }
             private set
             {
                 m_isBusy = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsGeneratePerSourceEnabled
+        {
+            get { return m_isGeneratePerSourceEnabled; }
+            private set
+            {
+                m_isGeneratePerSourceEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsGenerateSummaryEnabled
+        {
+            get { return m_isGenerateSummaryEnabled; }
+            private set
+            {
+                m_isGenerateSummaryEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -145,7 +169,10 @@ namespace WorkSummarizerGUI.ViewModels
             var selectedStartLocalTime = m_startLocalTime;
             var selectedEndLocalTime = m_endLocalTime;
 
-            if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any())
+            var selectedIsGeneratePerSourceEnabled = m_isGeneratePerSourceEnabled;
+            var selectedIsGeneratePerSummaryEnabled = m_isGenerateSummaryEnabled;
+
+            if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any() && (selectedIsGeneratePerSourceEnabled || selectedIsGeneratePerSummaryEnabled))
             {
                 var uiDispatcher = Dispatcher.CurrentDispatcher;
                 await Task.Run(() =>
@@ -167,7 +194,19 @@ namespace WorkSummarizerGUI.ViewModels
                         var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
                         var summaryImportantSentences = new List<string>();
 
-                        var progressIncrement = 100/((eventQueryServiceRegistrations.Count() + 1) * 2); // increment 1 for summary, *2 for two increments per service registration
+                        var totalProgressSteps = eventQueryServiceRegistrations.Count();
+
+                        if (selectedIsGeneratePerSourceEnabled)
+                        {
+                            totalProgressSteps += eventQueryServiceRegistrations.Count();
+                        }
+
+                        if (selectedIsGeneratePerSummaryEnabled)
+                        {
+                            totalProgressSteps += 1;
+                        }
+
+                        var progressIncrement = 100 / Math.Max(totalProgressSteps, 1);
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
                             IEnumerable<Event> evts = Enumerable.Empty<Event>();
@@ -256,9 +295,9 @@ namespace WorkSummarizerGUI.ViewModels
                         MessageBox.Show("Oh noes!" + Environment.NewLine + Environment.NewLine + ex);
                     }
                 });
-
-                IsBusy = false;
             }
+
+            IsBusy = false;
         }
     }
 }
