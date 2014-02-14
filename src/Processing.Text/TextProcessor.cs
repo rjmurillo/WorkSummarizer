@@ -27,6 +27,11 @@ namespace Processing.Text
             return text.ToUpperInvariant();
         }
 
+        public HashSet<string> StopWords
+        {
+            get { return m_stopWords; }
+        }
+
         public IEnumerable<string> Tokenize(string input)
         {
             var sanitizedInput = Sanitize(input);

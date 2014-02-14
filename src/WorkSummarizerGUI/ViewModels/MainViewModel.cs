@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Threading;
+using DataSources.Who;
 using Events;
 using Events.CodeFlow;
 using Events.Connect;
@@ -18,6 +19,7 @@ using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
 using Extensibility;
+using FUSE.Weld.Base;
 using Processing.Text;
 using Renders;
 using Renders.Console;
@@ -265,10 +267,16 @@ namespace WorkSummarizerGUI.ViewModels
                                 sb.Append(String.Format(" {0} {1} ", evt.Subject.Text.Replace("\n", String.Empty).Replace("\r", String.Empty), evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty)));
                             }
 
+
+                            IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
+
+                            var customStopList = IdentityUtility.GetIdentityAttributes();
+
+                            textProc.StopWords.AddRange(customStopList);
+
                             var nouns = textProc.GetNouns(sb.ToString());
                             IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
                             IEnumerable<string> importantSentences = textProc.GetImportanEvents(evts.Select(x => x.Text), nouns);
-                            IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
 
                             if (selectedIsGeneratePerSourceEnabled)
                             {

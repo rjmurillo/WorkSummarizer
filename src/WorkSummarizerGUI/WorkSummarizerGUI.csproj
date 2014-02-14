@@ -118,6 +118,10 @@
       <Project>{8d667de1-cf34-448d-96e1-6b3b4aa5d102}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataSources.Who\DataSources.Who.csproj">
+      <Project>{67ffe75c-c82d-4890-b932-58d2ebf26e0d}</Project>
+      <Name>DataSources.Who</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Events.CodeFlow\Events.CodeFlow.csproj">
       <Project>{e4370d41-e906-47ee-b9cb-7c19e17b60c9}</Project>
       <Name>Events.CodeFlow</Name>
