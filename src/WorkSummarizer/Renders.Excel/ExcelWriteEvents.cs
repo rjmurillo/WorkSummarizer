@@ -25,9 +25,12 @@ namespace Renders.Excel
 
             writingRowNumber = WriteSentences(sheet, writingRowNumber++, importantSentences);
 
-            foreach (Event evt in events)
+            foreach (var evtGroup in events.GroupBy(v => v.EventType))
             {
-                WriteRow(sheet, evt, writingRowNumber++);
+                foreach (var evt in evtGroup.OrderByDescending(s => s.Date))
+                {
+                    WriteRow(sheet, evt, writingRowNumber++);
+                }
             }
             MarkUpColumnWidths(sheet);
             
@@ -88,18 +91,6 @@ namespace Renders.Excel
             return ++row;
         }
 
-        private static void MarkUpColumnWidths(Worksheet sheet)
-        {
-            var range = sheet.Range["A1"];
-            range.EntireColumn.ColumnWidth = 25;
-
-            range = sheet.Range["B1"];
-            range.EntireColumn.AutoFit();
-            
-            range = sheet.Range["C1"];
-            range.EntireColumn.ColumnWidth = 250;
-        }
-
         private Worksheet GetSheet(string eventType)
         {
             if (application == null)
@@ -129,8 +120,24 @@ namespace Renders.Excel
         private static void WriteRow(Worksheet sheet, Event theEvent, int row)
         {
             sheet.Cells[row, 1] = theEvent.Date;
-            sheet.Cells[row, 2] = theEvent.Subject.Text;
-            sheet.Cells[row, 3] = theEvent.Text;
+            sheet.Cells[row, 2] = theEvent.EventType;
+            sheet.Cells[row, 3] = theEvent.Subject.Text;
+            sheet.Cells[row, 4] = theEvent.Text;
+        }
+
+        private static void MarkUpColumnWidths(Worksheet sheet)
+        {
+            var range = sheet.Range["A1"];
+            range.EntireColumn.ColumnWidth = 25;
+
+            range = sheet.Range["B1"];
+            range.EntireColumn.AutoFit();
+
+            range = sheet.Range["C1"];
+            range.EntireColumn.AutoFit();
+
+            range = sheet.Range["D1"];
+            range.EntireColumn.ColumnWidth = 250;
         }
     }
 }
