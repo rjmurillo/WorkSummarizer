@@ -12,6 +12,7 @@ using Events.ManicTime;
 using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
+using Extensibility;
 using Renders;
 using Renders.Console;
 using Renders.Excel;
@@ -20,28 +21,38 @@ using WorkSummarizer;
 
 namespace WorkSummarizerGUI.ViewModels
 {
-    
     public class MainViewModel : ViewModelBase
     {
-        private DateTime m_endLocalTime;
-        private readonly IEnumerable<EventSourceViewModel> m_eventSources;
-        private bool m_isBusy;
+        private readonly IEnumerable<ServiceViewModel> m_eventSources;
+        private readonly IPluginRuntime m_pluginRuntime;
         private readonly IEnumerable<ReportingSinkViewModel> m_reportingSinks;
+
+        private DateTime m_endLocalTime;
+        private bool m_isBusy;
         private DateTime m_startLocalTime;
 
         public MainViewModel()
         {
-            m_eventSources = new[] 
+            var pluginRuntime = new PluginRuntime();
+            pluginRuntime.Start(new[]
             {
-                new EventSourceViewModel("Fake", typeof(FakeEventsPlugin)) { IsSelected = true }, 
-                new EventSourceViewModel("CodeFlow", typeof(CodeFlowPlugin)), 
-                new EventSourceViewModel("Connect", typeof(ConnectPlugin)), 
-                new EventSourceViewModel("Kudos", typeof(KudosPlugin)), 
-                new EventSourceViewModel("ManicTime", typeof(ManicTimePlugin)), 
-                new EventSourceViewModel("Outlook", typeof(OutlookPlugin)), 
-                new EventSourceViewModel("Team Foundation Server", typeof(TeamFoundationServerPlugin)), 
-                new EventSourceViewModel("Yammer", typeof(YammerPlugin)), 
-            };
+                typeof(CodeFlowPlugin),
+                typeof(ConnectPlugin),
+                typeof(KudosPlugin),
+                typeof(ManicTimePlugin),
+                typeof(OutlookPlugin),
+                typeof(TeamFoundationServerPlugin),
+                typeof(YammerPlugin)
+            });
+
+            m_pluginRuntime = pluginRuntime;
+
+            m_eventSources =
+                pluginRuntime.EventQueryServices
+                             .GroupBy(p => p.Key.Family)
+                             .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()))
+                             .ToList();
+
             m_endLocalTime = DateTime.Now;
             m_reportingSinks = new[] 
             { 
@@ -62,7 +73,7 @@ namespace WorkSummarizerGUI.ViewModels
             }
         }
         
-        public IEnumerable<EventSourceViewModel> EventSources
+        public IEnumerable<ServiceViewModel> EventSources
         {
             get { return m_eventSources; }
         }
@@ -101,9 +112,9 @@ namespace WorkSummarizerGUI.ViewModels
         {
             IsBusy = true;
 
-            var selectedEventSourceTypes = EventSources.Where(p => p.IsSelected)
-                                                       .Select(p => p.EventSourceType)
-                                                       .ToList();
+            var selectedEventSourceIds = EventSources.Where(p => p.IsSelected)
+                                                     .SelectMany(p => p.ServiceIds)
+                                                     .ToList();
 
             var selectedReportingSinkTypes = ReportingSinks.Where(p => p.IsSelected)
                                                            .Select(p => p.ReportingSinkType)
@@ -112,7 +123,7 @@ namespace WorkSummarizerGUI.ViewModels
             var selectedStartLocalTime = m_startLocalTime;
             var selectedEndLocalTime = m_endLocalTime;
 
-            if (selectedEventSourceTypes.Any() && selectedReportingSinkTypes.Any())
+            if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any())
             {
                 DispatcherFrame frame = new DispatcherFrame();
                 Dispatcher.CurrentDispatcher.BeginInvoke(
@@ -123,28 +134,27 @@ namespace WorkSummarizerGUI.ViewModels
 
                         try
                         {
-                            var pluginRuntime = new PluginRuntime();
-                            pluginRuntime.Start(selectedEventSourceTypes);
+                            var eventQueryServiceRegistrations =
+                                m_pluginRuntime
+                                    .EventQueryServices
+                                    .Where(p => selectedEventSourceIds.Contains(p.Key.Id));
 
-                            foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
+                            foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                             {
                                 Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
                                 var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
 
                                 IDictionary<string, int> weightedTags = null; // TODO - pass real tags
+                                IDictionary<string, int> weightedPeople = null; // TODO
+                                IEnumerable<string> importantSentences = null; // TODO
 
                                 // TODO renderers as plugins
                                 foreach (IRenderEvents render in selectedReportingSinkTypes.Select(Activator.CreateInstance))
                                 {
-                                    render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags);
+                                    render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
                                 }
 
                                 Console.WriteLine();
-                            }
-
-                            if (!pluginRuntime.EventQueryServices.Any())
-                            {
-                                Console.WriteLine("No event query services registered!");
                             }
                         }
                         catch (Exception ex)
