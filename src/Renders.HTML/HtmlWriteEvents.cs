@@ -16,7 +16,7 @@ namespace Renders.HTML
         {
             var sb = new StringBuilder(events.Count() * 250);
 
-            sb.Append("<html><head><title>" + eventType + "</title><style type=\"text/css\">");
+            sb.Append("<html><head><title>" + HtmlEscape(eventType) + "</title><style type=\"text/css\">");
             BuildTagCloudCss(sb);
             sb.Append("</style></head><body>");
 
@@ -30,7 +30,7 @@ namespace Renders.HTML
                 sb.Append("<p><div style=\"font-weight:bold;\">Important Sentences:</div>");
                 foreach (var sentence in importantSentences)
                 {
-                    sb.Append("<p>" + sentence + "</p>");
+                    sb.Append("<p>" + HtmlEscape(sentence) + "</p>");
                 }
                 sb.Append("</p>");
             }
@@ -56,7 +56,7 @@ namespace Renders.HTML
         private static void BuildHtmlFragment(StringBuilder sb, Event evnt)
         {
             sb.Append("<p>");
-            sb.Append("<div style=\"font-weight:bold;\">type: " + evnt.EventType + "</div>");
+            sb.Append("<div style=\"font-weight:bold;\">type: " + HtmlEscape(evnt.EventType) + "</div>");
 
             sb.Append("<div>date: " + evnt.Date);
             if (evnt.Duration.Ticks > 0)
@@ -67,11 +67,11 @@ namespace Renders.HTML
 
             if (evnt.Subject != null && !string.IsNullOrWhiteSpace(evnt.Subject.Text))
             {
-                sb.Append("<div>subject: " + evnt.Subject.Text + "</div>");
+                sb.Append("<div>subject: " + HtmlEscape(evnt.Subject.Text) + "</div>");
             }
             if (evnt.Context != null)
             {
-                sb.Append("<div>context: " + evnt.Context + "</div>");
+                sb.Append("<div>context: " + HtmlEscape(evnt.Context.ToString()) + "</div>");
             }
             if (evnt.Participants != null)
             {
@@ -81,13 +81,13 @@ namespace Renders.HTML
                 {
                     sb.Append(separator);
                     separator = ", ";
-                    sb.Append(participant.Value.Alias);
+                    sb.Append(HtmlEscape(participant.Value.Alias));
                 }
                 sb.Append("</div>");
             }
             if (!string.IsNullOrWhiteSpace(evnt.Text))
             {
-                sb.Append("<div>text: <div style=\"border:1px solid #9AF\">" + evnt.Text + "</div></div>");
+                sb.Append("<div>text: <div style=\"border:1px solid #9AF\">" + HtmlEscape(evnt.Text) + "</div></div>");
             }
             sb.Append("</p>");
         }
@@ -146,6 +146,11 @@ namespace Renders.HTML
                 {
 	                font-size:12px;
                 }");
+        }
+
+        private static string HtmlEscape(string text)
+        {
+            return text.Replace("<", "&lt;").Replace(">", "&gt;");
         }
     }
 }
