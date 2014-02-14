@@ -62,6 +62,9 @@
     <Compile Include="..\WorkSummarizer\FakeEventsPlugin.cs">
       <Link>FakeEventsPlugin.cs</Link>
     </Compile>
+    <Compile Include="..\WorkSummarizer\PeopleProcessor.cs">
+      <Link>PeopleProcessor.cs</Link>
+    </Compile>
     <Compile Include="..\WorkSummarizer\PluginRuntime.cs">
       <Link>PluginRuntime.cs</Link>
     </Compile>
