@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using DataSources.ManicTime;
+using DataSources.Who;
 
 namespace Events.ManicTime
 {
@@ -24,6 +25,10 @@ namespace Events.ManicTime
                     Subject = new Subject { Text = p.GroupDisplayName },
                     Text = p.DisplayName
                 };
+
+                // "Utilities" and other "helpers" should be injected via the plugin runtime
+                e.Participants.Add(IdentityUtility.Create(Environment.UserName));
+
                 return e;
             }).ToList();
 
