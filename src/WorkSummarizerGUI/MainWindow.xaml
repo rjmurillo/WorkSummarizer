@@ -204,7 +204,8 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <CheckBox Content="{Binding Name}"
-                                              IsChecked="{Binding IsSelected}" />
+                                              IsChecked="{Binding IsSelected}"
+                                              ToolTip="{Binding HelpText}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

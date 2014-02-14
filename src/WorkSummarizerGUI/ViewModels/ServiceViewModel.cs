@@ -9,6 +9,7 @@ namespace WorkSummarizerGUI.ViewModels
     {
         private readonly IEnumerable<string> m_serviceIds;
         private readonly string m_name;
+        private string m_helpText;
         private bool m_isEnabled;
         private bool m_isSelected;
 
@@ -16,12 +17,18 @@ namespace WorkSummarizerGUI.ViewModels
         {
             m_serviceIds = serviceIds;
             m_name = name;
+            m_helpText = String.Empty;
             m_isEnabled = true;
         }
 
-        public IEnumerable<string> ServiceIds
+        public string HelpText
         {
-            get { return m_serviceIds; }
+            get { return m_helpText; }
+            set
+            {
+                m_helpText = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool IsEnabled
@@ -53,6 +60,11 @@ namespace WorkSummarizerGUI.ViewModels
         public string Name
         {
             get { return m_name; }
+        }
+
+        public IEnumerable<string> ServiceIds
+        {
+            get { return m_serviceIds; }
         }
     }
 }

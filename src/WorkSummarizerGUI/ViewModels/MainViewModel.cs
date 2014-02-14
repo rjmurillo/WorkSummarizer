@@ -64,7 +64,7 @@ namespace WorkSummarizerGUI.ViewModels
             m_eventSources =
                 pluginRuntime.EventQueryServices
                              .GroupBy(p => p.Key.Family)
-                             .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()))
+                             .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()) { HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))})
                              .ToList();
 
             EndLocalTime = DateTime.Now;
@@ -179,10 +179,6 @@ namespace WorkSummarizerGUI.ViewModels
 
         public async Task GenerateAsync()
         {
-            IsBusy = true;
-            ProgressPercentage = 0;
-            ProgressStatus = String.Empty;
-
             var selectedEventSourceIds = EventSources.Where(p => p.IsSelected)
                                                      .SelectMany(p => p.ServiceIds)
                                                      .ToList();
@@ -199,6 +195,10 @@ namespace WorkSummarizerGUI.ViewModels
 
             if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any() && (selectedIsGeneratePerSourceEnabled || selectedIsGeneratePerSummaryEnabled))
             {
+                IsBusy = true;
+                ProgressPercentage = 0;
+                ProgressStatus = String.Empty;
+
                 var uiDispatcher = Dispatcher.CurrentDispatcher;
                 await Task.Run(() =>
                 {
@@ -334,10 +334,10 @@ namespace WorkSummarizerGUI.ViewModels
                         MessageBox.Show("Oh noes!" + Environment.NewLine + Environment.NewLine + ex);
                     }
                 });
+                
+                IsBusy = false;
+                ProgressStatus = "...done.";
             }
-
-            IsBusy = false;
-            ProgressStatus = "...done.";
         }
         
         private void UpdateReportingDuration()
