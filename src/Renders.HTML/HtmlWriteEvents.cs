@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Events;
 using TagCloud;
@@ -10,15 +12,31 @@ namespace Renders.HTML
 {
     public class HtmlWriteEvents : IRenderEvents
     {
+        private string LoadResource(string name)
+        {
+            var a = Assembly.GetExecutingAssembly();
+            using (var s = a.GetManifestResourceStream("Renders.HTML." + name))
+            {
+                using (var r = new StreamReader(s))
+                {
+                    return r.ReadToEnd();
+                }
+            }
+        }
+
         public void Render(string eventType, IEnumerable<Event> events, IDictionary<string, int> weightedTags, IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences)
         {
             var sb = new StringBuilder(events.Count() * 250);
 
-            sb.Append("<html><head><title>" + HtmlEscape(eventType) + "</title><style type=\"text/css\">");
-            sb.Append("h1,h2 { font-family:arial;}");
-            BuildTagCloudCss(sb);
-            sb.Append("</style></head><body>");
+            
+            
             sb.Append("<h1>Work Summary</h1>");
+
+            if (weightedPeople != null)
+            {
+                sb.Append("<h2>People:</h2>");
+                BuildTagCloud(sb, weightedPeople);
+            }
 
             if (weightedTags != null)
             {
@@ -28,19 +46,12 @@ namespace Renders.HTML
 
             if (importantSentences != null)
             {
-                sb.Append("<h2>Important Sentences:</h2>");
+                sb.Append("<h2>Important events:</h2>");
                 foreach (var sentence in importantSentences)
                 {
                     sb.Append("<p>" + HtmlEscape(sentence) + "</p>");
                 }
             }
-
-            if (weightedPeople != null)
-            {
-                sb.Append("<h2>People:</h2>");
-                BuildTagCloud(sb, weightedPeople);
-            }
-
             if (events != null)
             {
                 sb.Append("<h2>Events:</h2>");
@@ -49,10 +60,32 @@ namespace Renders.HTML
                     BuildEventHtml(sb, evnt);
                 }
             }
-            sb.Append("</body></html>");
+            
+            /* Boilerplate has 5 areas
+             * 0: Title
+             * 1: CSS
+             * 2: JS (blocking JS)
+             * 3: Your Content
+             * 4: Your other JS
+             */
+            var htmlBoilerplate = LoadResource("boilerplate2.html");
+            var cssNormalize = LoadResource("normalize.css");
+            var cssMain = LoadResource("main.css");
+            var cssTagCloud = BuildTagCloudCss();
+            var jsMain = LoadResource("main.js");
+
+            var htmlFinal = string.Format(
+                CultureInfo.InvariantCulture,
+                htmlBoilerplate,
+                HtmlEscape(eventType),
+                cssNormalize + cssMain + cssTagCloud,
+                string.Empty,
+                sb.ToString(),
+                jsMain);
+
 
             string fileName = string.Format("WorkSummary_{0}.html", eventType);
-            File.WriteAllText(fileName, sb.ToString());
+            File.WriteAllText(fileName, htmlFinal);
             Process.Start(fileName);
 
         }
@@ -109,47 +142,47 @@ namespace Renders.HTML
             sb.Append("<p>" + htmlTags + "</p>");
         }
 
-        private static void BuildTagCloudCss(StringBuilder sb)
+        private string BuildTagCloudCss()
         {
-            sb.Append(@"
+            return @"
                 .TagCloud			/* Applies to the entire tag cloud */
                 {
-	                font-family:Trebuchet MS;
-	                border:1px solid #888;
-	                padding:3px; 
-	                text-align:center;
+                    font-family:Trebuchet MS;
+                    border:1px solid #888;
+                    padding:3px; 
+                    text-align:center;
                 }
 
                 .TagCloud > span	/* Applies to each tag of the tag cloud */
                 {
-	                margin-right:3px;
-	                text-align:center;
+                    margin-right:3px;
+                    text-align:center;
                 }
 
                 .TagCloud > span.TagWeight1	/* Applies to the largest tags */
                 {
-	                font-size:40px;
+                    font-size:40px;
                 }
 
                 .TagCloud > span.TagWeight2
                 {
-	                font-size:32px;
+                    font-size:32px;
                 }
 
                 .TagCloud > span.TagWeight3
                 {
-	                font-size:25px;
+                    font-size:25px;
                 }
 
                 .TagCloud > span.TagWeight4
                 {
-	                font-size:18px;
+                    font-size:18px;
                 }
 
                 .TagCloud > span.TagWeight5	/* Applies to the smallest tags */
                 {
-	                font-size:12px;
-                }");
+                    font-size:12px;
+                }";
         }
 
         private static string HtmlEscape(string text)
