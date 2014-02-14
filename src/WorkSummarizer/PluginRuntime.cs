@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Events;
 using Events.Yammer;
 using Extensibility;
+using Renders;
 
 namespace WorkSummarizer
 {
@@ -11,9 +12,12 @@ namespace WorkSummarizer
         public PluginRuntime()
         {
             EventQueryServices = new Dictionary<ServiceRegistration, IEventQueryService>();
+            RenderEventServices = new Dictionary<ServiceRegistration, IRenderEvents>();
         }
 
         public IDictionary<ServiceRegistration, IEventQueryService> EventQueryServices { get; private set; }
+        
+        public IDictionary<ServiceRegistration, IRenderEvents> RenderEventServices { get; private set; }
 
         // REVIEW plugin discovery if we were fancy.
         public void Start(IEnumerable<Type> pluginTypes)

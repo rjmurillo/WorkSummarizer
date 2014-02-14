@@ -155,6 +155,10 @@
       <Project>{15e4259e-f270-4e1c-b91f-d00a88621301}</Project>
       <Name>Graph</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Processing.Text\Processing.Text.csproj">
+      <Project>{93ff4ed2-840e-46d9-af8d-f6f588e40485}</Project>
+      <Name>Processing.Text</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Renders.Console\Renders.Console.csproj">
       <Project>{b97b4ed9-962c-49ba-b6fd-f6d913773830}</Project>
       <Name>Renders.Console</Name>

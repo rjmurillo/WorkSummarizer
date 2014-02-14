@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Threading;
 using Events;
 using Events.CodeFlow;
@@ -25,7 +27,7 @@ namespace WorkSummarizerGUI.ViewModels
     {
         private readonly IEnumerable<ServiceViewModel> m_eventSources;
         private readonly IPluginRuntime m_pluginRuntime;
-        private readonly IEnumerable<ReportingSinkViewModel> m_reportingSinks;
+        private readonly IEnumerable<ServiceViewModel> m_reportingSinks;
 
         private DateTime m_endLocalTime;
         private bool m_isBusy;
@@ -42,7 +44,11 @@ namespace WorkSummarizerGUI.ViewModels
                 typeof(ManicTimePlugin),
                 typeof(OutlookPlugin),
                 typeof(TeamFoundationServerPlugin),
-                typeof(YammerPlugin)
+                typeof(YammerPlugin),
+
+                typeof(ConsoleRenderPlugin),
+                typeof(ExcelRenderPlugin),
+                typeof(HtmlRenderPlugin),
             });
 
             m_pluginRuntime = pluginRuntime;
@@ -54,12 +60,12 @@ namespace WorkSummarizerGUI.ViewModels
                              .ToList();
 
             m_endLocalTime = DateTime.Now;
-            m_reportingSinks = new[] 
-            { 
-                new ReportingSinkViewModel("Console", typeof(ConsoleWriteEvents)) { IsSelected = true },
-                new ReportingSinkViewModel("Excel", typeof(ExcelWriteEvents)), 
-                new ReportingSinkViewModel("Web page", typeof(HtmlWriteEvents)), 
-            };
+            
+            m_reportingSinks = pluginRuntime.RenderEventServices
+                             .GroupBy(p => p.Key.Family)
+                             .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()))
+                             .ToList();
+
             m_startLocalTime = DateTime.Now.AddMonths(-1);
         }
         
@@ -88,7 +94,7 @@ namespace WorkSummarizerGUI.ViewModels
             }
         }
 
-        public IEnumerable<ReportingSinkViewModel> ReportingSinks
+        public IEnumerable<ServiceViewModel> ReportingSinks
         {
             get { return m_reportingSinks; }
         }
@@ -117,7 +123,7 @@ namespace WorkSummarizerGUI.ViewModels
                                                      .ToList();
 
             var selectedReportingSinkTypes = ReportingSinks.Where(p => p.IsSelected)
-                                                           .Select(p => p.ReportingSinkType)
+                                                           .SelectMany(p => p.ServiceIds)
                                                            .ToList();
 
             var selectedStartLocalTime = m_startLocalTime;
@@ -139,22 +145,48 @@ namespace WorkSummarizerGUI.ViewModels
                                     .EventQueryServices
                                     .Where(p => selectedEventSourceIds.Contains(p.Key.Id));
 
+                            var renderServiceRegistrations =
+                                m_pluginRuntime
+                                    .RenderEventServices
+                                    .Where(p => selectedReportingSinkTypes.Contains(p.Key.Id));
+
+                            var summaryEvents = new List<Event>();
+                            var summaryWeightedTags = new ConcurrentDictionary<string, int>();
+                            var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
+                            var summaryImportantSentences = new List<string>();
+
                             foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                             {
-                                Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
                                 var evts = eventQueryServiceRegistration.Value.PullEvents(selectedStartLocalTime, selectedEndLocalTime);
 
-                                IDictionary<string, int> weightedTags = null; // TODO - pass real tags
-                                IDictionary<string, int> weightedPeople = null; // TODO
-                                IEnumerable<string> importantSentences = null; // TODO
+                                IDictionary<string, int> weightedTags = new Dictionary<string, int>(); // TODO - pass real tags
+                                IDictionary<string, int> weightedPeople = new Dictionary<string, int>(); // TODO
+                                IEnumerable<string> importantSentences = new List<string>(); // TODO
 
-                                // TODO renderers as plugins
-                                foreach (IRenderEvents render in selectedReportingSinkTypes.Select(Activator.CreateInstance))
+                                foreach (var render in renderServiceRegistrations)
                                 {
-                                    render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
+                                    render.Value.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
                                 }
 
-                                Console.WriteLine();
+                                summaryEvents.AddRange(evts);
+                                foreach (var weightedTagEntry in weightedTags)
+                                {
+                                    summaryWeightedTags.AddOrUpdate(weightedTagEntry.Key, weightedTagEntry.Value,
+                                        (s, i) => i + weightedTagEntry.Value);
+                                }
+
+                                foreach (var weightedPersonEntry in weightedPeople)
+                                {
+                                    summaryWeightedPeople.AddOrUpdate(weightedPersonEntry.Key, weightedPersonEntry.Value,
+                                        (s, i) => i + weightedPersonEntry.Value);
+                                }
+
+                                summaryImportantSentences.AddRange(importantSentences);
+                            }
+
+                            foreach (var render in renderServiceRegistrations)
+                            {
+                                render.Value.Render("Summary", summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
                             }
                         }
                         catch (Exception ex)
@@ -169,7 +201,6 @@ namespace WorkSummarizerGUI.ViewModels
                 Dispatcher.PushFrame(frame);
             }
 
-            Console.WriteLine("Done.");
             IsBusy = false;
         }
     }

@@ -11,6 +11,7 @@ using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
 using Microsoft.Office.Interop.Excel;
+using Processing.Text;
 using Renders;
 using Renders.Console;
 using Renders.Excel;
@@ -31,17 +32,16 @@ namespace WorkSummarizer
             // plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
             // plugins.Add(typeof(OutlookPlugin));
-             plugins.Add(typeof(TeamFoundationServerPlugin));
-            // plugins.Add(typeof(YammerPlugin));
+            // plugins.Add(typeof(TeamFoundationServerPlugin));
+            plugins.Add(typeof(YammerPlugin));
+            
+            //plugins.Add(typeof(ConsoleRenderPlugin));
+            //plugins.Add(typeof(ExcelRenderPlugin));
+            plugins.Add(typeof(HtmlRenderPlugin));
 
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(plugins);
 
-            var renders = new List<IRenderEvents>();
-            //renders.Add(new ExcelWriteEvents());
-            //renders.Add(new ConsoleWriteEvents());
-            renders.Add(new HtmlWriteEvents());
-            
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
                 var sb = new StringBuilder();
@@ -57,10 +57,10 @@ namespace WorkSummarizer
                 var peopleProc = new PeopleProcessor();
                
                 IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
+                IEnumerable<string> importantSentences = textProc.GetImportantSentences(sb.ToString());
                 IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
-                IEnumerable<string> importantSentences = null; // TODO
 
-                foreach (IRenderEvents render in renders)
+                foreach (IRenderEvents render in pluginRuntime.RenderEventServices.Values)
                 {
                     render.Render(eventQueryServiceRegistration.Key.Id, evts, weightedTags, weightedPeople, importantSentences);
                 }

@@ -68,7 +68,7 @@
     </ProjectReference>
     <ProjectReference Include="..\OutlookDataSource\DataSources.Outlook.csproj">
       <Project>{65827b3b-3c23-440d-958d-9fcc4c692cc0}</Project>
-      <Name>OutlookDataSource</Name>
+      <Name>DataSources.Outlook</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
