@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +18,7 @@ using Events.Outlook;
 using Events.TeamFoundationServer;
 using Events.Yammer;
 using Extensibility;
+using Processing.Text;
 using Renders;
 using Renders.Console;
 using Renders.Excel;
@@ -186,9 +188,19 @@ namespace WorkSummarizerGUI.ViewModels
                             
                             uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
 
-                            IDictionary<string, int> weightedTags = new Dictionary<string, int>(); // TODO - pass real tags
-                            IDictionary<string, int> weightedPeople = new Dictionary<string, int>(); // TODO
-                            IEnumerable<string> importantSentences = new List<string>(); // TODO
+                            var textProc = new TextProcessor();
+                            var peopleProc = new PeopleProcessor();
+
+                            var sb = new StringBuilder();
+
+                            foreach (var evt in evts)
+                            {
+                                sb.Append(String.Format(" {0} {1} ", evt.Subject.Text.Replace("\n", String.Empty).Replace("\r", String.Empty), evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty)));
+                            }
+
+                            IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
+                            IEnumerable<string> importantSentences = textProc.GetImportantSentences(sb.ToString());
+                            IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
 
                             foreach (var render in renderServiceRegistrations)
                             {
