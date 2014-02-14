@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using DataSources.TeamFoundationServer;
+using DataSources.Who;
 using Graph;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using WorkSummarizer.TeamFoundationServerDataSource;
@@ -32,7 +33,7 @@ namespace Events.TeamFoundationServer
                 foreach (Revision r in wi.Revisions)
                 {
                     var e = new Event();
-                    var p = new Participant((string)r.Fields["Changed by"].Value);
+                    var p = IdentityUtility.Create((string)r.Fields["Changed by"].Value);
 
                     e.Participants = new Graph<Participant> { p };
                     e.Date = (DateTime)r.Fields["Changed date"].Value;
@@ -61,6 +62,12 @@ namespace Events.TeamFoundationServer
                     }
 
                     e.Context = wi.Id;
+
+                    if (e.Text.Contains("TFS AUTO UPDATE"))
+                    {
+                        continue;
+                    }
+
                     retval.Add(e);
                 }
             }

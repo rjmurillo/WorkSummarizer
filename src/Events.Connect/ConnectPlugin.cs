@@ -6,7 +6,7 @@ namespace Events.Connect
     {
         public ConnectPlugin(IPluginRuntime pluginRuntime)
         {
-            pluginRuntime.EventQueryServices[new ServiceRegistration("Connect.History", "Connect", "History")] = new ConnectHistoryEventQueryService();
+            pluginRuntime.EventQueryServices[new ServiceRegistration("Connect.History", "Connect", "History") { InvokeOnShellDispatcher = true }] = new ConnectHistoryEventQueryService();
         }
     }
 }

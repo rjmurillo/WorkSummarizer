@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common;
+using DataSources.Who;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace DataSources.TeamFoundationServer
@@ -43,7 +44,7 @@ namespace DataSources.TeamFoundationServer
                         }
                     }
 
-                    participants.Add(new Participant((string)revision.Fields["Changed by"].Value));
+                    participants.Add(IdentityUtility.Create((string)revision.Fields["Changed by"].Value));
                 }
             }
 

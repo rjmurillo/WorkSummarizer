@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using DataSources.CodeFlow;
+using DataSources.Who;
+using Graph;
 
 namespace Events.CodeFlow
 {
@@ -20,10 +22,11 @@ namespace Events.CodeFlow
                     {
                         Date = p.PublishedUtcDate,
                         Duration = p.ClosedUtcDate - p.PublishedUtcDate,
-                        Text = p.Name
+                        Text = p.Name,
+                        Participants = p.Reviewers.ToGraph()
                     };
 
-                    e.Participants.Add(new Participant(p.AuthorLogin));
+                    e.Participants.Add(IdentityUtility.Create(p.AuthorLogin));
 
                     return e;
                 });
