@@ -37,7 +37,7 @@ namespace DataSources.Outlook
 
                 itemsList.Add(new OutlookItem(foo.Subject ?? String.Empty, foo.Body ?? String.Empty, foo.StartUTC,
                     foo.EndUTC,
-                    foo.Recipients.Cast<Recipient>().Select(x => x.AddressEntry.GetContact().Account)));
+                    foo.Recipients.Cast<Recipient>().Select(x => x.Name)));
                 item = calendarItems.FindNext();
             }
 
