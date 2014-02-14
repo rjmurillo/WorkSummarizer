@@ -23,4 +23,3 @@
 
 // Place any jQuery/helper plugins in here.
 
-// Place any other JavaScript in here.

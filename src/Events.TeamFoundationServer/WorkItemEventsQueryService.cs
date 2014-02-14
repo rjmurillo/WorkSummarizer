@@ -33,9 +33,7 @@ namespace Events.TeamFoundationServer
                 foreach (Revision r in wi.Revisions)
                 {
                     var e = new Event();
-                    var p = IdentityUtility.Create((string)r.Fields["Changed by"].Value);
-
-                    e.Participants = new Graph<Participant> { p };
+                    
                     e.Date = (DateTime)r.Fields["Changed date"].Value;
                     e.Duration = TimeSpan.Zero;
                     e.Text = (string)r.Fields["History"].Value;
@@ -70,6 +68,9 @@ namespace Events.TeamFoundationServer
 
                     if (e.Date.Ticks > startDateTime.Ticks && e.Date.Ticks < endDateTime.Ticks)
                     {
+                        var p = IdentityUtility.Create((string)r.Fields["Changed by"].Value);
+                        e.Participants = new Graph<Participant> { p };
+
                         retval.Add(e);
                     }
                 }

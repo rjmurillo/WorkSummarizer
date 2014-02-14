@@ -118,41 +118,64 @@ namespace Renders.HTML
                 
                 
                 
-                sb.AppendLine("<table id=\"overall_summary\"><thead><tr><th>Event Type</th><th>Count</th><th>Total Hours<th><th>Avg / Day</th><th>Avg / Hour</th></tr></thead><tbody>");
-                foreach (var r in g.OrderByDescending(ks=>ks.count))
-                {
-                    sb.AppendLine("<tr><td>" + r.key + "</td><td>" + r.count + "</td><td>" + r.hours + "</td><td>" + r.avgDays + "</td><td>" + r.avgHours + "</td></tr>");
-                }
-                sb.AppendLine("</tbody></table>");
+                //sb.AppendLine("<table id=\"overall_summary\" data-role=\"table\"><thead><tr><th>Event Type</th><th>Count</th><th>Total Hours<th><th>Avg / Day</th><th>Avg / Hour</th></tr></thead><tbody>");
+                //foreach (var r in g.OrderByDescending(ks=>ks.count))
+                //{
+                //    sb.AppendLine("<tr><td>" + r.key + "</td><td>" + r.count + "</td><td>" + r.hours + "</td><td>" + r.avgDays + "</td><td>" + r.avgHours + "</td></tr>");
+                //}
+                //sb.AppendLine("</tbody></table>");
 
+                foreach (var r in g)
+                {
+                    sb.AppendLine("<div class=\"container\">");
+
+                    sb.AppendLine("<div class=\"meetings-attended\">");
+                    sb.AppendLine("<span>" + r.count + "</span>");
+                    sb.AppendLine("<h2>" + DetermineHeader(r.key) + "</h2>");
+                    sb.AppendLine("</div>");
+
+                    sb.AppendLine("<div class=\"hours\">");
+                    sb.AppendLine("<span>" + Math.Round(r.avgDays, 1) + "</span>");
+                    sb.AppendLine("<p>" + DetermineHeader(r.key) + "<br /> per day (on average)</p>");
+                    sb.AppendLine("</div>");
+
+                    sb.AppendLine("<div class=\"hours\">");
+                    sb.AppendLine("<span>" + Math.Round(r.avgHours, 1) + "</span>");
+                    sb.AppendLine("<p>" + DetermineHeader(r.key) + "<br /> per hour (on average)</p>");
+                    sb.AppendLine("</div>");
+
+                    sb.Append("</div>");
+                }
                 
-                
+
 
             }
 
             if (weightedPeople != null)
             {
-                sb.AppendLine("<h2>People:</h2>");
+                sb.AppendLine("<h2>Connections</h2>");
                 BuildTagCloud(sb, weightedPeople);
             }
 
             if (weightedTags != null)
             {
-                sb.AppendLine("<h2>Top words:</h2>");
+                sb.AppendLine("<h2>Frequent words</h2>");
                 BuildTagCloud(sb, weightedTags);
             }
 
             if (importantSentences != null)
             {
-                sb.AppendLine("<h2>Important events:</h2>");
+                sb.AppendLine("<h2>Important events</h2>");
+                sb.AppendLine("<ul>");
                 foreach (var sentence in importantSentences)
                 {
-                    sb.AppendLine("<p>" + HtmlEscape(sentence) + "</p>");
+                    sb.AppendLine("<li>" + HtmlEscape(sentence) + "</li>");
                 }
+                sb.AppendLine("</ul>");
             }
             if (events != null)
             {
-                sb.AppendLine("<h2>Events:</h2>");
+                sb.AppendLine("<h2>Events</h2>");
                 foreach (var evnt in events)
                 {
                     BuildEventHtml(sb, evnt);
@@ -185,6 +208,41 @@ namespace Renders.HTML
             File.WriteAllText(fileName, htmlFinal);
             Process.Start(fileName);
 
+        }
+
+        private string DetermineHeader(string p)
+        {
+            switch (p)
+            {
+                case "CodeFlow.Author":
+                    return "Code Reviews";
+                case "Connect.Submission":
+                    return "Connect Reviews";
+                case "Kudos.Received":
+                    return "Kudos Recieved";
+                case "ManicTime Activities":
+                    return "ManicTime Activities";
+                case "Outlook.Conversation":
+                    return "Lync Conversations";
+                case "Outlook.Email":
+                    return "Email Sent";
+                case "Outlook.Meeting":
+                    return "Meetings Attended";
+                case "TeamFoundationServer.Changeset":
+                    return "Changesets Comitted";
+                case "TeamFoundationServer.WorkItem.Resolved":
+                    return "Work Items Resolved";
+                case "TeamFoundationServer.WorkItem.Revision":
+                    return "Work Items Edited";
+                case "TeamFoundationServer.WorkItem.Closed":
+                    return "Work Items Closed";
+                case "TeamFoundationServer.WorkItem.Activated":
+                    return "Work Items Activated";
+                case "Yammer.SentMessages":
+                    return "Yams Sent";
+                default:
+                    return p;
+            }
         }
 
         private static void BuildEventHtml(StringBuilder sb, Event evnt)
