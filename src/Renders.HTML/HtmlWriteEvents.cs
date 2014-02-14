@@ -213,12 +213,14 @@ namespace Renders.HTML
 
         private string BuildOtherJs(IDictionary<string, int> weightedTags)
         {
+            var top = weightedTags.OrderByDescending(ks => ks.Value).Take(10);
+
             var sb = new StringBuilder();
 
             sb.AppendLine("$('#important_events').wrapInTag({");
 sb.AppendLine("    tag: 'strong',");
 sb.Append("    words: [");
-            foreach (var t in weightedTags.Keys)
+            foreach (var t in top.Select(o => o.Key))
             {
                 sb.Append("'" + t + "',");
             }
