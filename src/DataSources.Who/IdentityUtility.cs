@@ -23,10 +23,15 @@ namespace DataSources.Who
                     return input.Split(new[] { "\\" }, StringSplitOptions.RemoveEmptyEntries).Last();
                 }
 
+
+                // Remove name distinguishers, not helpful to lookup service
                 var pattern = "\\([^()]*\\)";
                 var regex = new Regex(pattern, RegexOptions.Compiled);
                 input = regex.Replace(input, string.Empty);
 
+                // If the input still has a space, it's probably a display name and not an alias. Try to look up the alias
+                if (input.IndexOf(' ') > 0)
+                {
 //                var client = new RestClient(String.Format("http://qeid01"));
 //                client.DefaultParameters.Clear();
 //                var request = new RestRequest(String.Format("api/v1/identity/{0}?fields=alias,display_name,enabled", input), Method.GET);
@@ -55,8 +60,10 @@ namespace DataSources.Who
 //                    input = displayNameResponse.Data.First().Alias;
 //                }
 
-                var tp = new TeamProvider();
-                input = tp.ResolveDisplayName(input);
+                
+                    var tp = new TeamProvider();
+                    input = tp.ResolveDisplayName(input);
+                }
             }
 
             return input;
