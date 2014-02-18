@@ -23,7 +23,7 @@ namespace Events.TeamFoundationServer
 
         public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime, Func<Event, bool> predicate)
         {
-            var source = new TeamFoundationServerWorkItemDataProvider(TeamFoundationServer, Project);
+            var source = new TeamFoundationServerWorkItemDataProvider();
             var wis = source.PullData(startDateTime, endDateTime);
 
             // Convert WI to Event
