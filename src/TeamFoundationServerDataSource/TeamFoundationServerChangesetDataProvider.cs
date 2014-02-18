@@ -31,10 +31,28 @@ namespace DataSources.TeamFoundationServer
                 VersionControlServer versionControlServer =
                     (VersionControlServer)projectCollection.GetService(typeof(VersionControlServer));
 
+                string scope = null;
+                if (string.IsNullOrWhiteSpace(Project))
+                {
+                    scope = "$/";
+                }
+                else
+                {
+                    scope = "$/" + Project + "/";
+                }
+
                 IEnumerable changesetHistory =
-                    versionControlServer.QueryHistory("$/" + Project + "/", VersionSpec.Latest, 0,
-                        RecursionType.Full, null, versionFrom, versionTo, int.MaxValue,
-                        false, false);
+                    versionControlServer.QueryHistory(
+                        scope, 
+                        VersionSpec.Latest, 
+                        0,
+                        RecursionType.Full, 
+                        null, 
+                        versionFrom, 
+                        versionTo, 
+                        int.MaxValue,
+                        false, 
+                        false);
 
                 return changesetHistory.Cast<Changeset>().ToList();
             }
