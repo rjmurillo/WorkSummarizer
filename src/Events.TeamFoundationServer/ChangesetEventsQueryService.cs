@@ -21,7 +21,7 @@ namespace Events.TeamFoundationServer
 
         public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event, bool> predicate)
         {
-            var source = new TeamFoundationServerChangesetDataProvider(m_teamFoundationServer, m_project);
+            var source = new TeamFoundationServerChangesetDataProvider();
             var data = source.PullData(startDateTime, stopDateTime);
 
             var retval = data.Select(
