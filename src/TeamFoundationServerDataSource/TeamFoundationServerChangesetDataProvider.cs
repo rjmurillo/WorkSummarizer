@@ -1,22 +1,81 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.VersionControl.Client;
+using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace DataSources.TeamFoundationServer
 {
     public class TeamFoundationServerChangesetDataProvider : IDataPull<Changeset>
     {
-        public IEnumerable<Changeset> PullData(DateTime startDateTime, DateTime endDateTime)
+        public TeamFoundationServerChangesetDataProvider(Uri tfsConnectionString, string projectName)
         {
-            List<Changeset> retval = new List<Changeset>();
+            TeamFoundationServer = tfsConnectionString;
+            Project = projectName;
+        }
 
-            foreach (var connection in TeamFoundationServerRegistrationUtility.LoadRegisteredTeamFoundationServers())
+        public Uri TeamFoundationServer { get; private set; }
+        public string Project { get; private set; }
+
+        public IEnumerable<Changeset> PullData(DateTime startDate, DateTime endDate)
+        {
+            try
             {
-                var t = new TeamFoundationServerChangesetDataProviderInternal(connection, null);
-                retval.AddRange(t.PullData(startDateTime, endDateTime));
-            }
+                VersionSpec versionFrom = new DateVersionSpec(startDate);
+                VersionSpec versionTo = new DateVersionSpec(endDate);
 
-            return retval;
+                TfsTeamProjectCollection projectCollection =
+                    TfsTeamProjectCollectionFactory.GetTeamProjectCollection(TeamFoundationServer);
+                VersionControlServer versionControlServer =
+                    (VersionControlServer) projectCollection.GetService(typeof (VersionControlServer));
+
+                string scope = null;
+                if (string.IsNullOrWhiteSpace(Project))
+                {
+                    scope = "$/*";
+                }
+                else
+                {
+                    scope = "$/" + Project + "/";
+                }
+
+                IEnumerable changesetHistory =
+                    versionControlServer.QueryHistory(
+                        scope,
+                        VersionSpec.Latest,
+                        0,
+                        RecursionType.Full,
+                        null,
+                        versionFrom,
+                        versionTo,
+                        int.MaxValue,
+                        false,
+                        false);
+
+                return changesetHistory.Cast<Changeset>().ToList();
+            }
+            catch (DateVersionSpecBeforeBeginningOfRepositoryException)
+            {
+                // Nothing to see here, moving on
+                return new List<Changeset>();
+            }
+            catch (Exception ex)
+            {
+                throw new TeamFoundationException(
+                    "Unable to get versionControlServer for TFS server " + TeamFoundationServer.AbsoluteUri, ex);
+            }
+        }
+
+        public IEnumerable<Changeset> PullChangesets(Uri tfsConnectionString, IEnumerable<int> changesetIds)
+        {
+            TfsTeamProjectCollection projectCollection =
+                TfsTeamProjectCollectionFactory.GetTeamProjectCollection(tfsConnectionString);
+            VersionControlServer versionControlServer =
+                (VersionControlServer)projectCollection.GetService(typeof(VersionControlServer));
+
+            return changesetIds.Select(versionControlServer.GetChangeset);
         }
     }
 }

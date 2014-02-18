@@ -1,45 +1,56 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using DataSources.TeamFoundationServer;
-using DataSources.Who;
 using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace Events.TeamFoundationServer
 {
-    public class ChangesetEventsQueryService : EventQueryServiceBase
+    public class ChangesetEventsQueryService : IEventQueryService
     {
-        private readonly Uri m_teamFoundationServer;
-        private readonly string m_project;
-
-        public ChangesetEventsQueryService(Uri teamFoundationServerUri, string projectName)
+        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
-            m_teamFoundationServer = teamFoundationServerUri;
-            m_project = projectName;
+            List<Event> retval = new List<Event>();
+
+            var servers = TeamFoundationServerRegistrationUtility.LoadRegisteredTeamFoundationServers();
+
+            foreach (var server in servers)
+            {
+                var q = new ChangesetEventsQueryServiceInternal(server, null);
+                retval.AddRange(q.PullEvents(startDateTime, stopDateTime));
+            }
+
+            return retval;
         }
 
-        public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event, bool> predicate)
+        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, string alias)
         {
-            var source = new TeamFoundationServerChangesetDataProvider();
-            var data = source.PullData(startDateTime, stopDateTime);
+            List<Event> retval = new List<Event>();
 
-            var retval = data.Select(
-                p =>
-                {
-                    var e = new Event
-                    {
-                        Text = p.Comment,
-                        Date = p.CreationDate,
-                        Duration = TimeSpan.Zero,
-                        Context = p.ChangesetId,
-                        EventType = "TeamFoundationServer.Changeset"
-                    };
-                    e.Participants.Add(IdentityUtility.Create(p.Committer));
-                    return e;
-                }).ToList();
+            var servers = TeamFoundationServerRegistrationUtility.LoadRegisteredTeamFoundationServers();
 
-            return (predicate != null) ? retval.Where(predicate) : retval;
+            foreach (var server in servers)
+            {
+                var q = new ChangesetEventsQueryServiceInternal(server, null);
+                retval.AddRange(q.PullEvents(startDateTime, stopDateTime, alias));
+            }
+
+            return retval;
+        }
+
+        public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event, bool> predicate)
+        {
+            List<Event> retval = new List<Event>();
+
+            var servers = TeamFoundationServerRegistrationUtility.LoadRegisteredTeamFoundationServers();
+
+            foreach (var server in servers)
+            {
+                var q = new ChangesetEventsQueryServiceInternal(server, null);
+                retval.AddRange(q.PullEvents(startDateTime, stopDateTime, predicate));
+            }
+
+            return retval;
         }
     }
 }
