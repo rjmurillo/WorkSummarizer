@@ -95,21 +95,28 @@ namespace DataSources.Who
     {
         private const int MaximumSize = 512;
 
-        private readonly ClockCache<string, Participant> m_identitiesByAlias;
+        private readonly ClockCache<string, Participant> m_identitiesByInput;
+        private readonly ClockCache<string, IEnumerable<Participant>> m_identitiesByAlias; 
 
         public HashSet<string> GetKeys()
         {
-            return m_identitiesByAlias.Keys;
+            return m_identitiesByInput.Keys;
         }
 
         public IdentityCache()
         {
-            m_identitiesByAlias = new ClockCache<string, Participant>(MaximumSize);
+            m_identitiesByInput = new ClockCache<string, Participant>(MaximumSize);
+            m_identitiesByAlias = new ClockCache<string, IEnumerable<Participant>>(MaximumSize);
         }
 
         public Participant Get(string input)
         {
-            return Get(input, m_identitiesByAlias, f => IdentityUtility.CreateFromString(input));
+            return Get(input, m_identitiesByInput, f => IdentityUtility.CreateFromString(input));
+        }
+
+        public void CacheMultipleIdentities(string key, IEnumerable<string> values)
+        {
+            throw new NotImplementedException();
         }
 
         private Participant Get(string key, ClockCache<string, Participant> cache, Func<string, Participant> lookupFunc)
@@ -132,8 +139,8 @@ namespace DataSources.Who
         {
             if (participant != null)
             {
-                m_identitiesByAlias.TryAdd(participant.Alias, participant);
-                m_identitiesByAlias.TryAdd(key, participant);
+                m_identitiesByInput.TryAdd(participant.Alias, participant);
+                m_identitiesByInput.TryAdd(key, participant);
             }
         }
     }
