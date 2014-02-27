@@ -22,8 +22,8 @@ namespace Events.ManicTime
                     Date = p.StartUtcTime,
                     Duration = p.EndUtcTime - p.StartUtcTime,
                     EventType = "ManicTime.Activity",
-                    Subject = new Subject { Text = p.GroupDisplayName },
-                    Text = p.DisplayName
+                    Context = p.DisplayName,
+                    Text = p.GroupDisplayName
                 };
 
                 // "Utilities" and other "helpers" should be injected via the plugin runtime

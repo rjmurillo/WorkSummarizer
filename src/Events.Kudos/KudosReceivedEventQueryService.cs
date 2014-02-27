@@ -22,7 +22,7 @@ namespace Events.Kudos
                     {
                         Date = p.CreatedUtcTime,
                         EventType = "Kudos.Received",
-                        Subject = new Subject { Text = p.SenderAlias },
+                        Context = p.SenderAlias ,
                         Text = p.Message
                     };
 

@@ -11,7 +11,6 @@ namespace Events
         {
             Text = String.Empty;
             Participants = new Graph<Participant>();
-            Subject = new Subject {Text = String.Empty};
             EventType = String.Empty;
         }
 
@@ -21,7 +20,7 @@ namespace Events
 
         public Graph<Participant> Participants { get; set; }
 
-        public Subject Subject { get; set; }
+
 
         public string EventType { get; set; }
 

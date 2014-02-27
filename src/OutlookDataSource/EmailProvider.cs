@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Office.Interop.Outlook;
@@ -19,7 +20,7 @@ namespace DataSources.Outlook
                 mapiNamespace.GetDefaultFolder(OlDefaultFolders.olFolderSentMail);
 
             var filter = "[SentOn] >= \"" + startDateUtc.ToShortDateString() + "\" and [SentOn] <=\"" +
-                         endDateUtc.ToShortDateString() + "\"";
+                         endDateUtc.ToString(CultureInfo.CurrentUICulture) + "\"";
 
             Items restrictedItems = emailSentFolder.Items.Restrict(filter);
 

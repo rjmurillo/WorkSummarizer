@@ -282,10 +282,10 @@ sb.AppendLine("});");
             }
             sb.Append("</div>");
 
-            if (evnt.Subject != null && !string.IsNullOrWhiteSpace(evnt.Subject.Text))
-            {
-                sb.Append("<div>subject: " + HtmlEscape(evnt.Subject.Text) + "</div>");
-            }
+            //if (evnt.Subject != null && !string.IsNullOrWhiteSpace(evnt.Subject.Text))
+            //{
+            //    sb.Append("<div>subject: " + HtmlEscape(evnt.Subject.Text) + "</div>");
+            //}
             if (evnt.Context != null)
             {
                 sb.Append("<div>context: " + HtmlEscape(evnt.Context.ToString()) + "</div>");

@@ -40,17 +40,22 @@ namespace Events.TeamFoundationServer
                         var stateValue = r.Fields["State"].Value as string;
                         if (!string.IsNullOrWhiteSpace(stateValue))
                         {
-                            if (stateValue.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
+                            if (
+                                !string.Equals((string)r.Fields["State"].OriginalValue, (string)r.Fields["State"].Value,
+                                    StringComparison.OrdinalIgnoreCase))
                             {
-                                e.EventType = "TeamFoundationServer.WorkItem.Resolved";
-                            }
-                            else if (stateValue.Equals("Closed", StringComparison.OrdinalIgnoreCase))
-                            {
-                                e.EventType = "TeamFoundationServer.WorkItem.Closed";
-                            }
-                            else if (stateValue.Equals("Active", StringComparison.OrdinalIgnoreCase))
-                            {
-                                e.EventType = "TeamFoundationServer.WorkItem.Activated";
+                                if (stateValue.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    e.EventType = "TeamFoundationServer.WorkItem.Resolved";
+                                }
+                                else if (stateValue.Equals("Closed", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    e.EventType = "TeamFoundationServer.WorkItem.Closed";
+                                }
+                                else if (stateValue.Equals("Active", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    e.EventType = "TeamFoundationServer.WorkItem.Activated";
+                                }
                             }
                         }
                     }

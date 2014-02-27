@@ -121,7 +121,7 @@ namespace Renders.Excel
         {
             sheet.Cells[row, 1] = theEvent.Date;
             sheet.Cells[row, 2] = theEvent.EventType;
-            sheet.Cells[row, 3] = theEvent.Subject.Text;
+            sheet.Cells[row, 3] = string.Empty;//theEvent.Subject.Text;
             sheet.Cells[row, 4] = theEvent.Text;
         }
 

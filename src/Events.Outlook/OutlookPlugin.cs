@@ -11,7 +11,7 @@ namespace Events.Outlook
     {
         public OutlookPlugin(IPluginRuntime pluginRuntime)
         {
-            pluginRuntime.EventQueryServices[new ServiceRegistration("Outlook.Mail", "Outlook", "Inbox")] = new OutlookEmailEventQueryService();
+            pluginRuntime.EventQueryServices[new ServiceRegistration("Outlook.Mail", "Outlook", "Sent")] = new OutlookEmailEventQueryService();
             pluginRuntime.EventQueryServices[new ServiceRegistration("Outlook.Meetings", "Outlook", "Meetings")] = new OutlookMeetingEventQueryService();
             pluginRuntime.EventQueryServices[new ServiceRegistration("Outlook.ConversationHistory", "Outlook", "Conversation History")] = new OutlookConversationHistoryEventQueryService();
         }
