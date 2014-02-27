@@ -18,7 +18,7 @@
             <Setter Property="FontFamily"
                     Value="Segoe UI" />
             <Setter Property="FontSize"
-                    Value="14" />
+                    Value="12" />
             <Setter Property="Foreground"
                     Value="#222222" />
         </Style>
@@ -26,7 +26,7 @@
             <Setter Property="FontFamily"
                     Value="Segoe UI" />
             <Setter Property="FontSize"
-                    Value="14"/>
+                    Value="12"/>
             <Setter Property="Margin"
                     Value="4,0,0,8" />
         </Style>
@@ -34,7 +34,7 @@
             <Setter Property="FontFamily"
                     Value="Segoe UI" />
             <Setter Property="FontSize"
-                    Value="14" />
+                    Value="12" />
             <Setter Property="Foreground"
                     Value="#222222" />
         </Style>
@@ -151,7 +151,7 @@
         <Label x:Name="TitleStage" 
                Grid.Row="1"
                Content="WORK SUMMARIZER"
-               FontSize="42"
+               FontSize="50"
                FontWeight="Bold"
                Opacity="0.8">
             <Label.RenderTransform>
@@ -199,7 +199,7 @@
                     <StackPanel>
                         <Label Content="sources"
                                FontFamily="Segoe UI"
-                               FontSize="22"
+                               FontSize="21"
                                FontWeight="Bold" />
                         <ItemsControl ItemsSource="{Binding EventSources}">
                             <ItemsControl.ItemTemplate>
@@ -214,7 +214,7 @@
                     <StackPanel>
                         <Label Content="time span"
                                FontFamily="Segoe UI"
-                               FontSize="22"
+                               FontSize="21"
                                FontWeight="Bold"
                                Margin="0,10,0,0" />
                         <Grid>
@@ -266,7 +266,7 @@
                     <StackPanel>
                         <Label Content="processing"
                                FontFamily="Segoe UI"
-                               FontSize="22"
+                               FontSize="21"
                                FontWeight="Bold" />
                         <CheckBox Content="Top people"
                                   IsChecked="True" 
@@ -282,7 +282,7 @@
                     <StackPanel>
                         <Label Content="reporting"
                                FontFamily="Segoe UI"
-                               FontSize="22"
+                               FontSize="21"
                                FontWeight="Bold"
                                Margin="0,10,0,0" />
                         <ItemsControl ItemsSource="{Binding ReportingSinks}">
@@ -299,7 +299,7 @@
                     <StackPanel>
                         <Label Content="output"
                                FontFamily="Segoe UI"
-                               FontSize="22"
+                               FontSize="21"
                                FontWeight="Bold"
                                Margin="0,10,0,0" />
                         <CheckBox Content="Per source"
@@ -328,12 +328,12 @@
                        VerticalAlignment="Bottom">
                 <StatusBarItem>
                     <Label Content="By benb, edkotows, jocarrie, mattwest, rimuri"
-                           FontSize="10" 
+                           FontSize="9" 
                            Foreground="White"/>
                 </StatusBarItem>
                 <StatusBarItem HorizontalAlignment="Right">
                     <Label Content="{Binding Version, Mode=OneTime}"
-                           FontSize="10"
+                           FontSize="9"
                            Foreground="White" />
                 </StatusBarItem>
             </StatusBar>
