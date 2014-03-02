@@ -27,14 +27,17 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <CheckBox Grid.Column="0"
+                          x:Name="EnableServiceCheckBox"
                           VerticalAlignment="Center"
                           Content="{Binding Name}"
                           IsChecked="{Binding IsSelected}"
                           ToolTip="{Binding HelpText}" />
-                <Button Grid.Column="1"
-                        Command="{Binding ConfigureCommand}"
-                        Content="_configure"
-                        Visibility="{Binding ConfigureCommand.IsEnabled, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Grid Grid.Column="1"
+                      IsEnabled="{Binding IsChecked, ElementName=EnableServiceCheckBox}">
+                    <Button Command="{Binding ConfigureCommand}"
+                            Content="_configure"
+                            Visibility="{Binding ConfigureCommand.IsEnabled, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </Grid>
             </Grid>
         </DataTemplate>
 
