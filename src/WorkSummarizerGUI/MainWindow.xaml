@@ -4,10 +4,10 @@
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
                       Title="Work Summarizer"
-                      Height="540"
-                      MinWidth="640"
-                      Width="640"
-                      MaxWidth="640"
+                      Height="560"
+                      MinWidth="680"
+                      Width="680"
+                      MaxWidth="680"
                       ShowMaxRestoreButton="False"
                       ShowTitleBar="False"                      
                       WindowStartupLocation="CenterScreen"
@@ -21,18 +21,25 @@
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
 
         <DataTemplate x:Key="ServiceDataTemplate">
-            <Grid Margin="0,2,0,2">
+            <Grid Margin="6,4,0,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="80" />
                 </Grid.ColumnDefinitions>
-                <CheckBox Grid.Column="0"
-                          x:Name="EnableServiceCheckBox"
-                          VerticalAlignment="Center"
-                          Content="{Binding Name}"
-                          IsChecked="{Binding IsSelected}"
-                          ToolTip="{Binding HelpText}" />
-                <Grid Grid.Column="1"
+                <TextBlock Grid.Column="0"
+                           Text="{Binding Name}"
+                           ToolTip="{Binding HelpText}"
+                           VerticalAlignment="Center"/>
+                <controls:ToggleSwitch Grid.Column="1"
+                                       x:Name="EnableServiceCheckBox"
+                                       Margin="4,0,0,0"
+                                       VerticalAlignment="Center"
+                                       OffLabel=""
+                                       OnLabel=""
+                                       IsChecked="{Binding IsSelected}" />
+                <Grid Grid.Column="2"
+                      Margin="4,0,0,0"
                       IsEnabled="{Binding IsChecked, ElementName=EnableServiceCheckBox}">
                     <Button Command="{Binding ConfigureCommand}"
                             Content="_configure"
@@ -301,11 +308,7 @@
                                         Margin="0,6,0,0" />
 
                             <Label Grid.Column="0"
-                                   Grid.Row="2"
-                                   Content="Duration"
-                                   Margin="0,6,0,0" />
-
-                            <Label Grid.Column="1"
+                                   Grid.ColumnSpan="2"
                                    Grid.Row="2"
                                    Content="{Binding ReportingDuration, Mode=OneWay}"
                                    Margin="0,6,0,0" />
@@ -314,22 +317,64 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1"
                             Grid.Row="0"
-                            Margin="40,0,10,0">
-                    <StackPanel>
-                        <Label Content="processing"
+                            Margin="30,0,10,0">
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        
+                        <Label Grid.Column="0" 
+                               Grid.ColumnSpan="2"
+                               Grid.Row="0" 
+                               Content="processing"
                                FontFamily="Segoe UI"
                                FontSize="21"
                                FontWeight="Bold" />
-                        <CheckBox Content="Top people"
-                                  IsChecked="True" 
-                                  IsEnabled="False" />
-                        <CheckBox Content="Top words"
-                                  IsChecked="True"
-                                  IsEnabled="False" />
-                        <CheckBox Content="Important events"
-                                  IsChecked="True"
-                                  IsEnabled="False" />
-                    </StackPanel>
+
+                        <TextBlock Grid.Column="0"
+                                   Grid.Row="1"
+                                   Text="Top people"
+                                   VerticalAlignment="Center"
+                                   Margin="6,4,0,0"/>
+                        <controls:ToggleSwitch Grid.Column="1"
+                                               Grid.Row="1"
+                                               Content=""
+                                               Margin="0,4,80,0"
+                                               IsChecked="True"
+                                               IsEnabled="False" />
+
+                        <TextBlock Grid.Column="0"
+                                   Grid.Row="2"
+                                   Text="Top words"
+                                   VerticalAlignment="Center"
+                                   Margin="6,4,0,0" />
+                        <controls:ToggleSwitch Grid.Column="1"
+                                               Grid.Row="2"
+                                               Content=""
+                                               Margin="0,4,80,0"
+                                               IsChecked="True"
+                                               IsEnabled="False" />
+
+                        <TextBlock Grid.Column="0"
+                                   Grid.Row="3"
+                                   Text="Important events"
+                                   VerticalAlignment="Center"
+                                   Margin="6,4,0,0" />
+                        <controls:ToggleSwitch Grid.Column="1"
+                                               Grid.Row="3"
+                                               Content=""
+                                               Margin="0,4,80,0"
+                                               IsChecked="True"
+                                               IsEnabled="False" />
+                    </Grid>
                     
                     <StackPanel>
                         <Label Content="reporting"
@@ -341,17 +386,47 @@
                                       ItemTemplate="{StaticResource ServiceDataTemplate}" />
                     </StackPanel>
 
-                    <StackPanel>
-                        <Label Content="output"
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               Grid.Row="0"
+                               Content="output"
                                FontFamily="Segoe UI"
                                FontSize="21"
-                               FontWeight="Bold"
-                               Margin="0,10,0,0" />
-                        <CheckBox Content="Per source"
-                                  IsChecked="{Binding IsGeneratePerSourceEnabled}" />
-                        <CheckBox Content="Summary"
-                                  IsChecked="{Binding IsGenerateSummaryEnabled}" />
-                    </StackPanel>
+                               FontWeight="Bold" />
+
+                        <TextBlock Grid.Column="0"
+                                   Grid.Row="1"
+                                   Text="Per source"
+                                   VerticalAlignment="Center"
+                                   Margin="6,4,0,0" />
+                        <controls:ToggleSwitch Grid.Column="1"
+                                               Grid.Row="1"
+                                               Content=""
+                                               Margin="0,4,80,0"
+                                               IsChecked="{Binding IsGeneratePerSourceEnabled}" />
+
+                        <TextBlock Grid.Column="0"
+                                   Grid.Row="2"
+                                   Text="Summary"
+                                   VerticalAlignment="Center"
+                                   Margin="6,4,0,0" />
+                        <controls:ToggleSwitch Grid.Column="1"
+                                               Grid.Row="2"
+                                               Content=""
+                                               Margin="0,4,80,0"
+                                               IsChecked="{Binding IsGenerateSummaryEnabled}" />
+                    </Grid>
                 </StackPanel>
 
                 <Button Grid.Column="0"
