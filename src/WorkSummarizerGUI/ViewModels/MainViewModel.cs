@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -347,11 +348,13 @@ namespace WorkSummarizerGUI.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Oh noes!" + Environment.NewLine + Environment.NewLine + ex);
+                        Debug.Fail(ex.ToString());
+                        Trace.WriteLine(ex);
+                        m_messenger.Send(ex);
                     }
                 });
 
-            IsBusy = false;
+                IsBusy = false;
                 ProgressStatus = "...done.";
             }
         }

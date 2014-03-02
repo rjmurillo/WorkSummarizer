@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
+using MahApps.Metro.Controls.Dialogs;
 using Events.CodeFlow;
 using Events.Connect;
 using Events.Kudos;
@@ -16,6 +17,8 @@ using WorkSummarizer;
 using WorkSummarizerGUI.Models;
 using WorkSummarizerGUI.ViewModels;
 using Extensibility;
+using System;
+using System.Diagnostics;
 
 namespace WorkSummarizerGUI
 {
@@ -48,10 +51,16 @@ namespace WorkSummarizerGUI
             m_mainViewModel = new MainViewModel(pluginRuntime.EventQueryServices, pluginRuntime.RenderEventServices);
             InitializeComponent();
 
-            Messenger.Default.Register<ServiceConfigurationRequest>(this, ShowWindow);
+            Messenger.Default.Register<ServiceConfigurationRequest>(this, msg => Dispatcher.Invoke(() => ShowServiceConfigurationFlyout(msg)));
+            Messenger.Default.Register<Exception>(this, msg => Dispatcher.Invoke(() => ShowExceptionWindow(msg)));
         }
 
-        private void ShowWindow(ServiceConfigurationRequest message)
+        private void ShowExceptionWindow(Exception exception)
+        {
+            this.ShowMessageAsync("Oh noes!", "Something went wrong while working on your request. Check your settings and try again. " + Environment.NewLine + Environment.NewLine + "Hint: " + exception.Message);
+        }
+
+        private void ShowServiceConfigurationFlyout(ServiceConfigurationRequest message)
         {
             // TODO move to own view
             var serviceConfigurationViewModels =
