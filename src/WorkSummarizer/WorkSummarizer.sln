@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30219.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkSummarizer", "WorkSummarizer.csproj", "{730E9457-05E3-4F42-871F-DE09AAD55483}"
 EndProject
@@ -83,6 +83,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Performance1.psess = Performance1.psess
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkSummarizerCLI", "..\WorkSummarizerCLI\WorkSummarizerCLI.csproj", "{B4E6A8E0-5B9D-430D-A76A-125B0862E51F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -194,6 +196,10 @@ Global
 		{93FF4ED2-840E-46D9-AF8D-F6F588E40485}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93FF4ED2-840E-46D9-AF8D-F6F588E40485}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93FF4ED2-840E-46D9-AF8D-F6F588E40485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4E6A8E0-5B9D-430D-A76A-125B0862E51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E6A8E0-5B9D-430D-A76A-125B0862E51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E6A8E0-5B9D-430D-A76A-125B0862E51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E6A8E0-5B9D-430D-A76A-125B0862E51F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

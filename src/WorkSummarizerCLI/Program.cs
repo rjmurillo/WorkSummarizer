@@ -32,8 +32,8 @@ namespace WorkSummarizer
             // plugins.Add(typeof(ConnectPlugin));
             //plugins.Add(typeof(KudosPlugin));
             // plugins.Add(typeof(ManicTimePlugin));
-            plugins.Add(typeof(OutlookPlugin));
-            //plugins.Add(typeof(TeamFoundationServerPlugin));
+            //plugins.Add(typeof(OutlookPlugin));
+            plugins.Add(typeof(TeamFoundationServerPlugin));
             //plugins.Add(typeof(YammerPlugin));
             
             //plugins.Add(typeof(ConsoleRenderPlugin));
@@ -46,7 +46,7 @@ namespace WorkSummarizer
             foreach (var eventQueryServiceRegistration in pluginRuntime.EventQueryServices)
             {
                 var sb = new StringBuilder();
-                Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key);
+                Console.WriteLine("Querying from event query service: " + eventQueryServiceRegistration.Key.Id);
                 var beg = DateTime.Today.AddDays(-21);
                 var end = DateTime.Today;
                 var evts = eventQueryServiceRegistration.Value.PullEvents(beg, end, Environment.UserName).ToList();

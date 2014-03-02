@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Events;
-using Events.Yammer;
 using Extensibility;
 using Renders;
 

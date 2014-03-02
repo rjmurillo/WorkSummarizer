@@ -7,7 +7,7 @@ using Events;
 
 namespace WorkSummarizer
 {
-    internal class PeopleProcessor
+    public class PeopleProcessor
     {
         public IDictionary<string, int> GetTeam(IEnumerable<Event> events)
         {
