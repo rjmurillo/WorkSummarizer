@@ -56,7 +56,7 @@ namespace WorkSummarizerGUI.ViewModels
                                      return new ServiceViewModel(
                                          p.Key,
                                          p.Select(q => q.Key.Id).ToList(),
-                                         new RelayCommand(() => { m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }); }) { IsEnabled = false }) // TODO indicate whether this plugin supports configuration
+                                         new RelayCommand(() => { m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }); }) { IsEnabled = p.Any(q => q.Key.IsConfigurable) })
                                         {
                                             HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))
                                         };
@@ -72,7 +72,7 @@ namespace WorkSummarizerGUI.ViewModels
                                      return new ServiceViewModel(
                                          p.Key,
                                          p.Select(q => q.Key.Id).ToList(),
-                                         new RelayCommand(() => { }) { IsEnabled = false }) // TODO indicate whether this plugin supports configuration
+                                         new RelayCommand(() => { }) { IsEnabled = p.Any(q => q.Key.IsConfigurable) })
                                          {
                                              HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))
                                          }; 

@@ -34,7 +34,7 @@
                 <Button Grid.Column="1"
                         Command="{Binding ConfigureCommand}"
                         Content="_configure"
-                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        Visibility="{Binding ConfigureCommand.IsEnabled, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
         </DataTemplate>
 
@@ -389,61 +389,108 @@
                              Header="Configuration"
                              IsModal="True"
                              Width="500">
-                <Grid Margin="20,0,20,40">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />                        
-                    </Grid.RowDefinitions>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="20,0,20,0">
+                        <ItemsControl x:Name="ConfigureView">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,20">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0"
-                          Margin="0,0,0,20">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <TextBlock Grid.Column="0"
-                                   x:Name="ConfigureViewName"
-                                   FontSize="18"
-                                   VerticalAlignment="Center"/>
-                        <Button Grid.Column="1"
-                                IsEnabled="False"
-                                Width="40"
-                                Height="40"
-                                Style="{DynamicResource MetroCircleButtonStyle}"
-                                HorizontalAlignment="Right"
-                                ToolTip="Revert to default">
-                            <Rectangle Width="16"
-                                       Height="16">
-                                <Rectangle.Fill>
-                                    <VisualBrush Stretch="Fill"
-                                                 Visual="{DynamicResource appbar_undo}" />
-                                </Rectangle.Fill>
-                            </Rectangle>                            
-                        </Button>
+                                        <TextBlock Grid.Column="0"
+                                                   Grid.Row="0"
+                                                   Text="{Binding Name, Mode=OneWay}"
+                                                   Foreground="{DynamicResource AccentColorBrush}"
+                                                   FontSize="18"
+                                                   VerticalAlignment="Center" />
+
+                                        <Button Grid.Column="1"
+                                                Grid.Row="0"
+                                                Command="{Binding RevertToDefaultCommand}"
+                                                Width="32"
+                                                Height="32"
+                                                Style="{DynamicResource MetroCircleButtonStyle}"
+                                                HorizontalAlignment="Right"
+                                                ToolTip="Revert all to default values">
+                                            <Rectangle Width="12"
+                                                       Height="12">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill"
+                                                                 Visual="{DynamicResource appbar_undo}" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Button>
+
+                                        <ItemsControl Grid.Column="0"
+                                                      Grid.ColumnSpan="2"
+                                                      Grid.Row="1"
+                                                      ItemsSource="{Binding Settings}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Margin="0,16,0,0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <TextBlock Grid.Column="0"      
+                                                                   Grid.ColumnSpan="2"
+                                                                   Grid.Row="0"
+                                                                   Text="{Binding Name, Mode=OneWay}"
+                                                                   VerticalAlignment="Center"/>
+
+                                                        <TextBlock Grid.Column="0"
+                                                                   Grid.ColumnSpan="2"
+                                                                   Grid.Row="1"
+                                                                   Text="{Binding Description, Mode=OneWay}"
+                                                                   VerticalAlignment="Center" />
+
+                                                        <TextBox Grid.Column="0"
+                                                                 Grid.Row="2"
+                                                                 Text="{Binding Value, Mode=TwoWay}"
+                                                                 controls:TextboxHelper.ClearTextButton="True"
+                                                                 HorizontalAlignment="Stretch"
+                                                                 Margin="0,4,0,4"/>
+
+                                                        <Button Grid.Column="1"
+                                                                Grid.Row="2"
+                                                                Command="{Binding RevertToDefaultCommand}"
+                                                                Width="32"
+                                                                Height="32"
+                                                                Style="{DynamicResource MetroCircleButtonStyle}"
+                                                                HorizontalAlignment="Right"
+                                                                Margin="8,0,0,0"
+                                                                ToolTip="{Binding DefaultValue, Mode=OneWay}">
+                                                            <Rectangle Width="12"
+                                                                       Height="12">
+                                                                <Rectangle.Fill>
+                                                                    <VisualBrush Stretch="Fill"
+                                                                                 Visual="{DynamicResource appbar_undo}" />
+                                                                </Rectangle.Fill>
+                                                            </Rectangle>
+                                                        </Button>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
-
-                    <ItemsControl Grid.Row="1" 
-                                  x:Name="ConfigureView">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Grid.Column="0" 
-                                               Text="{Binding Mode=OneWay}" />
-
-                                    <TextBox Grid.Column="1"
-                                             Text="Key/values" 
-                                             IsReadOnly="True" />
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
+                </ScrollViewer>
             </controls:Flyout>
         </controls:FlyoutsControl>
     </controls:MetroWindow.Flyouts>

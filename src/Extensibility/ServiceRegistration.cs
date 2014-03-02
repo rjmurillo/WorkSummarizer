@@ -15,6 +15,12 @@ namespace Extensibility
             m_name = name;
         }
 
+        public bool IsConfigurable
+        {
+            get;
+            set;
+        }
+
         public string Family
         {
             get { return m_family; }

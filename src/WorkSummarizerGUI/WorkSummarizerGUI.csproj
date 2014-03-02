@@ -80,6 +80,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Models\ServiceConfigurationRequest.cs" />
+    <Compile Include="ViewModels\ServiceConfigurationViewModel.cs" />
     <Compile Include="ViewModels\ServiceViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReportingSinkViewModel.cs" />

@@ -23,6 +23,8 @@ namespace Extensibility
 
     public interface IConfigurationService
     {
+        string GetValueOrDefault(string key);
+
         IEnumerable<ConfigurationSetting> Settings { get; }
     }
 
@@ -41,6 +43,17 @@ namespace Extensibility
             {
                 return m_configuration.Values;
             }
+        }
+
+        public string GetValueOrDefault(string key)
+        {
+            ConfigurationSetting returnValue;
+            if (m_configuration.TryGetValue(key, out returnValue))
+            {
+                return returnValue.Value;
+            }
+
+            return default(string);
         }
     }
 }

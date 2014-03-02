@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using DataSources.TeamFoundationServer;
+using Extensibility;
 
 namespace Events.TeamFoundationServer
 {
     public class WorkItemEventsQueryService : IEventQueryService
     {
+        private readonly IConfigurationService m_configurationService;
+
+        public WorkItemEventsQueryService(IConfigurationService configurationService)
+        {
+            m_configurationService = configurationService;
+        }
+
         public IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime)
         {
             List<Event> retval = new List<Event>();
@@ -14,7 +22,7 @@ namespace Events.TeamFoundationServer
 
             foreach (var server in servers)
             {
-                var q = new WorkItemEventsQueryServiceInternal(server, null);
+                var q = new WorkItemEventsQueryServiceInternal(server, null, m_configurationService);
                 retval.AddRange(q.PullEvents(startDateTime, stopDateTime));
             }
 
@@ -29,7 +37,7 @@ namespace Events.TeamFoundationServer
 
             foreach (var server in servers)
             {
-                var q = new WorkItemEventsQueryServiceInternal(server, null);
+                var q = new WorkItemEventsQueryServiceInternal(server, null, m_configurationService);
                 retval.AddRange(q.PullEvents(startDateTime, stopDateTime, alias));
             }
 
@@ -44,7 +52,7 @@ namespace Events.TeamFoundationServer
 
             foreach (var server in servers)
             {
-                var q = new WorkItemEventsQueryServiceInternal(server, null);
+                var q = new WorkItemEventsQueryServiceInternal(server, null, m_configurationService);
                 retval.AddRange(q.PullEvents(startDateTime, stopDateTime, predicate));
             }
 

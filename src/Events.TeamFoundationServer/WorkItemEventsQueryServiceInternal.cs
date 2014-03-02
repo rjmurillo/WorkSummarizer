@@ -4,6 +4,7 @@ using System.Linq;
 using Common;
 using DataSources.TeamFoundationServer;
 using DataSources.Who;
+using Extensibility;
 using Graph;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using WorkSummarizer.TeamFoundationServerDataSource;
@@ -12,9 +13,12 @@ namespace Events.TeamFoundationServer
 {
     public class WorkItemEventsQueryServiceInternal : TeamFoundationServerEventQueryServiceBase
     {
-        public WorkItemEventsQueryServiceInternal(Uri teamFoundationServerUri, string projectName)
+        private readonly string m_skipWorkItemWhenHistoryContainsText;
+
+        public WorkItemEventsQueryServiceInternal(Uri teamFoundationServerUri, string projectName, IConfigurationService configurationService)
             :base(teamFoundationServerUri, projectName)
         {
+            m_skipWorkItemWhenHistoryContainsText = configurationService.GetValueOrDefault(TeamFoundationServerSettingConstants.WorkItemSkipWhenHistoryContains);
         }
 
         public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime, Func<Event, bool> predicate)
@@ -62,7 +66,7 @@ namespace Events.TeamFoundationServer
 
                     e.Context = wi.Id;
 
-                    if (e.Text.Contains("TFS AUTO UPDATE"))
+                    if (e.Text.Contains(m_skipWorkItemWhenHistoryContainsText))
                     {
                         continue;
                     }
