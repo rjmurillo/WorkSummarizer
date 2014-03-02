@@ -19,7 +19,7 @@
     <controls:MetroWindow.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        
+
         <DataTemplate x:Key="ServiceDataTemplate">
             <Grid Margin="0,2,0,2">
                 <Grid.ColumnDefinitions>
@@ -27,16 +27,44 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <CheckBox Grid.Column="0"
-                            VerticalAlignment="Center"
-                            Content="{Binding Name}"
-                            IsChecked="{Binding IsSelected}"
-                            ToolTip="{Binding HelpText}" />
+                          VerticalAlignment="Center"
+                          Content="{Binding Name}"
+                          IsChecked="{Binding IsSelected}"
+                          ToolTip="{Binding HelpText}" />
                 <Button Grid.Column="1"
                         Command="{Binding ConfigureCommand}"
                         Content="_configure"
                         Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
         </DataTemplate>
+
+        <Canvas Width="48"
+                Height="48"
+                Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
+                UseLayoutRounding="False"
+                x:Key="appbar_save">
+            <Path Width="22"
+                  Height="22"
+                  Canvas.Left="13"
+                  Canvas.Top="13"
+                  Stretch="Fill"
+                  Fill="{DynamicResource BlackBrush}"
+                  Data="F1 M 13,13L 35,13L 35,35L 29,35L 29,28L 19,28L 19,35L 13,35L 13,13 Z M 21,35L 21,32L 25,32L 25,35L 21,35 Z M 17,15L 17,21L 31,21L 31,15L 17,15 Z " />
+        </Canvas>
+
+        <Canvas Width="48.0067"
+                Height="48.0067"
+                Clip="F1 M 0,0L 48.0067,0L 48.0067,48.0067L 0,48.0067L 0,0"
+                UseLayoutRounding="False"
+                x:Key="appbar_undo">
+            <Path Width="22.0015"
+                  Height="20.7793"
+                  Canvas.Left="13.0018"
+                  Canvas.Top="13.0019"
+                  Stretch="Fill"
+                  Fill="{DynamicResource BlackBrush}"
+                  Data="F1 M 16.0018,13.0019L 16.0009,18.4508C 18.0067,16.3263 20.8494,15.0004 24.0018,15.0004C 30.0778,15.0004 35.0033,19.926 35.0033,26.0019C 35.0033,29.0399 33.772,31.7903 31.7811,33.7812L 29.3059,31.3061C 30.6633,29.9486 31.5029,28.0734 31.5029,26.002C 31.5029,21.8593 28.1446,18.501 24.0019,18.501C 21.7803,18.501 19.7843,19.4668 18.4108,21.0014L 24.0018,21.0019L 21.0018,24.002L 13.0018,24.0019L 13.0018,16.002L 16.0018,13.0019 Z " />
+        </Canvas>
 
         <Style TargetType="Button">
             <Setter Property="Background"
@@ -54,7 +82,7 @@
             <Setter Property="FontFamily"
                     Value="Segoe UI" />
             <Setter Property="FontSize"
-                    Value="12"/>
+                    Value="12" />
             <Setter Property="Margin"
                     Value="4,0,0,8" />
         </Style>
@@ -353,4 +381,70 @@
             </StatusBar>
         </Grid>
     </Grid>
+    <controls:MetroWindow.Flyouts>
+        <controls:FlyoutsControl>
+            <controls:Flyout x:Name="ConfigureFlyout"
+                             Position="Right"
+                             Theme="Adapt"
+                             Header="Configuration"
+                             IsModal="True"
+                             Width="500">
+                <Grid Margin="20,0,20,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />                        
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0"
+                          Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Grid.Column="0"
+                                   x:Name="ConfigureViewName"
+                                   FontSize="18"
+                                   VerticalAlignment="Center"/>
+                        <Button Grid.Column="1"
+                                IsEnabled="False"
+                                Width="40"
+                                Height="40"
+                                Style="{DynamicResource MetroCircleButtonStyle}"
+                                HorizontalAlignment="Right"
+                                ToolTip="Revert to default">
+                            <Rectangle Width="16"
+                                       Height="16">
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Fill"
+                                                 Visual="{DynamicResource appbar_undo}" />
+                                </Rectangle.Fill>
+                            </Rectangle>                            
+                        </Button>
+                    </Grid>
+
+                    <ItemsControl Grid.Row="1" 
+                                  x:Name="ConfigureView">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" 
+                                               Text="{Binding Mode=OneWay}" />
+
+                                    <TextBox Grid.Column="1"
+                                             Text="Key/values" 
+                                             IsReadOnly="True" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </controls:Flyout>
+        </controls:FlyoutsControl>
+    </controls:MetroWindow.Flyouts>
 </controls:MetroWindow>

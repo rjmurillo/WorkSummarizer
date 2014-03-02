@@ -20,6 +20,7 @@ using Events.TeamFoundationServer;
 using Events.Yammer;
 using Extensibility;
 using FUSE.Weld.Base;
+using GalaSoft.MvvmLight.Messaging;
 using Processing.Text;
 using Renders;
 using Renders.Console;
@@ -27,6 +28,7 @@ using Renders.Excel;
 using Renders.HTML;
 using WorkSummarizer;
 using WorkSummarizerGUI.Commands;
+using WorkSummarizerGUI.Models;
 
 namespace WorkSummarizerGUI.ViewModels
 {
@@ -35,6 +37,7 @@ namespace WorkSummarizerGUI.ViewModels
         private readonly IEnumerable<ServiceViewModel> m_eventSources;
         private readonly IPluginRuntime m_pluginRuntime;
         private readonly IEnumerable<ServiceViewModel> m_reportingSinks;
+        private readonly IMessenger m_messenger = Messenger.Default;
 
         private DateTime m_endLocalTime;
         private bool m_isBusy;
@@ -72,7 +75,7 @@ namespace WorkSummarizerGUI.ViewModels
                                      return new ServiceViewModel(
                                          p.Key,
                                          p.Select(q => q.Key.Id).ToList(),
-                                         new RelayCommand(() => { }) { IsEnabled = false }) // TODO update configuration service shared with plugin instances
+                                         new RelayCommand(() => { m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }); }) { IsEnabled = false }) // TODO indicate whether this plugin supports configuration
                                         {
                                             HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))
                                         };
@@ -86,9 +89,12 @@ namespace WorkSummarizerGUI.ViewModels
                              .Select(p => 
                                  {
                                      return new ServiceViewModel(
-                                         p.Key, 
+                                         p.Key,
                                          p.Select(q => q.Key.Id).ToList(),
-                                         new RelayCommand(() => { }) { IsEnabled = false }); // TODO update configuration service shared with plugin instances
+                                         new RelayCommand(() => { }) { IsEnabled = false }) // TODO indicate whether this plugin supports configuration
+                                         {
+                                             HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))
+                                         }; 
                                  })
                              .ToList();
 

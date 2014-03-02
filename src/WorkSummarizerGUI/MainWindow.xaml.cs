@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
+using GalaSoft.MvvmLight.Messaging;
+using WorkSummarizerGUI.Models;
 using WorkSummarizerGUI.ViewModels;
 
 namespace WorkSummarizerGUI
@@ -14,6 +17,16 @@ namespace WorkSummarizerGUI
         {
             m_mainViewModel = new MainViewModel();
             InitializeComponent();
+
+            Messenger.Default.Register<ServiceConfigurationRequest>(this, ShowWindow);
+        }
+
+        private void ShowWindow(ServiceConfigurationRequest message)
+        {
+            // TODO move to own view
+            ConfigureView.ItemsSource = message.Ids;
+            ConfigureViewName.Text = message.Name;
+            ConfigureFlyout.IsOpen = true;
         }
 
         public MainViewModel ViewModel
