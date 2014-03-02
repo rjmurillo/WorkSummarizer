@@ -10,6 +10,13 @@ namespace DataSources.ManicTime
 {
     public class ManicTimeDataProvider : IDataPull<ManicTimeActivity>
     {
+        private readonly string m_manicTimeDbFile;
+
+        public ManicTimeDataProvider(string manicTimeDbFile)
+        {
+            m_manicTimeDbFile = manicTimeDbFile;
+        }
+
         /***
          * CREATE TABLE [Activity] (
               [ActivityId] int NOT NULL
@@ -44,54 +51,40 @@ namespace DataSources.ManicTime
          */
         public IEnumerable<ManicTimeActivity> PullData(DateTime startTimeUtc, DateTime endTimeUtc)
         {
-            var manicTimeDbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..\\Local\\Finkit\\ManicTime");
-
-            if(!Directory.Exists(manicTimeDbPath))
+            using (
+                var conn =
+                    new SqlCeConnection("Data Source = " + m_manicTimeDbFile + ";Persist Security Info=False"))
             {
-                manicTimeDbPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
+                conn.Open();
 
-            try
-            {
-                using (
-                    var conn =
-                        new SqlCeConnection("Data Source = " + Path.Combine(manicTimeDbPath, "ManicTime.sdf") +
-                                            ";Persist Security Info=False"))
+                SqlCeCommand cmd = conn.CreateCommand();
+                cmd.CommandText =
+                    "SELECT act.[DisplayName], act.[StartUtcTime], act.[EndUtcTime], act.[TextData], grp.[DisplayName] GroupDisplayName"
+                    + " FROM [Activity] act"
+                    + " INNER JOIN [Group] grp ON act.GroupId = grp.GroupId"
+                    + " WHERE act.DisplayName <> '' "
+                    + " AND act.StartUtcTime >= '" + startTimeUtc.ToString("yyyy/MM/dd HH:mm:ss") + "'"
+                        // REVIEW localized date parsing and parameter substitution
+                    + " AND act.EndUtcTime <= '" + endTimeUtc.ToString("yyyy/MM/dd HH:mm:ss") + "'"
+                    + " ORDER BY act.EndUtcTime DESC";
+
+                var reader = cmd.ExecuteReader();
+                var activities = new List<ManicTimeActivity>();
+                while (reader.Read())
                 {
-                    conn.Open();
-
-                    SqlCeCommand cmd = conn.CreateCommand();
-                    cmd.CommandText =
-                        "SELECT act.[DisplayName], act.[StartUtcTime], act.[EndUtcTime], act.[TextData], grp.[DisplayName] GroupDisplayName"
-                        + " FROM [Activity] act"
-                        + " INNER JOIN [Group] grp ON act.GroupId = grp.GroupId"
-                        + " WHERE act.DisplayName <> '' "
-                        + " AND act.StartUtcTime >= '" + startTimeUtc.ToString("yyyy/MM/dd HH:mm:ss") + "'"
-                            // REVIEW localized date parsing and parameter substitution
-                        + " AND act.EndUtcTime <= '" + endTimeUtc.ToString("yyyy/MM/dd HH:mm:ss") + "'"
-                        + " ORDER BY act.EndUtcTime DESC";
-
-                    var reader = cmd.ExecuteReader();
-                    var activities = new List<ManicTimeActivity>();
-                    while (reader.Read())
+                    activities.Add(new ManicTimeActivity
                     {
-                        activities.Add(new ManicTimeActivity
-                        {
-                            DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
-                            TextData = reader.GetString(reader.GetOrdinal("TextData")),
-                            GroupDisplayName = reader.GetString(reader.GetOrdinal("GroupDisplayName")),
-                            StartUtcTime = reader.GetDateTime(reader.GetOrdinal("StartUtcTime")),
-                            EndUtcTime = reader.GetDateTime(reader.GetOrdinal("EndUtcTime"))
-                        });
-                    }
-
-                    return activities;
+                        DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                        TextData = reader.GetString(reader.GetOrdinal("TextData")),
+                        GroupDisplayName = reader.GetString(reader.GetOrdinal("GroupDisplayName")),
+                        StartUtcTime = reader.GetDateTime(reader.GetOrdinal("StartUtcTime")),
+                        EndUtcTime = reader.GetDateTime(reader.GetOrdinal("EndUtcTime"))
+                    });
                 }
+
+                return activities;
             }
-            catch (SqlCeException)
-            {
-                // no ManicTime data to get, that's ok just don't crash
-            }
+
             return new List<ManicTimeActivity>();
         }
     }

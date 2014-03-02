@@ -6,14 +6,22 @@ using System.Threading.Tasks;
 using Common;
 using DataSources.ManicTime;
 using DataSources.Who;
+using Extensibility;
 
 namespace Events.ManicTime
 {
     public class ManicTimeActivityEventQueryService : EventQueryServiceBase
     {
+        private readonly IConfigurationService m_configurationService;
+
+        public ManicTimeActivityEventQueryService(IConfigurationService configurationService)
+        {
+            m_configurationService = configurationService;
+        }
+
         public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event,bool> predicate)
         {
-            var m = new ManicTimeDataProvider();
+            var m = new ManicTimeDataProvider(m_configurationService.GetValueOrDefault(ManicTimeSettingConstants.ActivitiesDatabaseFile));
 
             var retval = m.PullData(startDateTime, stopDateTime).Select(p => 
             {
