@@ -1,14 +1,22 @@
-﻿<Window x:Class="WorkSummarizerGUI.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
-        Title="Work Summarizer"
-        Height="580"
-        MinWidth="640"
-        Width="640"
-        MaxWidth="640"
-        DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}">
-    <Window.Resources>
+﻿<controls:MetroWindow x:Class="WorkSummarizerGUI.MainWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
+                      Title="Work Summarizer"
+                      Height="540"
+                      MinWidth="640"
+                      Width="640"
+                      MaxWidth="640"
+                      ShowMaxRestoreButton="False"
+                      ShowTitleBar="False"                      
+                      WindowStartupLocation="CenterScreen"
+                      BorderBrush="#dd222222"
+                      BorderThickness="0"
+                      ResizeMode="CanMinimize"
+                      GlowBrush="{DynamicResource AccentColorBrush}"
+                      DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}">
+    <controls:MetroWindow.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         
@@ -58,8 +66,8 @@
             <Setter Property="Foreground"
                     Value="#222222" />
         </Style>
-    </Window.Resources>
-    <Window.Triggers>
+    </controls:MetroWindow.Resources>
+    <controls:MetroWindow.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>
                 <Storyboard>
@@ -112,7 +120,7 @@
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
-    </Window.Triggers>
+    </controls:MetroWindow.Triggers>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -345,4 +353,4 @@
             </StatusBar>
         </Grid>
     </Grid>
-</Window>
+</controls:MetroWindow>
