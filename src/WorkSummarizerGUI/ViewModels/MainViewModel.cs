@@ -26,6 +26,7 @@ using Renders.Console;
 using Renders.Excel;
 using Renders.HTML;
 using WorkSummarizer;
+using WorkSummarizerGUI.Commands;
 
 namespace WorkSummarizerGUI.ViewModels
 {
@@ -66,14 +67,29 @@ namespace WorkSummarizerGUI.ViewModels
             m_eventSources =
                 pluginRuntime.EventQueryServices
                              .GroupBy(p => p.Key.Family)
-                             .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()) { HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))})
+                             .Select(p =>
+                                 {
+                                     return new ServiceViewModel(
+                                         p.Key,
+                                         p.Select(q => q.Key.Id).ToList(),
+                                         new RelayCommand(() => { }) { IsEnabled = false }) // TODO update configuration service shared with plugin instances
+                                        {
+                                            HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))
+                                        };
+                                 })
                              .ToList();
 
             EndLocalTime = DateTime.Now;
             
             m_reportingSinks = pluginRuntime.RenderEventServices
                              .GroupBy(p => p.Key.Family)
-                             .Select(p => new ServiceViewModel(p.Key, p.Select(q => q.Key.Id).ToList()))
+                             .Select(p => 
+                                 {
+                                     return new ServiceViewModel(
+                                         p.Key, 
+                                         p.Select(q => q.Key.Id).ToList(),
+                                         new RelayCommand(() => { }) { IsEnabled = false }); // TODO update configuration service shared with plugin instances
+                                 })
                              .ToList();
 
             m_reportingSinks.Last().IsSelected = true;
