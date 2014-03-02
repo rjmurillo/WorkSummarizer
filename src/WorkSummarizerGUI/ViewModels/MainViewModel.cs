@@ -11,21 +11,11 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using DataSources.Who;
 using Events;
-using Events.CodeFlow;
-using Events.Connect;
-using Events.Kudos;
-using Events.ManicTime;
-using Events.Outlook;
-using Events.TeamFoundationServer;
-using Events.Yammer;
 using Extensibility;
 using FUSE.Weld.Base;
 using GalaSoft.MvvmLight.Messaging;
 using Processing.Text;
 using Renders;
-using Renders.Console;
-using Renders.Excel;
-using Renders.HTML;
 using WorkSummarizer;
 using WorkSummarizerGUI.Commands;
 using WorkSummarizerGUI.Models;
@@ -39,6 +29,9 @@ namespace WorkSummarizerGUI.ViewModels
         private readonly IEnumerable<ServiceViewModel> m_reportingSinks;
         private readonly IMessenger m_messenger = Messenger.Default;
 
+        private readonly IDictionary<ServiceRegistration, IEventQueryService> m_eventQueryServices;
+        private readonly IDictionary<ServiceRegistration, IRenderEvents> m_renderServices;
+
         private DateTime m_endLocalTime;
         private bool m_isBusy;
         private bool m_isGeneratePerSourceEnabled;
@@ -48,27 +41,15 @@ namespace WorkSummarizerGUI.ViewModels
         private string m_progressStatus;
         private string m_reportingDuration;
 
-        public MainViewModel()
+        public MainViewModel(
+            IDictionary<ServiceRegistration, IEventQueryService> eventQueryServices, 
+            IDictionary<ServiceRegistration, IRenderEvents> renderServices)
         {
-            var pluginRuntime = new PluginRuntime();
-            pluginRuntime.Start(new[]
-            {
-                typeof(CodeFlowPlugin),
-                typeof(ConnectPlugin),
-                typeof(KudosPlugin),
-                typeof(ManicTimePlugin),
-                typeof(OutlookPlugin),
-                typeof(TeamFoundationServerPlugin),
-                typeof(YammerPlugin),
-
-                typeof(ExcelRenderPlugin),
-                typeof(HtmlRenderPlugin),
-            });
-
-            m_pluginRuntime = pluginRuntime;
+            m_eventQueryServices = eventQueryServices;
+            m_renderServices = renderServices;
 
             m_eventSources =
-                pluginRuntime.EventQueryServices
+                eventQueryServices
                              .GroupBy(p => p.Key.Family)
                              .Select(p =>
                                  {
@@ -83,8 +64,8 @@ namespace WorkSummarizerGUI.ViewModels
                              .ToList();
 
             EndLocalTime = DateTime.Now;
-            
-            m_reportingSinks = pluginRuntime.RenderEventServices
+
+            m_reportingSinks = renderServices
                              .GroupBy(p => p.Key.Family)
                              .Select(p => 
                                  {
@@ -229,13 +210,11 @@ namespace WorkSummarizerGUI.ViewModels
                     try
                     {
                         var eventQueryServiceRegistrations =
-                            m_pluginRuntime
-                                .EventQueryServices
+                            m_eventQueryServices
                                 .Where(p => selectedEventSourceIds.Contains(p.Key.Id));
 
                         var renderServiceRegistrations =
-                            m_pluginRuntime
-                                .RenderEventServices
+                            m_renderServices
                                 .Where(p => selectedReportingSinkTypes.Contains(p.Key.Id));
 
                         var summaryEvents = new List<Event>();

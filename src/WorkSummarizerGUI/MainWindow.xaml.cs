@@ -1,6 +1,17 @@
 ﻿using System.Globalization;
 using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
+using Events.CodeFlow;
+using Events.Connect;
+using Events.Kudos;
+using Events.ManicTime;
+using Events.Outlook;
+using Events.TeamFoundationServer;
+using Events.Yammer;
+using Renders.Console;
+using Renders.Excel;
+using Renders.HTML;
+using WorkSummarizer;
 using WorkSummarizerGUI.Models;
 using WorkSummarizerGUI.ViewModels;
 
@@ -15,7 +26,22 @@ namespace WorkSummarizerGUI
 
         public MainWindow()
         {
-            m_mainViewModel = new MainViewModel();
+            var pluginRuntime = new PluginRuntime();
+            pluginRuntime.Start(new[]
+            {
+                typeof(CodeFlowPlugin),
+                typeof(ConnectPlugin),
+                typeof(KudosPlugin),
+                typeof(ManicTimePlugin),
+                typeof(OutlookPlugin),
+                typeof(TeamFoundationServerPlugin),
+                typeof(YammerPlugin),
+
+                typeof(ExcelRenderPlugin),
+                typeof(HtmlRenderPlugin),
+            });
+
+            m_mainViewModel = new MainViewModel(pluginRuntime.EventQueryServices, pluginRuntime.RenderEventServices);
             InitializeComponent();
 
             Messenger.Default.Register<ServiceConfigurationRequest>(this, ShowWindow);
