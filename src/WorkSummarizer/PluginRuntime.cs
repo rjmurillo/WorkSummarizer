@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Events;
 using Extensibility;
 using Renders;
@@ -27,7 +28,15 @@ namespace WorkSummarizer
             foreach (var pluginType in pluginTypes)
             {
                 Console.WriteLine("Loading " + pluginType.FullName);
-                Activator.CreateInstance(pluginType, this);
+                try
+                {
+                    Activator.CreateInstance(pluginType, this);
+                }
+                catch (Exception ex)
+                {
+                    Debug.Fail(ex.ToString());
+                    Trace.WriteLine(ex);
+                }
             }
         }
     }

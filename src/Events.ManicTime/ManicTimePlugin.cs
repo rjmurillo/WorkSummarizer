@@ -24,7 +24,7 @@ namespace Events.ManicTime
             {
                 new ConfigurationSetting(ManicTimeSettingConstants.ActivitiesDatabaseFile, manicTimeDbFile) 
                 { 
-                    Name = "Database file location", 
+                    Name = "Database File Location", 
                     Description = "Path to the *.sdf database." 
                 }
             });

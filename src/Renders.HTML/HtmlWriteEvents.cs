@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using Events;
+using Extensibility;
 using TagCloud;
 
 namespace Renders.HTML
@@ -31,6 +32,13 @@ namespace Renders.HTML
 
     public class HtmlWriteEvents : IRenderEvents
     {
+        private readonly IConfigurationService m_configurationService;
+
+        public HtmlWriteEvents(IConfigurationService configurationService)
+        {
+            m_configurationService = configurationService;
+        }
+
         private static string LoadResource(string name)
         {
             var a = Assembly.GetExecutingAssembly();
@@ -206,6 +214,7 @@ namespace Renders.HTML
                 jsMain + jsOther);
 
             string fileName = string.Format("WorkSummarizer_{0}.html", eventType);
+            fileName = Path.Combine(m_configurationService.GetValueOrDefault(HtmlRenderSettingConstants.OutputDirectory), fileName);
             File.WriteAllText(fileName, htmlFinal);
             Process.Start(fileName);
 
