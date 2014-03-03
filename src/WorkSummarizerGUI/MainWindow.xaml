@@ -601,6 +601,57 @@
                 </StatusBarItem>
             </StatusBar>
         </Grid>
+        <Grid Grid.Column="0"
+              Grid.Row="0"
+              Grid.ColumnSpan="1"
+              Grid.RowSpan="4"
+              Margin="2470,1240,0,0">
+            <Grid>
+                <Grid.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="16"
+                                        ScaleY="16" />
+                        <RotateTransform Angle="350"/>
+                    </TransformGroup>
+                </Grid.RenderTransform>
+
+                <Rectangle Fill="DarkSeaGreen"
+                           HorizontalAlignment="Left"
+                           Height="15"
+                           VerticalAlignment="Top"
+                           Width="7"
+                           Margin="-1,-1,0,0" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="2"
+                           VerticalAlignment="Top"
+                           Width="2" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="2"
+                           VerticalAlignment="Top"
+                           Width="2"
+                           Margin="4,0,0,0" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="3"
+                           VerticalAlignment="Top"
+                           Width="2"
+                           Margin="2,2,0,0" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="3"
+                           VerticalAlignment="Top"
+                           Width="1"
+                           Margin="1,3,0,0" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="3"
+                           VerticalAlignment="Top"
+                           Width="1"
+                           Margin="4,3,0,0" />
+            </Grid>
+        </Grid>
     </Grid>
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl>
