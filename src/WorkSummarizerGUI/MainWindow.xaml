@@ -33,9 +33,8 @@
                 <controls:ToggleSwitch Grid.Column="1"
                                        x:Name="EnableServiceCheckBox"
                                        Margin="4,0,0,0"
+                                       Width="90"
                                        VerticalAlignment="Center"
-                                       OffLabel=""
-                                       OnLabel=""
                                        IsChecked="{Binding IsSelected}" />
                 <Grid Grid.Column="2"
                       Margin="4,0,0,0"
@@ -282,25 +281,32 @@
             <Button x:Name="ThemeAccentButton" 
                     ToolTip="Change theme accent"
                     Click="OnChangeThemeAccentClick">
-                <Rectangle Width="14"
-                           Height="14">
-                    <Rectangle.Fill>
-                        <VisualBrush Stretch="Fill"
-                                     Visual="{StaticResource appbar_layer}" />
-                    </Rectangle.Fill>
-                </Rectangle>
+                <Grid>
+                    <Rectangle Width="14"
+                               Height="14">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill"
+                                         Visual="{StaticResource appbar_layer}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <AccessText Text="_a" 
+                                Foreground="Transparent"/>
+                </Grid>
             </Button>
             <Button x:Name="ThemeBackgroundButton"
                     ToolTip="Change theme background"
                     Click="OnChangeThemeBackgroundClick">
-
-                <Rectangle Width="14"
-                           Height="14">
-                    <Rectangle.Fill>
-                        <VisualBrush Stretch="Fill"
-                                     Visual="{StaticResource appbar_weather_sun}" />
-                    </Rectangle.Fill>
-                </Rectangle>
+                <Grid>
+                    <Rectangle Width="14"
+                               Height="14">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill"
+                                         Visual="{StaticResource appbar_weather_sun}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <AccessText Text="_b"
+                                Foreground="Transparent" />
+                </Grid>
             </Button>
         </controls:WindowCommands>
     </controls:MetroWindow.WindowCommands>
@@ -481,8 +487,8 @@
                                    Margin="6,4,0,0"/>
                         <controls:ToggleSwitch Grid.Column="1"
                                                Grid.Row="1"
-                                               Content=""
                                                Margin="0,4,32,0"
+                                               Width="90"
                                                IsChecked="True"
                                                IsEnabled="False" />
 
@@ -491,25 +497,25 @@
                                    Text="Top words"
                                    VerticalAlignment="Center"
                                    Margin="6,8,0,0" />
-                        <controls:ToggleSwitch Grid.Column="1"
-                                               Grid.Row="2"
-                                               Content=""
-                                               Margin="0,8,32,0"
-                                               IsChecked="True"
-                                               IsEnabled="False" />
+                    <controls:ToggleSwitch Grid.Column="1"
+                                           Grid.Row="2"
+                                           Margin="0,8,32,0"
+                                           Width="90"
+                                           IsChecked="True"
+                                           IsEnabled="False" />
 
-                        <TextBlock Grid.Column="0"
+                    <TextBlock Grid.Column="0"
                                    Grid.Row="3"
                                    Text="Important events"
                                    VerticalAlignment="Center"
                                    Margin="6,8,0,0" />
-                        <controls:ToggleSwitch Grid.Column="1"
-                                               Grid.Row="3"
-                                               Content=""
-                                               Margin="0,8,32,0"
-                                               IsChecked="True"
-                                               IsEnabled="False" />
-                    </Grid>
+                    <controls:ToggleSwitch Grid.Column="1"
+                                           Grid.Row="3"
+                                           Margin="0,8,32,0"
+                                           Width="90"
+                                           IsChecked="True"
+                                           IsEnabled="False" />
+                </Grid>
 
                 <StackPanel MinWidth="340"
                             Margin="20,0,40,0">
@@ -545,8 +551,8 @@
                                Margin="6,8,0,0" />
                     <controls:ToggleSwitch Grid.Column="1"
                                            Grid.Row="1"
-                                           Content=""
                                            Margin="0,8,32,0"
+                                           Width="90"
                                            IsChecked="{Binding IsGeneratePerSourceEnabled}" />
 
                     <TextBlock Grid.Column="0"
@@ -556,8 +562,8 @@
                                Margin="6,8,0,0" />
                     <controls:ToggleSwitch Grid.Column="1"
                                            Grid.Row="2"
-                                           Content=""
                                            Margin="0,8,32,0"
+                                           Width="90"
                                            IsChecked="{Binding IsGenerateSummaryEnabled}" />
 
                     <Button Grid.Column="0"
