@@ -19,6 +19,8 @@ using WorkSummarizerGUI.ViewModels;
 using Extensibility;
 using System;
 using System.Diagnostics;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace WorkSummarizerGUI
 {
@@ -86,6 +88,16 @@ namespace WorkSummarizerGUI
         private async void OnGenerateClickAsync(object sender, RoutedEventArgs e)
         {
             await m_mainViewModel.GenerateAsync();
+        }
+
+        private void OnPreviewContentStageMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var scrollViewer = sender as ScrollViewer;
+            if (scrollViewer != null)
+            {
+                scrollViewer.ScrollToHorizontalOffset(scrollViewer.ContentHorizontalOffset - e.Delta);
+                e.Handled = true;
+            }
         }
     }
 }
