@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections.Generic;
+using MahApps.Metro;
 
 namespace WorkSummarizerGUI
 {
@@ -32,6 +33,10 @@ namespace WorkSummarizerGUI
     {
         private readonly MainViewModel m_mainViewModel;
         private readonly IPluginRuntime m_pluginRuntime;
+
+
+        private IEnumerator<string> m_themeAccentChooser = GetThemeAccentChooser();
+        private IEnumerator<Theme> m_themeBackgroundChooser = GetThemeBackgroundChooser();
 
         public MainWindow()
         {
@@ -55,6 +60,8 @@ namespace WorkSummarizerGUI
             InitializeComponent();
 
             UserAccountButton.Content = Environment.UserName;
+            m_themeAccentChooser.MoveNext();
+            m_themeBackgroundChooser.MoveNext();
 
             Messenger.Default.Register<ServiceConfigurationRequest>(this, msg => Dispatcher.Invoke(() => ShowServiceConfigurationFlyout(msg)));
             Messenger.Default.Register<Exception>(this, msg => Dispatcher.Invoke(() => ShowExceptionWindow(msg)));
@@ -103,25 +110,34 @@ namespace WorkSummarizerGUI
             }
         }
 
-        private IEnumerator<string> m_themeAccentChooser = GetThemeAccentChooser();
-
         private void OnChangeThemeAccentClick(object sender, RoutedEventArgs e)
         {
             m_themeAccentChooser.MoveNext();
-            var nextThemeAccent = m_themeAccentChooser.Current;
-            Application.Current.Resources.Clear();
-            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml", UriKind.RelativeOrAbsolute) });
-            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml", UriKind.RelativeOrAbsolute) });
-            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml", UriKind.RelativeOrAbsolute) });
-            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/" + nextThemeAccent + ".xaml", UriKind.RelativeOrAbsolute) });
-            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml", UriKind.RelativeOrAbsolute) });
-            ThemeAccentButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme accent: {0}. Click to change", nextThemeAccent);
+            ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(p => p.Name.Equals(m_themeAccentChooser.Current)), m_themeBackgroundChooser.Current);
+            ThemeAccentButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme accent: {0}", m_themeAccentChooser.Current);
+        }
+
+        private void OnChangeThemeBackgroundClick(object sender, RoutedEventArgs e)
+        {
+            m_themeBackgroundChooser.MoveNext();
+            ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(p => p.Name.Equals(m_themeAccentChooser.Current)), m_themeBackgroundChooser.Current);
+            ThemeBackgroundButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme background: {0}", m_themeBackgroundChooser.Current);
+        }
+
+        private static IEnumerator<Theme> GetThemeBackgroundChooser()
+        {
+            while (true)
+            {
+                yield return Theme.Light;
+                yield return Theme.Dark;
+            }
         }
 
         private static IEnumerator<string> GetThemeAccentChooser()
         {
             while (true)
             {
+                yield return "Sienna";
                 yield return "Amber";
                 yield return "Blue";
                 yield return "Brown";
@@ -143,7 +159,6 @@ namespace WorkSummarizerGUI
                 yield return "Teal";
                 yield return "Violet";
                 yield return "Yellow";
-                yield return "Sienna";
             }
         }
     }
