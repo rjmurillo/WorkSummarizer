@@ -21,6 +21,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace WorkSummarizerGUI
 {
@@ -99,6 +100,50 @@ namespace WorkSummarizerGUI
             {
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.ContentHorizontalOffset - e.Delta);
                 e.Handled = true;
+            }
+        }
+
+        private IEnumerator<string> m_themeAccentChooser = GetThemeAccentChooser();
+
+        private void OnChangeThemeAccentClick(object sender, RoutedEventArgs e)
+        {
+            m_themeAccentChooser.MoveNext();
+            var nextThemeAccent = m_themeAccentChooser.Current;
+            Application.Current.Resources.Clear();
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml", UriKind.RelativeOrAbsolute) });
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml", UriKind.RelativeOrAbsolute) });
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml", UriKind.RelativeOrAbsolute) });
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/" + nextThemeAccent + ".xaml", UriKind.RelativeOrAbsolute) });
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml", UriKind.RelativeOrAbsolute) });
+            ThemeAccentButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme accent: {0}. Click to change", nextThemeAccent);
+        }
+
+        private static IEnumerator<string> GetThemeAccentChooser()
+        {
+            while (true)
+            {
+                yield return "Amber";
+                yield return "Blue";
+                yield return "Brown";
+                yield return "Cobalt";
+                yield return "Crimson";
+                yield return "Cyan";
+                yield return "Emerald";
+                yield return "Green";
+                yield return "Indigo";
+                yield return "Lime";
+                yield return "Magenta";
+                yield return "Mauve";
+                yield return "Olive";
+                yield return "Orange";
+                yield return "Pink";
+                yield return "Purple";
+                yield return "Red";
+                yield return "Steel";
+                yield return "Teal";
+                yield return "Violet";
+                yield return "Yellow";
+                yield return "Sienna";
             }
         }
     }
