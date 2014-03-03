@@ -20,16 +20,16 @@
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
 
         <DataTemplate x:Key="ServiceDataTemplate">
-            <Grid Margin="6,4,0,4">
+            <Grid Margin="0,4,0,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="32" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           Text="{Binding Name}"
-                           ToolTip="{Binding HelpText}"
-                           VerticalAlignment="Center"/>
+                <Label Grid.Column="0"
+                       Content="{Binding Name}"
+                       ToolTip="{Binding HelpText}"
+                       VerticalAlignment="Center" />
                 <controls:ToggleSwitch Grid.Column="1"
                                        x:Name="EnableServiceCheckBox"
                                        Margin="4,0,0,0"
@@ -154,13 +154,12 @@
             <Setter Property="Margin"
                     Value="4,0,0,8" />
         </Style>
-        <Style TargetType="Label">
+        <Style TargetType="Label"
+               BasedOn="{StaticResource {x:Type Label}}">
             <Setter Property="FontFamily"
                     Value="Segoe UI" />
             <Setter Property="FontSize"
                     Value="12" />
-            <Setter Property="Foreground"
-                    Value="{DynamicResource LabelTextBrush}" />
         </Style>
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily"
@@ -171,7 +170,8 @@
                     Value="{DynamicResource TextBrush}" />
         </Style>
         <Style x:Key="HeaderLabel" 
-               TargetType="Label">
+               TargetType="Label"
+               BasedOn="{StaticResource {x:Type Label}}">
             <Setter Property="FontWeight"
                     Value="Thin" />
             <Setter Property="FontSize"
@@ -253,13 +253,13 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity"
-                                                                        Duration="0:0:2"
+                                                                        Duration="0:0:3"
                                                                         RepeatBehavior="Forever">
                                             <DoubleAnimationUsingKeyFrames.KeyFrames>
                                                 <DoubleKeyFrameCollection>
                                                     <DiscreteDoubleKeyFrame KeyTime="0:0:0"
                                                                             Value="1" />
-                                                    <DiscreteDoubleKeyFrame KeyTime="0:0:1.5"
+                                                    <DiscreteDoubleKeyFrame KeyTime="0:0:2.5"
                                                                             Value="0" />
                                                 </DoubleKeyFrameCollection>
                                             </DoubleAnimationUsingKeyFrames.KeyFrames>
@@ -480,23 +480,25 @@
                                Content="processing"
                                Style="{StaticResource HeaderLabel}" />
 
-                        <TextBlock Grid.Column="0"
-                                   Grid.Row="1"
-                                   Text="Top people"
-                                   VerticalAlignment="Center"
-                                   Margin="6,4,0,0"/>
-                        <controls:ToggleSwitch Grid.Column="1"
+                    <Label Grid.Column="0"
+                           Grid.Row="1"
+                           Content="Top people"
+                           VerticalAlignment="Center"
+                           Margin="0,4,0,0" 
+                           IsEnabled="False" />
+                    <controls:ToggleSwitch Grid.Column="1"
                                                Grid.Row="1"
                                                Margin="0,4,32,0"
                                                Width="90"
                                                IsChecked="True"
                                                IsEnabled="False" />
 
-                        <TextBlock Grid.Column="0"
-                                   Grid.Row="2"
-                                   Text="Top words"
-                                   VerticalAlignment="Center"
-                                   Margin="6,8,0,0" />
+                    <Label Grid.Column="0"
+                           Grid.Row="2"
+                           Content="Top words"
+                           VerticalAlignment="Center"
+                           Margin="0,8,0,0"
+                           IsEnabled="False" />
                     <controls:ToggleSwitch Grid.Column="1"
                                            Grid.Row="2"
                                            Margin="0,8,32,0"
@@ -504,11 +506,12 @@
                                            IsChecked="True"
                                            IsEnabled="False" />
 
-                    <TextBlock Grid.Column="0"
-                                   Grid.Row="3"
-                                   Text="Important events"
-                                   VerticalAlignment="Center"
-                                   Margin="6,8,0,0" />
+                    <Label Grid.Column="0"
+                           Grid.Row="3"
+                           Content="Important events"
+                           VerticalAlignment="Center"
+                           Margin="0,8,0,0" 
+                           IsEnabled="False" />
                     <controls:ToggleSwitch Grid.Column="1"
                                            Grid.Row="3"
                                            Margin="0,8,32,0"
@@ -544,22 +547,22 @@
                            Content="output"
                            Style="{StaticResource HeaderLabel}" />
 
-                    <TextBlock Grid.Column="0"
-                               Grid.Row="1"
-                               Text="Per source"
-                               VerticalAlignment="Center"
-                               Margin="6,8,0,0" />
+                    <Label Grid.Column="0"
+                           Grid.Row="1"
+                           Content="Per source"
+                           VerticalAlignment="Center"
+                           Margin="0,8,0,0" />
                     <controls:ToggleSwitch Grid.Column="1"
                                            Grid.Row="1"
                                            Margin="0,8,32,0"
                                            Width="90"
                                            IsChecked="{Binding IsGeneratePerSourceEnabled}" />
 
-                    <TextBlock Grid.Column="0"
-                               Grid.Row="2"
-                               Text="Summary"
-                               VerticalAlignment="Center"
-                               Margin="6,8,0,0" />
+                    <Label Grid.Column="0"
+                           Grid.Row="2"
+                           Content="Summary"
+                           VerticalAlignment="Center"
+                           Margin="0,8,0,0" />
                     <controls:ToggleSwitch Grid.Column="1"
                                            Grid.Row="2"
                                            Margin="0,8,32,0"
