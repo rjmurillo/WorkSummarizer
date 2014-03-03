@@ -4,13 +4,14 @@
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
                       Title="Work Summarizer"
-                      Height="640"
+                      Height="670"
                       MinHeight="300"
                       Width="820"
                       MinWidth="400"
                       ShowTitleBar="False"                      
                       WindowStartupLocation="CenterScreen"
                       BorderBrush="#dd222222"
+                      ResizeMode="CanResizeWithGrip"
                       BorderThickness="0"
                       GlowBrush="{DynamicResource AccentColorBrush}"
                       DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}">
@@ -47,10 +48,32 @@
                         <Rectangle Width="12"
                                    Height="12">
                             <Rectangle.Fill>
-                                <VisualBrush Stretch="Fill"
-                                             Visual="{DynamicResource appbar_settings}" />
+                                <VisualBrush Stretch="Fill">
+                                    <VisualBrush.Visual>
+                                        <!-- explicitly defined Canvas here instead of a resource because WPF won't update the Shape Fill on theme change bound with DynamicResource -->
+                                        <Canvas Width="48"
+                                                Height="48"
+                                                Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
+                                                UseLayoutRounding="False">
+                                            <Ellipse Width="4"
+                                                     Height="4"
+                                                     Canvas.Left="22"
+                                                     Canvas.Top="22"
+                                                     Stretch="Fill"
+                                                     Fill="{DynamicResource BlackBrush}" />
+                                            <Path Width="19.6504"
+                                                  Height="19.6504"
+                                                  Canvas.Left="14.1748"
+                                                  Canvas.Top="14.1748"
+                                                  Stretch="Fill"
+                                                  Fill="{DynamicResource BlackBrush}"
+                                                  Data="F1 M 24.69,17.5542L 27.9094,14.793C 28.5138,15.05 29.0876,15.3647 29.6241,15.7302L 29.0458,19.93L 33.2747,20.2541C 33.5166,20.8524 33.7023,21.4794 33.8252,22.1286L 30.4458,24.69L 33.207,27.9094C 32.95,28.5137 32.6353,29.0876 32.2698,29.6241L 28.07,29.0458L 27.7459,33.2747C 27.1476,33.5166 26.5206,33.7023 25.8714,33.8252L 23.3099,30.4458L 20.0906,33.207C 19.4862,32.95 18.9124,32.6353 18.3759,32.2698L 18.9542,28.0699L 14.7253,27.7459C 14.4834,27.1476 14.2977,26.5206 14.1748,25.8713L 17.5542,23.3099L 14.793,20.0906C 15.05,19.4862 15.3647,18.9124 15.7302,18.3759L 19.93,18.9542L 20.2541,14.7252C 20.8524,14.4834 21.4794,14.2977 22.1286,14.1748L 24.69,17.5542 Z M 24,20C 21.7909,20 20,21.7909 20,24C 20,26.2091 21.7909,28 24,28C 26.2091,28 28,26.2091 28,24C 28,21.7909 26.2091,20 24,20 Z " />
+                                        </Canvas>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
                             </Rectangle.Fill>
                         </Rectangle>
+
                     </Button>
                 </Grid>
             </Grid>
@@ -65,7 +88,7 @@
                   Canvas.Left="12"
                   Canvas.Top="12"
                   Stretch="Fill"
-                  Fill="{DynamicResource TextBrush}"
+                  Fill="{DynamicResource BlackBrush}"
                   Data="F1 M 14.0494,25L 12,25L 12,23L 14.0494,23C 14.5184,18.2756 18.2756,14.5184 23,14.0494L 23,12L 25,12L 25,14.0494C 29.7244,14.5184 33.4816,18.2756 33.9506,23L 36,23L 36,25L 33.9506,25C 33.4816,29.7244 29.7244,33.4816 25,33.9506L 25,36L 23,36L 23,33.9506C 18.2756,33.4816 14.5184,29.7244 14.0494,25 Z M 16.0619,23L 18,23L 18,25L 16.0619,25C 16.5131,28.6187 19.3813,31.4869 23,31.9381L 23,30L 25,30L 25,31.9381C 28.6187,31.4869 31.4868,28.6187 31.9381,25L 30,25L 30,23L 31.9381,23C 31.4868,19.3813 28.6187,16.5132 25,16.0619L 25,18L 23,18L 23,16.0619C 19.3813,16.5132 16.5131,19.3813 16.0619,23 Z " />
         </Canvas>
 
@@ -79,29 +102,10 @@
                   Canvas.Left="12.0017"
                   Canvas.Top="12.0017"
                   Stretch="Fill"
-                  Fill="{DynamicResource TextBrush}"
+                  Fill="{DynamicResource BlackBrush}"
                   Data="F1 M 36.005,24.0033L 24.0033,30.0042L 12.0017,24.0033L 16.0022,22.0031L 24.0034,26.0036L 32.0045,22.0031L 36.005,24.0033 Z M 24.0033,12.0017L 36.005,18.0025L 24.0033,24.0034L 12.0017,18.0025L 24.0033,12.0017 Z M 36.005,30.0042L 24.0033,36.005L 12.0017,30.0042L 16.0022,28.0039L 24.0033,32.0045L 32.0045,28.0039L 36.005,30.0042 Z " />
         </Canvas>
 
-        <Canvas Width="48"
-                Height="48"
-                Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
-                UseLayoutRounding="False"
-                x:Key="appbar_settings">
-            <Ellipse Width="4"
-                     Height="4"
-                     Canvas.Left="22"
-                     Canvas.Top="22"
-                     Stretch="Fill"
-                     Fill="{DynamicResource TextBrush}" />
-            <Path Width="19.6504"
-                  Height="19.6504"
-                  Canvas.Left="14.1748"
-                  Canvas.Top="14.1748"
-                  Stretch="Fill"
-                  Fill="{DynamicResource TextBrush}"
-                  Data="F1 M 24.69,17.5542L 27.9094,14.793C 28.5138,15.05 29.0876,15.3647 29.6241,15.7302L 29.0458,19.93L 33.2747,20.2541C 33.5166,20.8524 33.7023,21.4794 33.8252,22.1286L 30.4458,24.69L 33.207,27.9094C 32.95,28.5137 32.6353,29.0876 32.2698,29.6241L 28.07,29.0458L 27.7459,33.2747C 27.1476,33.5166 26.5206,33.7023 25.8714,33.8252L 23.3099,30.4458L 20.0906,33.207C 19.4862,32.95 18.9124,32.6353 18.3759,32.2698L 18.9542,28.0699L 14.7253,27.7459C 14.4834,27.1476 14.2977,26.5206 14.1748,25.8713L 17.5542,23.3099L 14.793,20.0906C 15.05,19.4862 15.3647,18.9124 15.7302,18.3759L 19.93,18.9542L 20.2541,14.7252C 20.8524,14.4834 21.4794,14.2977 22.1286,14.1748L 24.69,17.5542 Z M 24,20C 21.7909,20 20,21.7909 20,24C 20,26.2091 21.7909,28 24,28C 26.2091,28 28,26.2091 28,24C 28,21.7909 26.2091,20 24,20 Z " />
-        </Canvas>
 
         <Canvas Width="48"
                 Height="48"
@@ -113,22 +117,8 @@
                   Canvas.Left="13"
                   Canvas.Top="13"
                   Stretch="Fill"
-                  Fill="{DynamicResource TextBrush}"
+                  Fill="{DynamicResource BlackBrush}"
                   Data="F1 M 13,13L 35,13L 35,35L 29,35L 29,28L 19,28L 19,35L 13,35L 13,13 Z M 21,35L 21,32L 25,32L 25,35L 21,35 Z M 17,15L 17,21L 31,21L 31,15L 17,15 Z " />
-        </Canvas>
-
-        <Canvas Width="48.0067"
-                Height="48.0067"
-                Clip="F1 M 0,0L 48.0067,0L 48.0067,48.0067L 0,48.0067L 0,0"
-                UseLayoutRounding="False"
-                x:Key="appbar_undo">
-            <Path Width="22.0015"
-                  Height="20.7793"
-                  Canvas.Left="13.0018"
-                  Canvas.Top="13.0019"
-                  Stretch="Fill"
-                  Fill="{DynamicResource TextBrush}"
-                  Data="F1 M 16.0018,13.0019L 16.0009,18.4508C 18.0067,16.3263 20.8494,15.0004 24.0018,15.0004C 30.0778,15.0004 35.0033,19.926 35.0033,26.0019C 35.0033,29.0399 33.772,31.7903 31.7811,33.7812L 29.3059,31.3061C 30.6633,29.9486 31.5029,28.0734 31.5029,26.002C 31.5029,21.8593 28.1446,18.501 24.0019,18.501C 21.7803,18.501 19.7843,19.4668 18.4108,21.0014L 24.0018,21.0019L 21.0018,24.002L 13.0018,24.0019L 13.0018,16.002L 16.0018,13.0019 Z " />
         </Canvas>
 
         <Canvas Width="48"
@@ -281,7 +271,7 @@
                         </Ellipse.Triggers>
                     </Ellipse>
                     <Rectangle Width="14"
-                                Height="14">
+                               Height="14">
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill"
                                             Visual="{StaticResource appbar_crosshair}" />
@@ -303,6 +293,7 @@
             <Button x:Name="ThemeBackgroundButton"
                     ToolTip="Change theme background"
                     Click="OnChangeThemeBackgroundClick">
+
                 <Rectangle Width="14"
                            Height="14">
                     <Rectangle.Fill>
@@ -325,9 +316,10 @@
         <Label Grid.Row="0"
                Content="{Binding ProgressStatus, Mode=OneWay}"
                Height="0"
+               Margin="0,30,0,0"
                FontFamily="Segoe UI"
                Foreground="White"
-               Background="#444444">
+               Background="{DynamicResource AccentColorBrush}">
             <Label.Style>
                 <Style>
                     <Style.Triggers>
@@ -590,12 +582,13 @@
                 <StatusBarItem>
                     <Label Content="By benb, edkotows, jocarrie, mattwest, rimuri"
                            FontSize="9"
-                           Foreground="{DynamicResource LabelTextBrush}"/>
+                           Foreground="{DynamicResource GrayBrush1}"/>
                 </StatusBarItem>
                 <StatusBarItem HorizontalAlignment="Right">
                     <Label Content="{Binding Version, Mode=OneTime}"
                            FontSize="9"
-                           Foreground="{DynamicResource LabelTextBrush}" />
+                           Margin="0,0,8,0"
+                           Foreground="{DynamicResource GrayBrush1}" />
                 </StatusBarItem>
             </StatusBar>
         </Grid>
@@ -641,8 +634,23 @@
                                             <Rectangle Width="12"
                                                        Height="12">
                                                 <Rectangle.Fill>
-                                                    <VisualBrush Stretch="Fill"
-                                                                 Visual="{DynamicResource appbar_undo}" />
+                                                    <VisualBrush Stretch="Fill">
+                                                        <VisualBrush.Visual>
+                                                            <!-- explicitly defined Canvas here instead of a resource because WPF won't update the Shape Fill on theme change bound with DynamicResource -->
+                                                            <Canvas Width="48.0067"
+                                                                    Height="48.0067"
+                                                                    Clip="F1 M 0,0L 48.0067,0L 48.0067,48.0067L 0,48.0067L 0,0"
+                                                                    UseLayoutRounding="False">
+                                                                <Path Width="22.0015"
+                                                                      Height="20.7793"
+                                                                      Canvas.Left="13.0018"
+                                                                      Canvas.Top="13.0019"
+                                                                      Stretch="Fill"
+                                                                      Fill="{DynamicResource BlackBrush}"
+                                                                      Data="F1 M 16.0018,13.0019L 16.0009,18.4508C 18.0067,16.3263 20.8494,15.0004 24.0018,15.0004C 30.0778,15.0004 35.0033,19.926 35.0033,26.0019C 35.0033,29.0399 33.772,31.7903 31.7811,33.7812L 29.3059,31.3061C 30.6633,29.9486 31.5029,28.0734 31.5029,26.002C 31.5029,21.8593 28.1446,18.501 24.0019,18.501C 21.7803,18.501 19.7843,19.4668 18.4108,21.0014L 24.0018,21.0019L 21.0018,24.002L 13.0018,24.0019L 13.0018,16.002L 16.0018,13.0019 Z " />
+                                                            </Canvas>
+                                                        </VisualBrush.Visual>
+                                                    </VisualBrush>
                                                 </Rectangle.Fill>
                                             </Rectangle>
                                         </Button>
@@ -695,8 +703,23 @@
                                                             <Rectangle Width="12"
                                                                        Height="12">
                                                                 <Rectangle.Fill>
-                                                                    <VisualBrush Stretch="Fill"
-                                                                                 Visual="{DynamicResource appbar_undo}" />
+                                                                    <VisualBrush Stretch="Fill">
+                                                                        <VisualBrush.Visual>
+                                                                            <!-- explicitly defined Canvas here instead of a resource because WPF won't update the Shape Fill on theme change bound with DynamicResource -->
+                                                                            <Canvas Width="48.0067"
+                                                                                    Height="48.0067"
+                                                                                    Clip="F1 M 0,0L 48.0067,0L 48.0067,48.0067L 0,48.0067L 0,0"
+                                                                                    UseLayoutRounding="False">
+                                                                                <Path Width="22.0015"
+                                                                                      Height="20.7793"
+                                                                                      Canvas.Left="13.0018"
+                                                                                      Canvas.Top="13.0019"
+                                                                                      Stretch="Fill"
+                                                                                      Fill="{DynamicResource BlackBrush}"
+                                                                                      Data="F1 M 16.0018,13.0019L 16.0009,18.4508C 18.0067,16.3263 20.8494,15.0004 24.0018,15.0004C 30.0778,15.0004 35.0033,19.926 35.0033,26.0019C 35.0033,29.0399 33.772,31.7903 31.7811,33.7812L 29.3059,31.3061C 30.6633,29.9486 31.5029,28.0734 31.5029,26.002C 31.5029,21.8593 28.1446,18.501 24.0019,18.501C 21.7803,18.501 19.7843,19.4668 18.4108,21.0014L 24.0018,21.0019L 21.0018,24.002L 13.0018,24.0019L 13.0018,16.002L 16.0018,13.0019 Z " />
+                                                                            </Canvas>
+                                                                        </VisualBrush.Visual>
+                                                                    </VisualBrush>
                                                                 </Rectangle.Fill>
                                                             </Rectangle>
                                                         </Button>
