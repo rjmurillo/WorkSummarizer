@@ -4,7 +4,7 @@
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
                       Title="Work Summarizer"
-                      Height="560"
+                      Height="580"
                       MinWidth="680"
                       Width="680"
                       MaxWidth="680"
@@ -25,7 +25,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="32" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0"
                            Text="{Binding Name}"
@@ -42,11 +42,41 @@
                       Margin="4,0,0,0"
                       IsEnabled="{Binding IsChecked, ElementName=EnableServiceCheckBox}">
                     <Button Command="{Binding ConfigureCommand}"
-                            Content="_configure"
-                            Visibility="{Binding ConfigureCommand.IsEnabled, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            Height="32"
+                            Width="32"
+                            Visibility="{Binding ConfigureCommand.IsEnabled, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Rectangle Width="12"
+                                   Height="12">
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill"
+                                             Visual="{DynamicResource appbar_settings}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Button>
                 </Grid>
             </Grid>
         </DataTemplate>
+
+        <Canvas Width="48"
+                Height="48"
+                Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
+                UseLayoutRounding="False"
+                x:Key="appbar_settings">
+            <Ellipse Width="4"
+                     Height="4"
+                     Canvas.Left="22"
+                     Canvas.Top="22"
+                     Stretch="Fill"
+                     Fill="{DynamicResource BlackBrush}" />
+            <Path Width="19.6504"
+                  Height="19.6504"
+                  Canvas.Left="14.1748"
+                  Canvas.Top="14.1748"
+                  Stretch="Fill"
+                  Fill="{DynamicResource BlackBrush}"
+                  Data="F1 M 24.69,17.5542L 27.9094,14.793C 28.5138,15.05 29.0876,15.3647 29.6241,15.7302L 29.0458,19.93L 33.2747,20.2541C 33.5166,20.8524 33.7023,21.4794 33.8252,22.1286L 30.4458,24.69L 33.207,27.9094C 32.95,28.5137 32.6353,29.0876 32.2698,29.6241L 28.07,29.0458L 27.7459,33.2747C 27.1476,33.5166 26.5206,33.7023 25.8714,33.8252L 23.3099,30.4458L 20.0906,33.207C 19.4862,32.95 18.9124,32.6353 18.3759,32.2698L 18.9542,28.0699L 14.7253,27.7459C 14.4834,27.1476 14.2977,26.5206 14.1748,25.8713L 17.5542,23.3099L 14.793,20.0906C 15.05,19.4862 15.3647,18.9124 15.7302,18.3759L 19.93,18.9542L 20.2541,14.7252C 20.8524,14.4834 21.4794,14.2977 22.1286,14.1748L 24.69,17.5542 Z M 24,20C 21.7909,20 20,21.7909 20,24C 20,26.2091 21.7909,28 24,28C 26.2091,28 28,26.2091 28,24C 28,21.7909 26.2091,20 24,20 Z " />
+        </Canvas>
 
         <Canvas Width="48"
                 Height="48"
@@ -232,11 +262,13 @@
                 <ColumnDefinition Width="67*" />
                 <ColumnDefinition Width="525*" />
             </Grid.ColumnDefinitions>
-            <ProgressBar Height="3"
-                         Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
-                         Value="{Binding ProgressPercentage}"
-                         Maximum="100"
-                         Grid.ColumnSpan="2" />
+            <controls:MetroProgressBar Height="3"
+                                       Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       Foreground="{DynamicResource AccentColorBrush}"
+                                       Background="Transparent"
+                                       Value="{Binding ProgressPercentage}"
+                                       Maximum="100"
+                                       Grid.ColumnSpan="2" />
         </Grid>
 
         <ScrollViewer x:Name="ContentStage" 
@@ -317,7 +349,7 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1"
                             Grid.Row="0"
-                            Margin="30,0,10,0">
+                            Margin="40,0,10,0">
                     
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -343,11 +375,11 @@
                                    Grid.Row="1"
                                    Text="Top people"
                                    VerticalAlignment="Center"
-                                   Margin="6,4,0,0"/>
+                                   Margin="6,6,0,0"/>
                         <controls:ToggleSwitch Grid.Column="1"
                                                Grid.Row="1"
                                                Content=""
-                                               Margin="0,4,80,0"
+                                               Margin="0,6,32,0"
                                                IsChecked="True"
                                                IsEnabled="False" />
 
@@ -355,11 +387,11 @@
                                    Grid.Row="2"
                                    Text="Top words"
                                    VerticalAlignment="Center"
-                                   Margin="6,4,0,0" />
+                                   Margin="6,6,0,0" />
                         <controls:ToggleSwitch Grid.Column="1"
                                                Grid.Row="2"
                                                Content=""
-                                               Margin="0,4,80,0"
+                                               Margin="0,6,32,0"
                                                IsChecked="True"
                                                IsEnabled="False" />
 
@@ -367,11 +399,11 @@
                                    Grid.Row="3"
                                    Text="Important events"
                                    VerticalAlignment="Center"
-                                   Margin="6,4,0,0" />
+                                   Margin="6,6,0,0" />
                         <controls:ToggleSwitch Grid.Column="1"
                                                Grid.Row="3"
                                                Content=""
-                                               Margin="0,4,80,0"
+                                               Margin="0,6,32,0"
                                                IsChecked="True"
                                                IsEnabled="False" />
                     </Grid>
@@ -413,18 +445,18 @@
                         <controls:ToggleSwitch Grid.Column="1"
                                                Grid.Row="1"
                                                Content=""
-                                               Margin="0,4,80,0"
+                                               Margin="0,4,32,0"
                                                IsChecked="{Binding IsGeneratePerSourceEnabled}" />
 
                         <TextBlock Grid.Column="0"
                                    Grid.Row="2"
                                    Text="Summary"
                                    VerticalAlignment="Center"
-                                   Margin="6,4,0,0" />
+                                   Margin="6,6,0,0" />
                         <controls:ToggleSwitch Grid.Column="1"
                                                Grid.Row="2"
                                                Content=""
-                                               Margin="0,4,80,0"
+                                               Margin="0,6,32,0"
                                                IsChecked="{Binding IsGenerateSummaryEnabled}" />
                     </Grid>
                 </StackPanel>
@@ -437,6 +469,7 @@
                         Width="140"
                         HorizontalAlignment="Right"
                         Margin="0,0,10,10"
+                        Style="{DynamicResource SquareButtonStyle}"
                         Click="OnGenerateClickAsync" />
             </Grid>
         </ScrollViewer>
