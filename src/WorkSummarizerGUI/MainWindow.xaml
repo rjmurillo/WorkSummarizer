@@ -422,7 +422,7 @@
                     </StackPanel>
 
                 <Grid MinWidth="340"
-                      Margin="20,0,20,0">
+                      Margin="20,0,40,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
@@ -469,7 +469,7 @@
                             Height="40"
                             Width="140"
                             HorizontalAlignment="Right"
-                            Margin="0,40,20,10"
+                            Margin="0,40,0,10"
                             Style="{DynamicResource SquareButtonStyle}"
                             Click="OnGenerateClickAsync" />
                 </Grid>
