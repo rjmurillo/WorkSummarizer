@@ -26,7 +26,6 @@ namespace WorkSummarizerGUI.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly IEnumerable<ServiceViewModel> m_eventSources;
-        private readonly IPluginRuntime m_pluginRuntime;
         private readonly IEnumerable<ServiceViewModel> m_reportingSinks;
         private readonly IMessenger m_messenger = Messenger.Default;
 
