@@ -164,7 +164,9 @@ namespace WorkSummarizerGUI
 
         private void OnLicenseClick(object sender, RoutedEventArgs e)
         {
-            new LicenseWindow().ShowDialog();
+            var licenseWindow = new LicenseWindow();
+            licenseWindow.Owner = this;
+            licenseWindow.ShowDialog();
         }
     }
 }
