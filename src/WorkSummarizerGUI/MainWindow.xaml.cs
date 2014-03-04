@@ -19,9 +19,7 @@ namespace WorkSummarizerGUI
         public MainWindow()
         {
             InitializeComponent();
-
-            UserAccountButton.Content = Environment.UserName;
-            
+                        
             Messenger.Default.Register<ServiceConfigurationRequest>(this, msg => Dispatcher.Invoke(() => ShowServiceConfigurationFlyout(msg)));
             Messenger.Default.Register<Exception>(this, msg => Dispatcher.Invoke(() => ShowExceptionWindow(msg)));
         }

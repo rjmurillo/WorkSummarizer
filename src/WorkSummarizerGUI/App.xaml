@@ -25,6 +25,10 @@
                     <DataTemplate DataType="{x:Type vms:ThemeSwitchWidgetViewModel}">
                         <views:ThemeSwitchWidgetView />
                     </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type vms:UserWidgetViewModel}">
+                        <views:UserWidgetView />
+                    </DataTemplate>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

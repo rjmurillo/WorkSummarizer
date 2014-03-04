@@ -131,8 +131,8 @@
     </controls:MetroWindow.Triggers>
     <controls:MetroWindow.WindowCommands>
         <controls:WindowCommands>
-            <Button x:Name="UserAccountButton"
-                    IsHitTestVisible="False" />
+            <ContentControl Focusable="False"
+                            Content="{Binding UserWidget, Source={StaticResource ViewModelLocator}}" />
             <Button ToolTip="Location: unavailable">
                 <Grid Width="14" 
                         Height="14">

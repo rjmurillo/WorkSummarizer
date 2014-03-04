@@ -89,6 +89,7 @@
     <Compile Include="ViewModels\CreateReportViewModel.cs" />
     <Compile Include="ViewModels\ReportingSinkViewModel.cs" />
     <Compile Include="ViewModels\ThemeSwitchWidgetViewModel.cs" />
+    <Compile Include="ViewModels\UserWidgetViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\CreateReportView.xaml.cs">
@@ -96,6 +97,9 @@
     </Compile>
     <Compile Include="Views\ThemeSwitchWidgetView.xaml.cs">
       <DependentUpon>ThemeSwitchWidgetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserWidgetView.xaml.cs">
+      <DependentUpon>UserWidgetView.xaml</DependentUpon>
     </Compile>
     <Page Include="LicenseWindow.xaml">
       <SubType>Designer</SubType>
@@ -118,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ThemeSwitchWidgetView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserWidgetView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
