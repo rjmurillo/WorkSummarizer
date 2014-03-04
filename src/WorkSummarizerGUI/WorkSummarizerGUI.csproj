@@ -83,6 +83,7 @@
       <DependentUpon>LicenseWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ServiceConfigurationRequest.cs" />
+    <Compile Include="Services\MahAppsModernThemeSwitchService.cs" />
     <Compile Include="ViewModels\ServiceConfigurationViewModel.cs" />
     <Compile Include="ViewModels\ServiceViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -8,9 +7,9 @@ using System.Windows.Input;
 using Extensibility;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
-using MahApps.Metro;
 using MahApps.Metro.Controls.Dialogs;
 using WorkSummarizerGUI.Models;
+using WorkSummarizerGUI.Services;
 using WorkSummarizerGUI.ViewModels;
 
 namespace WorkSummarizerGUI
@@ -22,21 +21,18 @@ namespace WorkSummarizerGUI
     {
         private readonly MainViewModel m_mainViewModel;
         private readonly IPluginRuntime m_pluginRuntime;
-
-        private IEnumerator<string> m_themeAccentChooser = GetThemeAccentChooser();
-        private IEnumerator<Theme> m_themeBackgroundChooser = GetThemeBackgroundChooser();
+        private readonly IThemeSwitchService m_themeSwitchService;
 
         public MainWindow()
         {
             m_pluginRuntime = SimpleIoc.Default.GetInstance<IPluginRuntime>();
+            m_themeSwitchService = SimpleIoc.Default.GetInstance<IThemeSwitchService>();
 
             m_mainViewModel = new MainViewModel(m_pluginRuntime.EventQueryServices, m_pluginRuntime.RenderEventServices);
             InitializeComponent();
 
             UserAccountButton.Content = Environment.UserName;
-            m_themeAccentChooser.MoveNext();
-            m_themeBackgroundChooser.MoveNext();
-
+            
             Messenger.Default.Register<ServiceConfigurationRequest>(this, msg => Dispatcher.Invoke(() => ShowServiceConfigurationFlyout(msg)));
             Messenger.Default.Register<Exception>(this, msg => Dispatcher.Invoke(() => ShowExceptionWindow(msg)));
         }
@@ -86,54 +82,14 @@ namespace WorkSummarizerGUI
 
         private void OnChangeThemeAccentClick(object sender, RoutedEventArgs e)
         {
-            m_themeAccentChooser.MoveNext();
-            ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(p => p.Name.Equals(m_themeAccentChooser.Current)), m_themeBackgroundChooser.Current);
-            ThemeAccentButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme accent: {0}", m_themeAccentChooser.Current);
+            m_themeSwitchService.CycleAccent();
+            ThemeAccentButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme accent: {0}", m_themeSwitchService.AccentName);
         }
 
         private void OnChangeThemeBackgroundClick(object sender, RoutedEventArgs e)
         {
-            m_themeBackgroundChooser.MoveNext();
-            ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(p => p.Name.Equals(m_themeAccentChooser.Current)), m_themeBackgroundChooser.Current);
-            ThemeBackgroundButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme background: {0}", m_themeBackgroundChooser.Current);
-        }
-
-        private static IEnumerator<Theme> GetThemeBackgroundChooser()
-        {
-            while (true)
-            {
-                yield return Theme.Light;
-                yield return Theme.Dark;
-            }
-        }
-
-        private static IEnumerator<string> GetThemeAccentChooser()
-        {
-            while (true)
-            {
-                yield return "Sienna";
-                yield return "Amber";
-                yield return "Blue";
-                yield return "Brown";
-                yield return "Cobalt";
-                yield return "Crimson";
-                yield return "Cyan";
-                yield return "Emerald";
-                yield return "Green";
-                yield return "Indigo";
-                yield return "Lime";
-                yield return "Magenta";
-                yield return "Mauve";
-                yield return "Olive";
-                yield return "Orange";
-                yield return "Pink";
-                yield return "Purple";
-                yield return "Red";
-                yield return "Steel";
-                yield return "Teal";
-                yield return "Violet";
-                yield return "Yellow";
-            }
+            m_themeSwitchService.CycleBackground();
+            ThemeBackgroundButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme background: {0}", m_themeSwitchService.BackgroundName);
         }
 
         private void OnLicenseClick(object sender, RoutedEventArgs e)

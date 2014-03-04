@@ -18,6 +18,7 @@ using Renders.Excel;
 using Renders.HTML;
 using WorkSummarizer;
 using Extensibility;
+using WorkSummarizerGUI.Services;
 
 namespace WorkSummarizerGUI
 {
@@ -44,6 +45,7 @@ namespace WorkSummarizerGUI
             });
 
             SimpleIoc.Default.Register<IPluginRuntime>(() => pluginRuntime);
+            SimpleIoc.Default.Register<IThemeSwitchService, MahAppsModernThemeSwitchService>();
         }
     }
 }
