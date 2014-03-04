@@ -1,28 +1,17 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
-using GalaSoft.MvvmLight.Messaging;
-using MahApps.Metro.Controls.Dialogs;
-using Events.CodeFlow;
-using Events.Connect;
-using Events.Kudos;
-using Events.ManicTime;
-using Events.Outlook;
-using Events.TeamFoundationServer;
-using Events.Yammer;
-using Renders.Console;
-using Renders.Excel;
-using Renders.HTML;
-using WorkSummarizer;
-using WorkSummarizerGUI.Models;
-using WorkSummarizerGUI.ViewModels;
-using Extensibility;
-using System;
-using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections.Generic;
+using Extensibility;
+using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro;
+using MahApps.Metro.Controls.Dialogs;
+using WorkSummarizerGUI.Models;
+using WorkSummarizerGUI.ViewModels;
 
 namespace WorkSummarizerGUI
 {
@@ -34,29 +23,14 @@ namespace WorkSummarizerGUI
         private readonly MainViewModel m_mainViewModel;
         private readonly IPluginRuntime m_pluginRuntime;
 
-
         private IEnumerator<string> m_themeAccentChooser = GetThemeAccentChooser();
         private IEnumerator<Theme> m_themeBackgroundChooser = GetThemeBackgroundChooser();
 
         public MainWindow()
         {
-            var pluginRuntime = new PluginRuntime();
-            pluginRuntime.Start(new[]
-            {
-                typeof(CodeFlowPlugin),
-                typeof(ConnectPlugin),
-                typeof(KudosPlugin),
-                typeof(ManicTimePlugin),
-                typeof(OutlookPlugin),
-                typeof(TeamFoundationServerPlugin),
-                typeof(YammerPlugin),
+            m_pluginRuntime = SimpleIoc.Default.GetInstance<IPluginRuntime>();
 
-                typeof(ExcelRenderPlugin),
-                typeof(HtmlRenderPlugin),
-            });
-            m_pluginRuntime = pluginRuntime;
-
-            m_mainViewModel = new MainViewModel(pluginRuntime.EventQueryServices, pluginRuntime.RenderEventServices);
+            m_mainViewModel = new MainViewModel(m_pluginRuntime.EventQueryServices, m_pluginRuntime.RenderEventServices);
             InitializeComponent();
 
             UserAccountButton.Content = Environment.UserName;
