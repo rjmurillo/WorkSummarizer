@@ -9,7 +9,6 @@ using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls.Dialogs;
 using WorkSummarizerGUI.Models;
-using WorkSummarizerGUI.Services;
 using WorkSummarizerGUI.ViewModels;
 
 namespace WorkSummarizerGUI
@@ -20,15 +19,18 @@ namespace WorkSummarizerGUI
     public partial class MainWindow
     {
         private readonly MainViewModel m_mainViewModel;
+        private readonly ThemeSwitchViewModel m_themeSwitchViewModel;
         private readonly IPluginRuntime m_pluginRuntime;
-        private readonly IThemeSwitchService m_themeSwitchService;
 
         public MainWindow()
         {
+            DataContext = this;
+
             m_pluginRuntime = SimpleIoc.Default.GetInstance<IPluginRuntime>();
-            m_themeSwitchService = SimpleIoc.Default.GetInstance<IThemeSwitchService>();
 
             m_mainViewModel = new MainViewModel(m_pluginRuntime.EventQueryServices, m_pluginRuntime.RenderEventServices);
+            m_themeSwitchViewModel = new ThemeSwitchViewModel();
+
             InitializeComponent();
 
             UserAccountButton.Content = Environment.UserName;
@@ -65,6 +67,11 @@ namespace WorkSummarizerGUI
             get { return m_mainViewModel; }
         }
 
+        public ThemeSwitchViewModel ThemeSwitchViewModel
+        {
+            get { return m_themeSwitchViewModel; }
+        }
+
         private async void OnGenerateClickAsync(object sender, RoutedEventArgs e)
         {
             await m_mainViewModel.GenerateAsync();
@@ -78,18 +85,6 @@ namespace WorkSummarizerGUI
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.ContentHorizontalOffset - e.Delta);
                 e.Handled = true;
             }
-        }
-
-        private void OnChangeThemeAccentClick(object sender, RoutedEventArgs e)
-        {
-            m_themeSwitchService.CycleAccent();
-            ThemeAccentButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme accent: {0}", m_themeSwitchService.AccentName);
-        }
-
-        private void OnChangeThemeBackgroundClick(object sender, RoutedEventArgs e)
-        {
-            m_themeSwitchService.CycleBackground();
-            ThemeBackgroundButton.ToolTip = string.Format(CultureInfo.CurrentCulture, "Theme background: {0}", m_themeSwitchService.BackgroundName);
         }
 
         private void OnLicenseClick(object sender, RoutedEventArgs e)

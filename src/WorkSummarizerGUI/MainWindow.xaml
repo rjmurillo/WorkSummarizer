@@ -8,17 +8,16 @@
                       MinHeight="300"
                       Width="820"
                       MinWidth="400"
-                      ShowTitleBar="False"                      
+                      ShowTitleBar="False"
                       WindowStartupLocation="CenterScreen"
                       BorderBrush="#dd222222"
                       ResizeMode="CanResizeWithGrip"
                       BorderThickness="0"
-                      GlowBrush="{DynamicResource AccentColorBrush}"
-                      DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}">
+                      GlowBrush="{DynamicResource AccentColorBrush}">
     <controls:MetroWindow.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-
+        
         <DataTemplate x:Key="ServiceDataTemplate">
             <Grid Margin="0,4,0,4">
                 <Grid.ColumnDefinitions>
@@ -91,21 +90,6 @@
                   Data="F1 M 14.0494,25L 12,25L 12,23L 14.0494,23C 14.5184,18.2756 18.2756,14.5184 23,14.0494L 23,12L 25,12L 25,14.0494C 29.7244,14.5184 33.4816,18.2756 33.9506,23L 36,23L 36,25L 33.9506,25C 33.4816,29.7244 29.7244,33.4816 25,33.9506L 25,36L 23,36L 23,33.9506C 18.2756,33.4816 14.5184,29.7244 14.0494,25 Z M 16.0619,23L 18,23L 18,25L 16.0619,25C 16.5131,28.6187 19.3813,31.4869 23,31.9381L 23,30L 25,30L 25,31.9381C 28.6187,31.4869 31.4868,28.6187 31.9381,25L 30,25L 30,23L 31.9381,23C 31.4868,19.3813 28.6187,16.5132 25,16.0619L 25,18L 23,18L 23,16.0619C 19.3813,16.5132 16.5131,19.3813 16.0619,23 Z " />
         </Canvas>
 
-        <Canvas Width="48.0067"
-                Height="48.0067"
-                Clip="F1 M 0,0L 48.0067,0L 48.0067,48.0067L 0,48.0067L 0,0"
-                UseLayoutRounding="False"
-                x:Key="appbar_layer">
-            <Path Width="24.0033"
-                  Height="24.0033"
-                  Canvas.Left="12.0017"
-                  Canvas.Top="12.0017"
-                  Stretch="Fill"
-                  Fill="{DynamicResource BlackBrush}"
-                  Data="F1 M 36.005,24.0033L 24.0033,30.0042L 12.0017,24.0033L 16.0022,22.0031L 24.0034,26.0036L 32.0045,22.0031L 36.005,24.0033 Z M 24.0033,12.0017L 36.005,18.0025L 24.0033,24.0034L 12.0017,18.0025L 24.0033,12.0017 Z M 36.005,30.0042L 24.0033,36.005L 12.0017,30.0042L 16.0022,28.0039L 24.0033,32.0045L 32.0045,28.0039L 36.005,30.0042 Z " />
-        </Canvas>
-
-
         <Canvas Width="48"
                 Height="48"
                 Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
@@ -120,32 +104,6 @@
                   Data="F1 M 13,13L 35,13L 35,35L 29,35L 29,28L 19,28L 19,35L 13,35L 13,13 Z M 21,35L 21,32L 25,32L 25,35L 21,35 Z M 17,15L 17,21L 31,21L 31,15L 17,15 Z " />
         </Canvas>
 
-        <Canvas Width="48"
-                Height="48"
-                Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
-                UseLayoutRounding="False"
-                x:Key="appbar_weather_sun">
-            <Path Width="30.223"
-                  Height="30.223"
-                  Canvas.Left="8.88851"
-                  Canvas.Top="8.88852"
-                  Stretch="Fill"
-                  Fill="{DynamicResource BlackBrush}"
-                  Data="F1 M 39.1115,25.9086L 33.4741,27.2029C 33.8974,25.9546 34.0773,24.6144 33.9741,23.254L 39.1115,25.9086 Z M 33.3358,36.0351L 28.4353,32.9645C 29.6607,32.36 30.7222,31.5228 31.58,30.5243L 33.3358,36.0351 Z M 22.0913,39.1115L 20.7971,33.4742C 22.0454,33.8974 23.3856,34.0773 24.746,33.9741L 22.0913,39.1115 Z M 11.9649,33.3358L 15.0355,28.4353C 15.64,29.6608 16.4772,30.7222 17.4757,31.58L 11.9649,33.3358 Z M 8.88851,22.0914L 14.5259,20.7971C 14.1026,22.0454 13.9227,23.3856 14.0259,24.7461L 8.88851,22.0914 Z M 14.6642,11.965L 19.5647,15.0355C 18.3392,15.64 17.2778,16.4772 16.42,17.4757L 14.6642,11.965 Z M 25.9086,8.88852L 27.2029,14.5259C 25.9546,14.1026 24.6144,13.9227 23.254,14.0259L 25.9086,8.88852 Z M 36.035,14.6642L 32.9645,19.5647C 32.36,18.3393 31.5228,17.2778 30.5243,16.42L 36.035,14.6642 Z M 24,16C 28.4183,16 32,19.5817 32,24C 32,28.4183 28.4183,32 24,32C 19.5817,32 16,28.4183 16,24C 16,19.5817 19.5817,16 24,16 Z " />
-        </Canvas>
-
-        <!--<Style TargetType="Button">
-            <Setter Property="Background"
-                    Value="Transparent" />
-            <Setter Property="FontFamily"
-                    Value="Segoe UI" />
-            <Setter Property="FontSize"
-                    Value="12" />
-            <Setter Property="Foreground"
-                    Value="#222222" />
-            <Setter Property="Padding"
-                    Value="10,2,10,2" />
-        </Style>-->
         <Style TargetType="Hyperlink"
                BasedOn="{StaticResource {x:Type Hyperlink}}">
             <Setter Property="FontFamily"
@@ -279,39 +237,11 @@
                     </Rectangle>
                 </Grid>
             </Button>
-            <Button x:Name="ThemeAccentButton" 
-                    ToolTip="Change theme accent"
-                    Click="OnChangeThemeAccentClick">
-                <Grid>
-                    <Rectangle Width="14"
-                               Height="14">
-                        <Rectangle.Fill>
-                            <VisualBrush Stretch="Fill"
-                                         Visual="{StaticResource appbar_layer}" />
-                        </Rectangle.Fill>
-                    </Rectangle>
-                    <AccessText Text="_a" 
-                                Foreground="Transparent"/>
-                </Grid>
-            </Button>
-            <Button x:Name="ThemeBackgroundButton"
-                    ToolTip="Change theme background"
-                    Click="OnChangeThemeBackgroundClick">
-                <Grid>
-                    <Rectangle Width="14"
-                               Height="14">
-                        <Rectangle.Fill>
-                            <VisualBrush Stretch="Fill"
-                                         Visual="{StaticResource appbar_weather_sun}" />
-                        </Rectangle.Fill>
-                    </Rectangle>
-                    <AccessText Text="_b"
-                                Foreground="Transparent" />
-                </Grid>
-            </Button>
+            <ContentControl x:Name="ThemeSwitchContentControl" 
+                            Content="{Binding ThemeSwitchViewModel}" />
         </controls:WindowCommands>
     </controls:MetroWindow.WindowCommands>
-    <Grid>
+    <Grid DataContext="{Binding ViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
