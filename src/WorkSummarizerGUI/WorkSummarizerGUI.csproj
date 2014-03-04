@@ -86,11 +86,14 @@
     <Compile Include="Services\MahAppsModernThemeSwitchService.cs" />
     <Compile Include="ViewModels\ServiceConfigurationViewModel.cs" />
     <Compile Include="ViewModels\ServiceViewModel.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\CreateReportViewModel.cs" />
     <Compile Include="ViewModels\ReportingSinkViewModel.cs" />
     <Compile Include="ViewModels\ThemeSwitchViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Views\CreateReportView.xaml.cs">
+      <DependentUpon>CreateReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ThemeSwitchView.xaml.cs">
       <DependentUpon>ThemeSwitchView.xaml</DependentUpon>
     </Compile>
@@ -110,6 +113,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\CreateReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ThemeSwitchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

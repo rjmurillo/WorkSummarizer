@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Threading;
 using DataSources.Who;
 using Events;
@@ -23,7 +24,7 @@ using WorkSummarizerGUI.Models;
 
 namespace WorkSummarizerGUI.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public class CreateReportViewModel : ViewModelBase
     {
         private readonly IEnumerable<ServiceViewModel> m_eventSources;
         private readonly IEnumerable<ServiceViewModel> m_reportingSinks;
@@ -41,7 +42,7 @@ namespace WorkSummarizerGUI.ViewModels
         private string m_progressStatus;
         private string m_reportingDuration;
 
-        public MainViewModel(
+        public CreateReportViewModel(
             IDictionary<ServiceRegistration, IEventQueryService> eventQueryServices, 
             IDictionary<ServiceRegistration, IRenderEvents> renderServices)
         {
@@ -83,6 +84,7 @@ namespace WorkSummarizerGUI.ViewModels
 
             StartLocalTime = DateTime.Now.AddMonths(-1);
             m_isGenerateSummaryEnabled = true;
+            GenerateReportCommand = new RelayCommand(() => GenerateAsync());
         }
         
         public DateTime EndLocalTime
@@ -99,6 +101,11 @@ namespace WorkSummarizerGUI.ViewModels
         public IEnumerable<ServiceViewModel> EventSources
         {
             get { return m_eventSources; }
+        }
+
+        public ICommand GenerateReportCommand
+        {
+            get; private set;
         }
         
         public bool IsBusy

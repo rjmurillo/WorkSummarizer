@@ -16,7 +16,11 @@
                 
                 <ResourceDictionary>
                     <vms:ViewModelLocator x:Key="ViewModelLocator" />
-                    
+
+                    <DataTemplate DataType="{x:Type vms:CreateReportViewModel}">
+                        <views:CreateReportView />
+                    </DataTemplate>
+
                     <DataTemplate DataType="{x:Type vms:ThemeSwitchViewModel}">
                         <views:ThemeSwitchView />
                     </DataTemplate>
