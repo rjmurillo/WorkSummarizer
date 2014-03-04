@@ -594,10 +594,27 @@
                            Foreground="{DynamicResource GrayBrush1}"/>
                 </StatusBarItem>
                 <StatusBarItem HorizontalAlignment="Right">
-                    <Label Content="{Binding Version, Mode=OneTime}"
-                           FontSize="9"
-                           Margin="0,0,8,0"
-                           Foreground="{DynamicResource GrayBrush1}" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center">
+                            <Hyperlink FontSize="9"
+                                       FontFamily="Segoe UI"
+                                       Click="OnLicenseClick">
+                                License
+                            </Hyperlink>
+                        </TextBlock>
+
+                        <Label Content="|"
+                               FontSize="9"
+                               Margin="4,0,2,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource GrayBrush1}" />
+                        
+                        <Label Content="{Binding Version, Mode=OneTime}"
+                               FontSize="9"
+                               Margin="2,0,8,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource GrayBrush1}" />
+                    </StackPanel>
                 </StatusBarItem>
             </StatusBar>
         </Grid>

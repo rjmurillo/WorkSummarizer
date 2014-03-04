@@ -161,5 +161,10 @@ namespace WorkSummarizerGUI
                 yield return "Yellow";
             }
         }
+
+        private void OnLicenseClick(object sender, RoutedEventArgs e)
+        {
+            new LicenseWindow().ShowDialog();
+        }
     }
 }
