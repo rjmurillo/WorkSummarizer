@@ -26,19 +26,6 @@
         <Canvas Width="48"
                 Height="48"
                 Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
-                x:Key="appbar_crosshair">
-            <Path Width="24"
-                  Height="24"
-                  Canvas.Left="12"
-                  Canvas.Top="12"
-                  Stretch="Fill"
-                  Fill="{DynamicResource BlackBrush}"
-                  Data="F1 M 14.0494,25L 12,25L 12,23L 14.0494,23C 14.5184,18.2756 18.2756,14.5184 23,14.0494L 23,12L 25,12L 25,14.0494C 29.7244,14.5184 33.4816,18.2756 33.9506,23L 36,23L 36,25L 33.9506,25C 33.4816,29.7244 29.7244,33.4816 25,33.9506L 25,36L 23,36L 23,33.9506C 18.2756,33.4816 14.5184,29.7244 14.0494,25 Z M 16.0619,23L 18,23L 18,25L 16.0619,25C 16.5131,28.6187 19.3813,31.4869 23,31.9381L 23,30L 25,30L 25,31.9381C 28.6187,31.4869 31.4868,28.6187 31.9381,25L 30,25L 30,23L 31.9381,23C 31.4868,19.3813 28.6187,16.5132 25,16.0619L 25,18L 23,18L 23,16.0619C 19.3813,16.5132 16.5131,19.3813 16.0619,23 Z " />
-        </Canvas>
-
-        <Canvas Width="48"
-                Height="48"
-                Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
                 UseLayoutRounding="False"
                 x:Key="appbar_save">
             <Path Width="22"
@@ -133,44 +120,8 @@
         <controls:WindowCommands>
             <ContentControl Focusable="False"
                             Content="{Binding UserWidget, Source={StaticResource ViewModelLocator}}" />
-            <Button ToolTip="Location: unavailable">
-                <Grid Width="14" 
-                        Height="14">
-                    <Ellipse Width="3"
-                                Height="3"
-                                Fill="{DynamicResource BlackBrush}"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center">
-                        <Ellipse.Triggers>
-                            <EventTrigger RoutedEvent="Ellipse.Loaded">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity"
-                                                                        Duration="0:0:3"
-                                                                        RepeatBehavior="Forever">
-                                            <DoubleAnimationUsingKeyFrames.KeyFrames>
-                                                <DoubleKeyFrameCollection>
-                                                    <DiscreteDoubleKeyFrame KeyTime="0:0:0"
-                                                                            Value="1" />
-                                                    <DiscreteDoubleKeyFrame KeyTime="0:0:2.5"
-                                                                            Value="0" />
-                                                </DoubleKeyFrameCollection>
-                                            </DoubleAnimationUsingKeyFrames.KeyFrames>
-                                        </DoubleAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </Ellipse.Triggers>
-                    </Ellipse>
-                    <Rectangle Width="14"
-                               Height="14">
-                        <Rectangle.Fill>
-                            <VisualBrush Stretch="Fill"
-                                            Visual="{StaticResource appbar_crosshair}" />
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Grid>
-            </Button>
+            <ContentControl Focusable="False"
+                            Content="{Binding LocationStatusWidget, Source={StaticResource ViewModelLocator}}" />
             <ContentControl Focusable="False"
                             Content="{Binding ThemeSwitchWidget, Source={StaticResource ViewModelLocator}}" />
         </controls:WindowCommands>
@@ -276,14 +227,15 @@
 
                         <Label Content="|"
                                FontSize="9"
-                               Margin="4,0,2,0"
+                               Margin="2,0,0,0"
                                VerticalAlignment="Center"
-                               Foreground="{DynamicResource GrayBrush1}" />
+                               Foreground="{DynamicResource GrayBrush1}" 
+                               SnapsToDevicePixels="True"/>
 
                         <!-- TODO don't reference CreateReport view model -->
                         <Label Content="{Binding CreateReport.Version, Mode=OneTime, Source={StaticResource ViewModelLocator}}"
                                FontSize="9"
-                               Margin="2,0,8,0"
+                               Margin="0,0,8,0"
                                VerticalAlignment="Center"
                                Foreground="{DynamicResource GrayBrush1}" />
                     </StackPanel>
