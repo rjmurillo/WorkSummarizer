@@ -4,7 +4,7 @@
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
                       Title="Work Summarizer"
-                      Height="670"
+                      Height="700"
                       MinHeight="300"
                       Width="820"
                       MinWidth="400"
