@@ -237,8 +237,8 @@
                     </Rectangle>
                 </Grid>
             </Button>
-            <ContentControl x:Name="ThemeSwitchContentControl" 
-                            Content="{Binding ThemeSwitchViewModel}" />
+            <ContentControl Focusable="False"
+                            Content="{Binding ThemeSwitch, Source={StaticResource ViewModelLocator}}" />
         </controls:WindowCommands>
     </controls:MetroWindow.WindowCommands>
     <Grid DataContext="{Binding ViewModel}">

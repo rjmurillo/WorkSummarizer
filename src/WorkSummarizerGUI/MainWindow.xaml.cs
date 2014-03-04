@@ -19,7 +19,6 @@ namespace WorkSummarizerGUI
     public partial class MainWindow
     {
         private readonly MainViewModel m_mainViewModel;
-        private readonly ThemeSwitchViewModel m_themeSwitchViewModel;
         private readonly IPluginRuntime m_pluginRuntime;
 
         public MainWindow()
@@ -29,7 +28,6 @@ namespace WorkSummarizerGUI
             m_pluginRuntime = SimpleIoc.Default.GetInstance<IPluginRuntime>();
 
             m_mainViewModel = new MainViewModel(m_pluginRuntime.EventQueryServices, m_pluginRuntime.RenderEventServices);
-            m_themeSwitchViewModel = new ThemeSwitchViewModel();
 
             InitializeComponent();
 
@@ -65,11 +63,6 @@ namespace WorkSummarizerGUI
         public MainViewModel ViewModel
         {
             get { return m_mainViewModel; }
-        }
-
-        public ThemeSwitchViewModel ThemeSwitchViewModel
-        {
-            get { return m_themeSwitchViewModel; }
         }
 
         private async void OnGenerateClickAsync(object sender, RoutedEventArgs e)
