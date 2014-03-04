@@ -6,13 +6,13 @@ using WorkSummarizerGUI.Services;
 
 namespace WorkSummarizerGUI.ViewModels
 {
-    public class ThemeSwitchViewModel : ViewModelBase
+    public class ThemeSwitchWidgetViewModel : ViewModelBase
     {
         private readonly IThemeSwitchService m_themeSwitchService;
         private string m_accentText;
         private string m_backgroundText;
 
-        public ThemeSwitchViewModel()
+        public ThemeSwitchWidgetViewModel()
         {
             m_themeSwitchService = SimpleIoc.Default.GetInstance<IThemeSwitchService>();
             AccentText = string.Format(CultureInfo.CurrentCulture, "Theme accent: {0}", m_themeSwitchService.AccentName);

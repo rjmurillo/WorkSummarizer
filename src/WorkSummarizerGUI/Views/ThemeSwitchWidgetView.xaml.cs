@@ -4,9 +4,9 @@ namespace WorkSummarizerGUI.Views
     /// <summary>
     /// Interaction logic for ThemeSwitchView.xaml
     /// </summary>
-    public partial class ThemeSwitchView
+    public partial class ThemeSwitchWidgetView
     {
-        public ThemeSwitchView()
+        public ThemeSwitchWidgetView()
         {
             InitializeComponent();
         }

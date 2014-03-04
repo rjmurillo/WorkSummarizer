@@ -172,7 +172,7 @@
                 </Grid>
             </Button>
             <ContentControl Focusable="False"
-                            Content="{Binding ThemeSwitch, Source={StaticResource ViewModelLocator}}" />
+                            Content="{Binding ThemeSwitchWidget, Source={StaticResource ViewModelLocator}}" />
         </controls:WindowCommands>
     </controls:MetroWindow.WindowCommands>
     <Grid DataContext="{Binding ViewModel}">
