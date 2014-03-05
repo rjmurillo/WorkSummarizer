@@ -195,6 +195,7 @@
                                     Grid.Row="1"
                                     SelectedDate="{Binding EndLocalTime}"
                                     DisplayDateStart="{Binding StartLocalTime}"
+                                    DisplayDateEnd="{Binding EndAbsoluteLocalTime, Mode=OneWay}"
                                     Margin="0,6,0,0" />
 
                         <Label Grid.Column="0"

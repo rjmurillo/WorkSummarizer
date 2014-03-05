@@ -86,6 +86,14 @@ namespace WorkSummarizerGUI.ViewModels
             m_isGenerateSummaryEnabled = true;
             GenerateReportCommand = new RelayCommand(() => GenerateAsync());
         }
+
+        public DateTime EndAbsoluteLocalTime
+        {
+            get
+            {
+                return DateTime.Now;
+            }
+        }
         
         public DateTime EndLocalTime
         {
