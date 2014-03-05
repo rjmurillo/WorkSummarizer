@@ -157,4 +157,3 @@ $RECYCLE.BIN/
 
 # NuGet packages
 packages/
-/src/WebRole/clickonce
