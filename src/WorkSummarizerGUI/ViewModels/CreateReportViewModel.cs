@@ -207,10 +207,11 @@ namespace WorkSummarizerGUI.ViewModels
             var selectedIsGeneratePerSourceEnabled = m_isGeneratePerSourceEnabled;
             var selectedIsGeneratePerSummaryEnabled = m_isGenerateSummaryEnabled;
 
+            ProgressPercentage = 0;
             if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any() && (selectedIsGeneratePerSourceEnabled || selectedIsGeneratePerSummaryEnabled))
             {
                 IsBusy = true;
-                ProgressPercentage = 0;
+                ProgressPercentage = 1;
                 ProgressStatus = String.Empty;
 
                 var uiDispatcher = Dispatcher.CurrentDispatcher;
@@ -264,7 +265,7 @@ namespace WorkSummarizerGUI.ViewModels
                             {
                                 pullEventsDelegate();
                             }
-                            
+
                             uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; ProgressStatus = String.Format("Summarizing data for {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
 
                             var textProc = new TextProcessor();
@@ -354,9 +355,13 @@ namespace WorkSummarizerGUI.ViewModels
 
                         uiDispatcher.Invoke(() => { ProgressPercentage = 100; });
                     }
+                    catch (AggregateException ex)
+                    {
+                        Trace.WriteLine("Aggregate inner exception: " + ex.InnerException);
+                        m_messenger.Send(ex.InnerException);
+                    }
                     catch (Exception ex)
                     {
-                        Debug.Fail(ex.ToString());
                         Trace.WriteLine(ex);
                         m_messenger.Send(ex);
                     }

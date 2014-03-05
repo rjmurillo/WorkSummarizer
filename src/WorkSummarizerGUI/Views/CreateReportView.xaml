@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
+             xmlns:xcontrols="clr-namespace:WorkSummarizerGUI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="400" 
              d:DesignWidth="600">
@@ -95,12 +96,51 @@
                 <ColumnDefinition Width="525*" />
             </Grid.ColumnDefinitions>
             <controls:MetroProgressBar Height="3"
-                                       Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
                                        Foreground="{DynamicResource AccentColorBrush}"
                                        Background="Transparent"
-                                       Value="{Binding ProgressPercentage}"
+                                       xcontrols:FluidProgress.Value="{Binding ProgressPercentage}"
                                        Maximum="100"
-                                       Grid.ColumnSpan="2" />
+                                       Grid.ColumnSpan="2"
+                                       Opacity="0">
+                <controls:MetroProgressBar.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsBusy}"
+                                         Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:0.2">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:0.4"
+                                                             BeginTime="0:0:1">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:MetroProgressBar.Style>
+            </controls:MetroProgressBar>
         </Grid>
 
         <ScrollViewer Grid.Row="1"
