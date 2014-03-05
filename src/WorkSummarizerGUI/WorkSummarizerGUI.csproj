@@ -82,6 +82,7 @@
     <Compile Include="LicenseWindow.xaml.cs">
       <DependentUpon>LicenseWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\ServiceConfigurationRequest.cs" />
     <Compile Include="Services\MahAppsModernThemeSwitchService.cs" />
     <Compile Include="ViewModels\ServiceConfigurationViewModel.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="ViewModels\ReportingSinkViewModel.cs" />
     <Compile Include="ViewModels\ThemeSwitchWidgetViewModel.cs" />
     <Compile Include="ViewModels\LocationStatusWidgetViewModel.cs" />
+    <Compile Include="ViewModels\ToastNotificationWidgetViewModel.cs" />
     <Compile Include="ViewModels\UserWidgetViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
@@ -98,6 +100,9 @@
     </Compile>
     <Compile Include="Views\LocationStatusWidgetView.xaml.cs">
       <DependentUpon>LocationStatusWidgetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ToastNotificationWidgetView.xaml.cs">
+      <DependentUpon>ToastNotificationWidgetView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ThemeSwitchWidgetView.xaml.cs">
       <DependentUpon>ThemeSwitchWidgetView.xaml</DependentUpon>
@@ -126,6 +131,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LocationStatusWidgetView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ToastNotificationWidgetView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

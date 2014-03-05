@@ -27,6 +27,7 @@ namespace WorkSummarizerGUI.ViewModels
                 SimpleIoc.Default.Register<CreateReportViewModel>(() => new CreateReportViewModel(SimpleIoc.Default.GetInstance<IPluginRuntime>().EventQueryServices, SimpleIoc.Default.GetInstance<IPluginRuntime>().RenderEventServices));
                 SimpleIoc.Default.Register<LocationStatusWidgetViewModel>();
                 SimpleIoc.Default.Register<ThemeSwitchWidgetViewModel>();
+                SimpleIoc.Default.Register<ToastNotificationWidgetViewModel>();
                 SimpleIoc.Default.Register<UserWidgetViewModel>();
             }            
         }
@@ -52,6 +53,14 @@ namespace WorkSummarizerGUI.ViewModels
             get
             {
                 return SimpleIoc.Default.GetInstance<LocationStatusWidgetViewModel>();
+            }
+        }
+
+        public ToastNotificationWidgetViewModel ToastNotificationWidget
+        {
+            get
+            {
+                return SimpleIoc.Default.GetInstance<ToastNotificationWidgetViewModel>();
             }
         }
 

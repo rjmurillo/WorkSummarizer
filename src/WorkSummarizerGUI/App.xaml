@@ -25,7 +25,11 @@
                     <DataTemplate DataType="{x:Type vms:LocationStatusWidgetViewModel}">
                         <views:LocationStatusWidgetView />
                     </DataTemplate>
-                    
+
+                    <DataTemplate DataType="{x:Type vms:ToastNotificationWidgetViewModel}">
+                        <views:ToastNotificationWidgetView />
+                    </DataTemplate>
+
                     <DataTemplate DataType="{x:Type vms:ThemeSwitchWidgetViewModel}">
                         <views:ThemeSwitchWidgetView />
                     </DataTemplate>

@@ -144,6 +144,7 @@ namespace WorkSummarizerGUI.ViewModels
             private set
             {
                 m_progressStatus = value;
+                Messenger.Default.Send<Notification>(new Notification(ProgressPercentage, ProgressStatus));
                 OnPropertyChanged();
             }
         }
@@ -154,6 +155,7 @@ namespace WorkSummarizerGUI.ViewModels
             private set 
             { 
                 m_progressPercentage = value;
+                Messenger.Default.Send<Notification>(new Notification(ProgressPercentage, ProgressStatus));
                 OnPropertyChanged();
             }
         }
@@ -362,6 +364,7 @@ namespace WorkSummarizerGUI.ViewModels
 
                 IsBusy = false;
                 ProgressStatus = "...done.";
+                ProgressPercentage = 100;
             }
         }
         
