@@ -134,53 +134,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- TODO don't reference CreateReport view model -->
-        <Label Grid.Row="0"
-               Content="{Binding CreateReport.ProgressStatus, Mode=OneWay, Source={StaticResource ViewModelLocator}}"
-               Height="0"
-               Margin="0,30,0,0"
-               FontFamily="Segoe UI"
-               Foreground="White"
-               Background="{DynamicResource AccentColorBrush}">
-            <Label.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding CreateReport.IsBusy, Source={StaticResource ViewModelLocator}}"
-                                     Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Height"
-                                                         From="0"
-                                                         To="30"
-                                                         Duration="0:0:0.4">
-                                            <DoubleAnimation.EasingFunction>
-                                                <CubicEase/>
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Height"
-                                                         From="30"
-                                                         To="0"
-                                                         Duration="0:0:0.4"
-                                                         BeginTime="0:0:3">
-                                            <DoubleAnimation.EasingFunction>
-                                                <CubicEase />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Label.Style>
-        </Label>
+        <ContentControl Grid.Row="0"
+                        Margin="0,30,0,0"
+                        Focusable="False"
+                        Content="{Binding ToastNotificationWidget, Source={StaticResource ViewModelLocator}}" />
 
         <Label x:Name="TitleStage" 
                Grid.Row="1"

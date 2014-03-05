@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
+             xmlns:xcontrols="clr-namespace:WorkSummarizerGUI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="400" 
              d:DesignWidth="600">
@@ -95,15 +96,55 @@
                 <ColumnDefinition Width="525*" />
             </Grid.ColumnDefinitions>
             <controls:MetroProgressBar Height="3"
-                                       Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
                                        Foreground="{DynamicResource AccentColorBrush}"
                                        Background="Transparent"
-                                       Value="{Binding ProgressPercentage}"
+                                       xcontrols:FluidProgress.Value="{Binding ProgressPercentage}"
                                        Maximum="100"
-                                       Grid.ColumnSpan="2" />
+                                       Grid.ColumnSpan="2"
+                                       Opacity="0">
+                <controls:MetroProgressBar.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsBusy}"
+                                         Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:0.2">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:0.4"
+                                                             BeginTime="0:0:1">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:MetroProgressBar.Style>
+            </controls:MetroProgressBar>
         </Grid>
 
         <ScrollViewer Grid.Row="1"
+                      x:Name="ContentStage"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Disabled"
                       PreviewMouseWheel="OnPreviewContentStageMouseWheel">
@@ -126,43 +167,9 @@
                             Margin="20,0,40,0">
                     <Label Content="time span"
                            Style="{StaticResource HeaderLabel}" />
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
 
-                        <Label Grid.Column="0"
-                               Grid.Row="0"
-                               Content="Start" />
-
-                        <DatePicker Grid.Column="1"
-                                    Grid.Row="0"
-                                    SelectedDate="{Binding StartLocalTime}"
-                                    DisplayDateEnd="{Binding EndLocalTime}" />
-
-                        <Label Grid.Column="0"
-                               Grid.Row="1"
-                               Content="End"
-                               Margin="0,6,0,0" />
-
-                        <DatePicker Grid.Column="1"
-                                    Grid.Row="1"
-                                    SelectedDate="{Binding EndLocalTime}"
-                                    DisplayDateStart="{Binding StartLocalTime}"
-                                    Margin="0,6,0,0" />
-
-                        <Label Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               Grid.Row="2"
-                               Content="{Binding ReportingDuration, Mode=OneWay}"
-                               Margin="0,6,0,0" />
-                    </Grid>
+                    <xcontrols:DateRangePicker SelectedStartDate="{Binding StartLocalTime}"
+                                               SelectedEndDate="{Binding EndLocalTime}"/>
                 </StackPanel>
 
                 <Grid MinWidth="340"

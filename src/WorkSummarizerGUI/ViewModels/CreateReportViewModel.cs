@@ -40,7 +40,6 @@ namespace WorkSummarizerGUI.ViewModels
         private DateTime m_startLocalTime;
         private int m_progressPercentage;
         private string m_progressStatus;
-        private string m_reportingDuration;
 
         public CreateReportViewModel(
             IDictionary<ServiceRegistration, IEventQueryService> eventQueryServices, 
@@ -86,14 +85,13 @@ namespace WorkSummarizerGUI.ViewModels
             m_isGenerateSummaryEnabled = true;
             GenerateReportCommand = new RelayCommand(() => GenerateAsync());
         }
-        
+                
         public DateTime EndLocalTime
         {
             get { return m_endLocalTime; }
             set 
             {
                 m_endLocalTime = value;
-                UpdateReportingDuration();
                 OnPropertyChanged();
             }
         }
@@ -144,6 +142,7 @@ namespace WorkSummarizerGUI.ViewModels
             private set
             {
                 m_progressStatus = value;
+                Messenger.Default.Send<Notification>(new Notification(ProgressPercentage, ProgressStatus));
                 OnPropertyChanged();
             }
         }
@@ -154,20 +153,11 @@ namespace WorkSummarizerGUI.ViewModels
             private set 
             { 
                 m_progressPercentage = value;
+                Messenger.Default.Send<Notification>(new Notification(ProgressPercentage, ProgressStatus));
                 OnPropertyChanged();
             }
         }
-
-        public string ReportingDuration
-        {
-            get { return m_reportingDuration; }
-            private set 
-            { 
-                m_reportingDuration = value;
-                OnPropertyChanged();
-            }
-        }
-
+        
         public IEnumerable<ServiceViewModel> ReportingSinks
         {
             get { return m_reportingSinks; }
@@ -179,7 +169,6 @@ namespace WorkSummarizerGUI.ViewModels
             set 
             {
                 m_startLocalTime = value;
-                UpdateReportingDuration();
                 OnPropertyChanged();
             }
         }
@@ -204,11 +193,12 @@ namespace WorkSummarizerGUI.ViewModels
 
             var selectedIsGeneratePerSourceEnabled = m_isGeneratePerSourceEnabled;
             var selectedIsGeneratePerSummaryEnabled = m_isGenerateSummaryEnabled;
-
+                        
             if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any() && (selectedIsGeneratePerSourceEnabled || selectedIsGeneratePerSummaryEnabled))
             {
-                IsBusy = true;
                 ProgressPercentage = 0;
+                IsBusy = true;
+                ProgressPercentage = 1;
                 ProgressStatus = String.Empty;
 
                 var uiDispatcher = Dispatcher.CurrentDispatcher;
@@ -262,7 +252,7 @@ namespace WorkSummarizerGUI.ViewModels
                             {
                                 pullEventsDelegate();
                             }
-                            
+
                             uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; ProgressStatus = String.Format("Summarizing data for {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
 
                             var textProc = new TextProcessor();
@@ -352,9 +342,13 @@ namespace WorkSummarizerGUI.ViewModels
 
                         uiDispatcher.Invoke(() => { ProgressPercentage = 100; });
                     }
+                    catch (AggregateException ex)
+                    {
+                        Trace.WriteLine("Aggregate inner exception: " + ex.InnerException);
+                        m_messenger.Send(ex.InnerException);
+                    }
                     catch (Exception ex)
                     {
-                        Debug.Fail(ex.ToString());
                         Trace.WriteLine(ex);
                         m_messenger.Send(ex);
                     }
@@ -362,14 +356,8 @@ namespace WorkSummarizerGUI.ViewModels
 
                 IsBusy = false;
                 ProgressStatus = "...done.";
+                ProgressPercentage = 100;
             }
-        }
-        
-        private void UpdateReportingDuration()
-        {
-            var duration = m_endLocalTime - m_startLocalTime;
-            var upperWeeks = (int)Math.Ceiling(Math.Ceiling(duration.TotalDays * 5/7) / 5);
-            ReportingDuration = String.Format("About {0} work weeks", upperWeeks);
         }
     }
 }
