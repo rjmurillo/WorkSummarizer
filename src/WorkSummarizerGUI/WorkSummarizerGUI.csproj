@@ -78,6 +78,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Controls\DateRangePicker.xaml.cs">
+      <DependentUpon>DateRangePicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FluidProgressAttachedProperty.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="LicenseWindow.xaml.cs">
@@ -111,6 +114,10 @@
     <Compile Include="Views\UserWidgetView.xaml.cs">
       <DependentUpon>UserWidgetView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\DateRangePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LicenseWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

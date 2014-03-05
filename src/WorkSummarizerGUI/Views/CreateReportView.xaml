@@ -166,44 +166,9 @@
                             Margin="20,0,40,0">
                     <Label Content="time span"
                            Style="{StaticResource HeaderLabel}" />
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
 
-                        <Label Grid.Column="0"
-                               Grid.Row="0"
-                               Content="Start" />
-
-                        <DatePicker Grid.Column="1"
-                                    Grid.Row="0"
-                                    SelectedDate="{Binding StartLocalTime}"
-                                    DisplayDateEnd="{Binding EndLocalTime}" />
-
-                        <Label Grid.Column="0"
-                               Grid.Row="1"
-                               Content="End"
-                               Margin="0,6,0,0" />
-
-                        <DatePicker Grid.Column="1"
-                                    Grid.Row="1"
-                                    SelectedDate="{Binding EndLocalTime}"
-                                    DisplayDateStart="{Binding StartLocalTime}"
-                                    DisplayDateEnd="{Binding EndAbsoluteLocalTime, Mode=OneWay}"
-                                    Margin="0,6,0,0" />
-
-                        <Label Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               Grid.Row="2"
-                               Content="{Binding ReportingDuration, Mode=OneWay}"
-                               Margin="0,6,0,0" />
-                    </Grid>
+                    <xcontrols:DateRangePicker SelectedStartDate="{Binding StartLocalTime}"
+                                               SelectedEndDate="{Binding EndLocalTime}"/>
                 </StackPanel>
 
                 <Grid MinWidth="340"

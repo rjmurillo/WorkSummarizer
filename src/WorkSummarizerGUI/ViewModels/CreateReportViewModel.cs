@@ -40,7 +40,6 @@ namespace WorkSummarizerGUI.ViewModels
         private DateTime m_startLocalTime;
         private int m_progressPercentage;
         private string m_progressStatus;
-        private string m_reportingDuration;
 
         public CreateReportViewModel(
             IDictionary<ServiceRegistration, IEventQueryService> eventQueryServices, 
@@ -86,22 +85,13 @@ namespace WorkSummarizerGUI.ViewModels
             m_isGenerateSummaryEnabled = true;
             GenerateReportCommand = new RelayCommand(() => GenerateAsync());
         }
-
-        public DateTime EndAbsoluteLocalTime
-        {
-            get
-            {
-                return DateTime.Now;
-            }
-        }
-        
+                
         public DateTime EndLocalTime
         {
             get { return m_endLocalTime; }
             set 
             {
                 m_endLocalTime = value;
-                UpdateReportingDuration();
                 OnPropertyChanged();
             }
         }
@@ -167,17 +157,7 @@ namespace WorkSummarizerGUI.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        public string ReportingDuration
-        {
-            get { return m_reportingDuration; }
-            private set 
-            { 
-                m_reportingDuration = value;
-                OnPropertyChanged();
-            }
-        }
-
+        
         public IEnumerable<ServiceViewModel> ReportingSinks
         {
             get { return m_reportingSinks; }
@@ -189,7 +169,6 @@ namespace WorkSummarizerGUI.ViewModels
             set 
             {
                 m_startLocalTime = value;
-                UpdateReportingDuration();
                 OnPropertyChanged();
             }
         }
@@ -214,10 +193,10 @@ namespace WorkSummarizerGUI.ViewModels
 
             var selectedIsGeneratePerSourceEnabled = m_isGeneratePerSourceEnabled;
             var selectedIsGeneratePerSummaryEnabled = m_isGenerateSummaryEnabled;
-
-            ProgressPercentage = 0;
+                        
             if (selectedEventSourceIds.Any() && selectedReportingSinkTypes.Any() && (selectedIsGeneratePerSourceEnabled || selectedIsGeneratePerSummaryEnabled))
             {
+                ProgressPercentage = 0;
                 IsBusy = true;
                 ProgressPercentage = 1;
                 ProgressStatus = String.Empty;
@@ -379,13 +358,6 @@ namespace WorkSummarizerGUI.ViewModels
                 ProgressStatus = "...done.";
                 ProgressPercentage = 100;
             }
-        }
-        
-        private void UpdateReportingDuration()
-        {
-            var duration = m_endLocalTime - m_startLocalTime;
-            var upperWeeks = (int)Math.Ceiling(Math.Ceiling(duration.TotalDays * 5/7) / 5);
-            ReportingDuration = String.Format("About {0} work weeks", upperWeeks);
         }
     }
 }
