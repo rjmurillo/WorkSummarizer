@@ -15,11 +15,11 @@ using DataSources.Who;
 using Events;
 using Extensibility;
 using FUSE.Weld.Base;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Processing.Text;
 using Renders;
 using WorkSummarizer;
-using WorkSummarizerGUI.Commands;
 using WorkSummarizerGUI.Models;
 
 namespace WorkSummarizerGUI.ViewModels
@@ -29,6 +29,7 @@ namespace WorkSummarizerGUI.ViewModels
         private readonly IEnumerable<ServiceViewModel> m_eventSources;
         private readonly IEnumerable<ServiceViewModel> m_reportingSinks;
         private readonly IMessenger m_messenger = Messenger.Default;
+        private readonly RelayCommand m_generateReportCommand;
 
         private readonly IDictionary<ServiceRegistration, IEventQueryService> m_eventQueryServices;
         private readonly IDictionary<ServiceRegistration, IRenderEvents> m_renderServices;
@@ -48,18 +49,24 @@ namespace WorkSummarizerGUI.ViewModels
             m_eventQueryServices = eventQueryServices;
             m_renderServices = renderServices;
 
+            m_generateReportCommand = new RelayCommand(
+                async () => { await GenerateAsync(); }, 
+                () => m_eventSources.Any(p => p.IsSelected) && m_reportingSinks.Any(p => p.IsSelected) && (IsGeneratePerSourceEnabled || IsGenerateSummaryEnabled));
+
             m_eventSources =
                 eventQueryServices
                              .GroupBy(p => p.Key.Family)
                              .Select(p =>
                                  {
-                                     return new ServiceViewModel(
+                                     var vm = new ServiceViewModel(
                                          p.Key,
                                          p.Select(q => q.Key.Id).ToList(),
-                                         new RelayCommand(() => { m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }); }) { IsEnabled = p.Any(q => q.Key.IsConfigurable) })
+                                         new WorkSummarizerGUI.Commands.RelayCommand(() => { m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }); }) { IsEnabled = p.Any(q => q.Key.IsConfigurable) })
                                         {
                                             HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))
                                         };
+                                     vm.PropertyChanged += (sender, propertyChanged) => { m_generateReportCommand.RaiseCanExecuteChanged(); };
+                                     return vm;
                                  })
                              .ToList();
 
@@ -69,13 +76,15 @@ namespace WorkSummarizerGUI.ViewModels
                              .GroupBy(p => p.Key.Family)
                              .Select(p => 
                                  {
-                                     return new ServiceViewModel(
+                                     var vm = new ServiceViewModel(
                                          p.Key,
                                          p.Select(q => q.Key.Id).ToList(),
-                                         new RelayCommand(() => { m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }); }) { IsEnabled = p.Any(q => q.Key.IsConfigurable) })
+                                         new WorkSummarizerGUI.Commands.RelayCommand(() => { m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }); }) { IsEnabled = p.Any(q => q.Key.IsConfigurable) })
                                          {
                                              HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))
-                                         }; 
+                                         };
+                                     vm.PropertyChanged += (sender, propertyChanged) => { m_generateReportCommand.RaiseCanExecuteChanged(); };
+                                     return vm;
                                  })
                              .ToList();
 
@@ -83,7 +92,6 @@ namespace WorkSummarizerGUI.ViewModels
 
             StartLocalTime = DateTime.Now.AddMonths(-1);
             m_isGenerateSummaryEnabled = true;
-            GenerateReportCommand = new RelayCommand(() => GenerateAsync());
         }
                 
         public DateTime EndLocalTime
@@ -103,7 +111,7 @@ namespace WorkSummarizerGUI.ViewModels
 
         public ICommand GenerateReportCommand
         {
-            get; private set;
+            get { return m_generateReportCommand; }
         }
         
         public bool IsBusy
