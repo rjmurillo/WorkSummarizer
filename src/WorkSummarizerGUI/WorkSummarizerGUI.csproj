@@ -82,6 +82,9 @@
       <DependentUpon>DateRangePicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\FluidProgressAttachedProperty.cs" />
+    <Compile Include="Controls\FriendlyDateRangePicker.xaml.cs">
+      <DependentUpon>FriendlyDateRangePicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="LicenseWindow.xaml.cs">
       <DependentUpon>LicenseWindow.xaml</DependentUpon>
@@ -115,6 +118,10 @@
       <DependentUpon>UserWidgetView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\DateRangePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FriendlyDateRangePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

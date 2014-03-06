@@ -168,8 +168,8 @@
                     <Label Content="time span"
                            Style="{StaticResource HeaderLabel}" />
 
-                    <xcontrols:DateRangePicker SelectedStartDate="{Binding StartLocalTime}"
-                                               SelectedEndDate="{Binding EndLocalTime}"/>
+                    <xcontrols:FriendlyDateRangePicker SelectedStartDate="{Binding StartLocalTime}"
+                                                       SelectedEndDate="{Binding EndLocalTime}"/>
                 </StackPanel>
 
                 <Grid MinWidth="340"
