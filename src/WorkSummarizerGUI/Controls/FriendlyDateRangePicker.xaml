@@ -274,7 +274,96 @@
             </Setter>
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
-                    <Style TargetType="{x:Type ComboBoxItem}">
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Foreground"
+                                Value="{DynamicResource TextBrush}" />
+                        <Setter Property="Padding"
+                                Value="2" />
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Left" />
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Top" />
+                        <Setter Property="Background"
+                                Value="{DynamicResource TransparentWhiteBrush}" />
+                        <Setter Property="BorderThickness"
+                                Value="1" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBoxItem">
+                                    <Grid Background="{TemplateBinding Background}"
+                                          Margin="0,0.5">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal" />
+                                                <VisualState x:Name="MouseOver">
+                                                    <Storyboard>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                                                       Storyboard.TargetName="MouseOverRectangle">
+                                                            <EasingDoubleKeyFrame KeyTime="0:0:0.1"
+                                                                                  Value=".65" />
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </VisualState>
+                                                <VisualState x:Name="Disabled">
+                                                    <Storyboard>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity"
+                                                                                       Storyboard.TargetName="contentPresenter">
+                                                            <SplineDoubleKeyFrame KeyTime="0"
+                                                                                  Value=".55" />
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                            <VisualStateGroup x:Name="SelectionStates">
+                                                <VisualState x:Name="Unselected" />
+                                                <VisualState x:Name="Selected">
+                                                    <Storyboard>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                                                       Storyboard.TargetName="SelectedRectangle">
+                                                            <EasingDoubleKeyFrame KeyTime="0:0:0.1"
+                                                                                  Value="1" />
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                            <VisualStateGroup x:Name="FocusStates">
+                                                <VisualState x:Name="Focused">
+                                                    <Storyboard />
+                                                </VisualState>
+                                                <VisualState x:Name="Unfocused" />
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Rectangle x:Name="SelectedRectangle"
+                                                   IsHitTestVisible="False"
+                                                   Opacity="0"
+                                                   Fill="{DynamicResource AccentColorBrush}" />
+                                        <Rectangle x:Name="MouseOverRectangle"
+                                                   IsHitTestVisible="False"
+                                                   Opacity="0"
+                                                   Fill="{DynamicResource AccentColorBrush3}" />
+                                        <ContentControl Foreground="{TemplateBinding Foreground}">
+                                            <ContentPresenter x:Name="contentPresenter"
+                                                              Margin="{TemplateBinding Padding}"
+                                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                                        </ContentControl>
+                                        <Rectangle x:Name="FocusVisualElement"
+                                                   Stroke="{DynamicResource HighlightBrush}"
+                                                   StrokeThickness="1"
+                                                   Visibility="Collapsed" />
+                                    </Grid>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource AccentSelectedColorBrush}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <!--<Style TargetType="{x:Type ComboBoxItem}">
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
@@ -286,9 +375,9 @@
                                                     HorizontalAlignment="Center">
                                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                            <!--<Label Content="{Binding Value}"
+                                            --><!--<Label Content="{Binding Value}"
                                                    Width="100" />
-                                            <Label Content="{Binding Description}" />-->
+                                            <Label Content="{Binding Description}" />--><!--
                                         </StackPanel>
                                     </Border>
                                     <ControlTemplate.Triggers>
@@ -309,7 +398,7 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-                    </Style>
+                    </Style>-->
                 </Setter.Value>
             </Setter>
         </Style>
@@ -319,42 +408,53 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0"
+        <Label Grid.Row="0" 
+               Content="Ending" />
+        
+        <StackPanel Grid.Row="1"
                     Orientation="Horizontal">
-            <Label Content="Ending" />
-            
-            <ComboBox ItemsSource="{Binding Months, ElementName=Root}" />
+            <ComboBox ItemsSource="{Binding Months, ElementName=Root}"
+                      SelectedValue="{Binding SelectedMonth, ElementName=Root}" />
 
-            <ComboBox ItemsSource="{Binding Days, ElementName=Root}" />
+            <ComboBox ItemsSource="{Binding Days, ElementName=Root}"
+                      SelectedValue="{Binding SelectedDay, ElementName=Root}" />
 
-            <ComboBox ItemsSource="{Binding Years, ElementName=Root}" />
+            <ComboBox ItemsSource="{Binding Years, ElementName=Root}"
+                      SelectedValue="{Binding SelectedYear, ElementName=Root}" />
         </StackPanel>
 
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal"
+        <StackPanel Grid.Row="2"
+                    Orientation="Vertical"
                     Margin="0,8,0,0">
             <Label Content="Go back" />
 
-            <ComboBox>
-                <ComboBoxItem Content="0"
-                              IsSelected="True" />
-            </ComboBox>
+            <Slider Value="{Binding YearDuration, ElementName=Root}"
+                    Minimum="0"
+                    Maximum="5"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"
+                    TickPlacement="Both"/>
 
             <Label Content="years" />
 
-            <ComboBox>
-                <ComboBoxItem Content="0"
-                              IsSelected="True" />
-            </ComboBox>
+            <Slider Value="{Binding MonthDuration, ElementName=Root}"
+                    Minimum="0"
+                    Maximum="11"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"
+                    TickPlacement="Both"/>
 
             <Label Content="months" />
 
-            <ComboBox>
-                <ComboBoxItem Content="1"
-                              IsSelected="True" />
-            </ComboBox>
+            <Slider Value="{Binding DayDuration, ElementName=Root}"
+                    Minimum="0"
+                    Maximum="30"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"
+                    TickPlacement="Both"/>
 
             <Label Content="days" />
         </StackPanel>
@@ -365,10 +465,10 @@
                     DisplayDateEnd="{Binding EndAbsoluteTime, Mode=OneWay, ElementName=Root}"
                     Margin="0,6,0,0" />-->
 
-        <StackPanel Grid.Row="2"
+        <StackPanel Grid.Row="3"
                     Orientation="Horizontal"
                     Margin="0,8,0,0">
-            <Label Content="To Monday Febuary 1, 2014" />
+            <Label Content="{Binding SelectedStartDate, ElementName=Root}" />
 
             <Label Content="{Binding ReportingDuration, Mode=OneWay, ElementName=Root}" />
         </StackPanel>

@@ -26,18 +26,23 @@ namespace WorkSummarizerGUI.Controls
             typeof(FriendlyDateRangePicker),
             new FrameworkPropertyMetadata(DateTime.Now, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedDateChanged, null));
 
+        private IEnumerable<DateSegmentViewModel> m_years;
         private IEnumerable<DateSegmentViewModel> m_days;
         private IEnumerable<DateSegmentViewModel> m_months;
-        private IEnumerable<DateSegmentViewModel> m_years;
+        private DateSegmentViewModel m_selectedMonth;
+        private DateSegmentViewModel m_selectedDay;
+        private DateSegmentViewModel m_selectedYear;
 
         private string m_reportingDuration;
 
         public FriendlyDateRangePicker()
         {
             var currentDate = DateTime.Now;
+            
             Years = DateSegmentViewModel.GetYears(currentDate.Year - 3);
-            Months = DateSegmentViewModel.GetMonths(currentDate.Year);
-            Days = DateSegmentViewModel.GetDays(currentDate.Year, currentDate.Month);
+            SelectedYear = Years.First(p => p.Value == currentDate.Year);
+            SelectedMonth = Months.First(p => p.Value == currentDate.Month);
+            SelectedDay = Days.First(p => p.Value == currentDate.Day);
 
             InitializeComponent();
         }        
@@ -71,7 +76,9 @@ namespace WorkSummarizerGUI.Controls
             private set
             {
                 m_days = value;
+                var selectedDay = SelectedDay != null ? SelectedDay.Value : value.First().Value;
                 OnPropertyChanged();
+                SelectedDay = value.FirstOrDefault(p => p.Value == selectedDay) ?? value.First();
             }
         }
 
@@ -84,7 +91,9 @@ namespace WorkSummarizerGUI.Controls
             private set
             {
                 m_months = value;
+                var selectedMonth = SelectedMonth != null ? SelectedMonth.Value : value.First().Value;
                 OnPropertyChanged();
+                SelectedMonth = value.FirstOrDefault(p => p.Value == selectedMonth) ?? value.First();
             }
         }
 
@@ -100,6 +109,103 @@ namespace WorkSummarizerGUI.Controls
                 OnPropertyChanged();
             }
         }
+
+        public DateSegmentViewModel SelectedMonth
+        {
+            get
+            {
+                return m_selectedMonth;
+            }
+            set
+            {
+                m_selectedMonth = value ?? Months.First();
+                Days = DateSegmentViewModel.GetDays(SelectedYear.Value, m_selectedMonth.Value);
+                this.OnPropertyChanged();
+                SelectedEndDate = new DateTime(SelectedYear.Value, SelectedMonth.Value, SelectedDay.Value);
+            }
+        }
+
+        public DateSegmentViewModel SelectedDay
+        {
+            get
+            {
+                return m_selectedDay;
+            }
+            set
+            {
+                m_selectedDay = value ?? Days.First();
+                this.OnPropertyChanged();
+                SelectedEndDate = new DateTime(SelectedYear.Value, SelectedMonth.Value, SelectedDay.Value);
+            }
+        }
+
+        public DateSegmentViewModel SelectedYear
+        {
+            get
+            {
+                return m_selectedYear;
+            }
+            set
+            {
+                m_selectedYear = value ?? Years.First();
+                Months = DateSegmentViewModel.GetMonths(m_selectedYear.Value);
+                this.OnPropertyChanged();
+                SelectedEndDate = new DateTime(SelectedYear.Value, SelectedMonth.Value, SelectedDay.Value);
+            }
+        }
+
+        private int m_monthDuration;
+
+        public int MonthDuration
+        {
+            get
+            {
+                return m_monthDuration;
+            }
+            set
+            {
+                m_monthDuration = value;
+                this.OnPropertyChanged();
+
+                SelectedStartDate =
+                    SelectedEndDate.AddYears(-YearDuration).AddMonths(-MonthDuration).AddDays(-DayDuration);
+            }
+        }
+
+        private int m_dayDuration;
+
+        public int DayDuration
+        {
+            get
+            {
+                return m_dayDuration;
+            }
+            set
+            {
+                m_dayDuration = value;
+                this.OnPropertyChanged();
+                SelectedStartDate =
+                    SelectedEndDate.AddYears(-YearDuration).AddMonths(-MonthDuration).AddDays(-DayDuration);
+            }
+        }
+
+        private int m_yearDuration;
+
+        public int YearDuration
+        {
+            get
+            {
+                return m_yearDuration;
+            }
+            set
+            {
+                m_yearDuration = value;
+                this.OnPropertyChanged();
+                SelectedStartDate =
+                    SelectedEndDate.AddYears(-YearDuration).AddMonths(-MonthDuration).AddDays(-DayDuration);
+            }
+        }
+
 
         public DateTime SelectedStartDate
         {
@@ -130,11 +236,6 @@ namespace WorkSummarizerGUI.Controls
             var duration = SelectedEndDate - SelectedStartDate;
             var upperWeeks = (int)Math.Ceiling(Math.Ceiling(duration.TotalDays * 5 / 7) / 5);
             ReportingDuration = String.Format("About {0} work weeks", upperWeeks);
-        }
-
-
-        public class DayViewModel
-        {
         }
 
         public class DateSegmentViewModel

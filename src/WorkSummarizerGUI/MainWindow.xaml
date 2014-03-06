@@ -9,7 +9,7 @@
                       xmlns:vms="clr-namespace:WorkSummarizerGUI.ViewModels"
                       mc:Ignorable="d"
                       Title="Work Summarizer"
-                      Height="700"
+                      Height="850"
                       MinHeight="300"
                       Width="820"
                       MinWidth="400"
