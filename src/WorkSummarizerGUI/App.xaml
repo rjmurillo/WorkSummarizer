@@ -37,6 +37,16 @@
                     <DataTemplate DataType="{x:Type vms:UserWidgetViewModel}">
                         <views:UserWidgetView />
                     </DataTemplate>
+                    
+                    <Style TargetType="Rectangle">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}"
+                                         Value="False">
+                                <Setter Property="Opacity"
+                                        Value="0.4"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
