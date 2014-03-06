@@ -65,7 +65,7 @@
             <Setter Property="IsReadOnly"
                     Value="True" />
             <Setter Property="Margin"
-                    Value="24,20,24,30" />
+                    Value="24,20,24,20" />
             <Setter Property="TextWrapping"
                     Value="Wrap" />
             <Setter Property="VerticalScrollBarVisibility"
@@ -73,7 +73,11 @@
         </Style>
     </controls:MetroWindow.Resources>
     <Grid>
-        <TabControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0">
             <TabItem Header="APACHE">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -356,5 +360,14 @@ A "contributor" is any person that distributes its contribution under this licen
                 </Grid>
             </TabItem>
         </TabControl>
+        <Button Grid.Row="1" 
+                Content="ok"
+                Command="{Binding CloseCommand}"
+                IsCancel="True"
+                Height="30"
+                Width="110"
+                HorizontalAlignment="Right"
+                Margin="0,0,30,20"
+                Style="{DynamicResource SquareButtonStyle}" />
     </Grid>
 </controls:MetroWindow>
