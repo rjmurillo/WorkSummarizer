@@ -24,7 +24,8 @@ namespace WorkSummarizerGUI.Services
         public MahAppsModernThemeSwitchService()
         {
             m_themeAccentChooser.MoveNext();
-            m_themeBackgroundChooser.MoveNext();
+            m_themeBackgroundChooser.MoveNext(); 
+            this.CycleBackground();
         }
 
         public string AccentName { get { return m_themeAccentChooser.Current; } }
