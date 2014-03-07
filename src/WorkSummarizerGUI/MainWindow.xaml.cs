@@ -21,12 +21,13 @@ namespace WorkSummarizerGUI
             InitializeComponent();
                         
             Messenger.Default.Register<ServiceConfigurationRequest>(this, msg => Dispatcher.Invoke(() => ShowServiceConfigurationFlyout(msg)));
-            Messenger.Default.Register<Exception>(this, msg => Dispatcher.Invoke(() => ShowExceptionWindow(msg)));
+            Messenger.Default.Register<ExceptionMessage>(this, msg => Dispatcher.Invoke(() => ShowExceptionWindow(msg)));
         }
 
-        private void ShowExceptionWindow(Exception exception)
+        private void ShowExceptionWindow(ExceptionMessage exceptionMessage)
         {
-            this.ShowMessageAsync("Oh noes!", "Something went wrong while working on your request. Check your settings and try again. " + Environment.NewLine + Environment.NewLine + "Hint: " + exception.Message);
+            var source = String.IsNullOrWhiteSpace(exceptionMessage.Context) ? "not sure" : exceptionMessage.Context;
+            this.ShowMessageAsync("Oh noes!", "Something went wrong while working on your request. Check your settings and try again. " + Environment.NewLine + Environment.NewLine + "From: " + source + Environment.NewLine + Environment.NewLine + "Hint: " + exceptionMessage.Exception.Message);
         }
 
         private void ShowServiceConfigurationFlyout(ServiceConfigurationRequest message)

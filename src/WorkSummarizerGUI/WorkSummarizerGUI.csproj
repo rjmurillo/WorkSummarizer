@@ -89,6 +89,7 @@
     <Compile Include="LicenseWindow.xaml.cs">
       <DependentUpon>LicenseWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ExceptionMessage.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\ServiceConfigurationRequest.cs" />
     <Compile Include="Services\MahAppsModernThemeSwitchService.cs" />

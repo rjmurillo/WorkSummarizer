@@ -209,6 +209,7 @@ namespace WorkSummarizerGUI.ViewModels
                 ProgressPercentage = 1;
                 ProgressStatus = String.Empty;
 
+                string currentActivity = string.Empty;
                 var uiDispatcher = Dispatcher.CurrentDispatcher;
                 await Task.Run(() =>
                 {
@@ -244,7 +245,8 @@ namespace WorkSummarizerGUI.ViewModels
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
                             KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
-                            uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Pulling data for {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
+                            currentActivity = String.Format("Pulling data for {0} - {1}", registration1.Key.Family, registration1.Key.Name);
+                            uiDispatcher.Invoke(() => { ProgressStatus = String.Format("{0}...", currentActivity); });
 
                             IEnumerable<Event> evts = Enumerable.Empty<Event>();
                             Action pullEventsDelegate = () =>
@@ -296,7 +298,8 @@ namespace WorkSummarizerGUI.ViewModels
                                 foreach (var render in renderServiceRegistrations)
                                 {
                                     KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
-                                    uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Rendering data for {0} - {1} with {2} - {3}...", registration1.Key.Family, registration1.Key.Name, render1.Key.Family, render1.Key.Name); });
+                                    currentActivity = String.Format("Rendering data for {0} - {1} with {2} - {3}...", registration1.Key.Family, registration1.Key.Name, render1.Key.Family, render1.Key.Name);
+                                    uiDispatcher.Invoke(() => { ProgressStatus = String.Format("{0}...", currentActivity); });
 
                                     KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
                                     Action renderEventsDelegate = () => render1.Value.Render(registration.Key.Id, selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), evts, weightedTags, weightedPeople, importantSentences);
@@ -335,7 +338,8 @@ namespace WorkSummarizerGUI.ViewModels
                             {
                                 KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
                                 Action renderEventsDelegate = () => render1.Value.Render("Summary", selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), summaryEvents, summaryWeightedTags, summaryWeightedPeople, summaryImportantSentences);
-                                uiDispatcher.Invoke(() => { ProgressStatus = String.Format("Rendering summary data with {0} - {1}...", render1.Key.Family, render1.Key.Name); });
+                                currentActivity = String.Format("Rendering summary data with {0} - {1}", render1.Key.Family, render1.Key.Name);
+                                uiDispatcher.Invoke(() => { ProgressStatus = String.Format("{0}...", currentActivity); });
 
                                 if (render.Key.InvokeOnShellDispatcher)
                                 {
@@ -353,12 +357,12 @@ namespace WorkSummarizerGUI.ViewModels
                     catch (AggregateException ex)
                     {
                         Trace.WriteLine("Aggregate inner exception: " + ex.InnerException);
-                        m_messenger.Send(ex.InnerException);
+                        m_messenger.Send(new ExceptionMessage(ex.InnerException, currentActivity));
                     }
                     catch (Exception ex)
                     {
                         Trace.WriteLine(ex);
-                        m_messenger.Send(ex);
+                        m_messenger.Send(new ExceptionMessage(ex, currentActivity));
                     }
                 });
 
