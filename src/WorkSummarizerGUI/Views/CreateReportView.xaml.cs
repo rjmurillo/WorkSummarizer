@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace WorkSummarizerGUI.Views
 {
+    using System.Windows;
+    using System.Windows.Media;
+
     /// <summary>
     /// Interaction logic for CreateReportView.xaml
     /// </summary>
@@ -15,12 +18,30 @@ namespace WorkSummarizerGUI.Views
         
         private void OnPreviewContentStageMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            var scrollViewer = sender as ScrollViewer;
-            if (scrollViewer != null)
+            var obj = e.OriginalSource as DependencyObject;
+
+            do
             {
-                scrollViewer.ScrollToHorizontalOffset(scrollViewer.ContentHorizontalOffset - e.Delta);
-                e.Handled = true;
+                if (obj == null)
+                {
+                    break;
+                }
+
+                var scrollViewer = obj as ScrollViewer;
+                if (scrollViewer != null)
+                {
+                    if (scrollViewer.Equals(ContentStage))
+                    {
+                        ContentStage.ScrollToHorizontalOffset(ContentStage.ContentHorizontalOffset - e.Delta);
+                        e.Handled = true;
+                    }
+
+                    break;
+                }
+
+                obj = VisualTreeHelper.GetParent(obj);
             }
+            while (obj != null);
         }
     }
 }
