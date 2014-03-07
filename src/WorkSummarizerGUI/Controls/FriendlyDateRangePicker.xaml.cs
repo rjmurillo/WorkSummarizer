@@ -43,6 +43,7 @@ namespace WorkSummarizerGUI.Controls
             SelectedYear = Years.First(p => p.Value == currentDate.Year);
             SelectedMonth = Months.First(p => p.Value == currentDate.Month);
             SelectedDay = Days.First(p => p.Value == currentDate.Day);
+            MonthDuration = 1;
 
             InitializeComponent();
         }        
@@ -222,6 +223,8 @@ namespace WorkSummarizerGUI.Controls
         private static void OnSelectedDateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var picker = d as FriendlyDateRangePicker;
+            picker.SelectedStartDate =
+                    picker.SelectedEndDate.AddYears(-picker.YearDuration).AddMonths(-picker.MonthDuration).AddDays(-picker.DayDuration);
             picker.UpdateReportingDuration();
         }
 

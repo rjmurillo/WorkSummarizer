@@ -39,7 +39,7 @@
             <Setter Property="Margin"
                     Value="6,0,6,0" />
             <Setter Property="Height"
-                    Value="78" />
+                    Value="58" />
             <Setter Property="Width"
                     Value="78" />
             <Setter Property="Template">
@@ -138,7 +138,7 @@
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <Grid Height="78"
+                        <Grid Height="58"
                               Width="78"
                               Background="{DynamicResource AccentColorBrush}">
                             <Grid.RowDefinitions>
@@ -248,7 +248,10 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" 
-               Content="Ending" />
+               Content="Ending on date"
+               FontSize="14"
+               FontWeight="Thin"
+               Margin="0,0,0,8" />
         
         <StackPanel Grid.Row="1"
                     Orientation="Horizontal">
@@ -262,45 +265,112 @@
                       SelectedValue="{Binding SelectedYear, ElementName=Root}" />
         </StackPanel>
 
-        <StackPanel Grid.Row="2"
-                    Orientation="Vertical"
-                    Margin="0,8,0,0">
-            <Label Content="Go back" />
+        <Grid Grid.Row="2"
+              Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="40" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="44" />
+                <RowDefinition Height="44" />
+                <RowDefinition Height="44" />
+            </Grid.RowDefinitions>
 
-            <Slider Value="{Binding YearDuration, ElementName=Root}"
+            <Label Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   Grid.Row="0"
+                   Margin="0,4,0,0"
+                   Content="Go back in history"
+                   FontSize="14"
+                   FontWeight="Thin" />
+
+            <!-- Years -->
+            <Label Grid.Column="0" 
+                    Grid.Row="1"
+                    Content="Years" 
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"/>
+                
+            <Slider Grid.Column="1"
+                    Grid.Row="1"
+                    Value="{Binding YearDuration, ElementName=Root}"
                     Minimum="0"
                     Maximum="5"
                     TickFrequency="1"
                     IsSnapToTickEnabled="True"
-                    TickPlacement="Both"/>
+                    TickPlacement="TopLeft"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"/>
 
-            <Label Content="years" />
+            <TextBlock Grid.Column="2"
+                        Grid.Row="1"
+                        Text="{Binding YearDuration, ElementName=Root}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        FontWeight="Thin"/>
 
-            <Slider Value="{Binding MonthDuration, ElementName=Root}"
+            <!-- Months -->
+            <Label Grid.Column="0"
+                    Grid.Row="2"
+                    Content="Months"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" />
+
+            <Slider Grid.Column="1"
+                    Grid.Row="2"
+                    Value="{Binding MonthDuration, ElementName=Root}"
                     Minimum="0"
                     Maximum="11"
                     TickFrequency="1"
                     IsSnapToTickEnabled="True"
-                    TickPlacement="Both"/>
+                    TickPlacement="TopLeft"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center" />
 
-            <Label Content="months" />
+            <TextBlock Grid.Column="2"
+                        Grid.Row="2"
+                        Text="{Binding MonthDuration, ElementName=Root}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        FontWeight="Thin" />
 
-            <Slider Value="{Binding DayDuration, ElementName=Root}"
+            <!-- Days -->
+            <Label Grid.Column="0"
+                    Grid.Row="3"
+                    Content="Days"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" />
+
+            <Slider Grid.Column="1"
+                    Grid.Row="3"
+                    Value="{Binding DayDuration, ElementName=Root}"
                     Minimum="0"
                     Maximum="30"
-                    TickFrequency="1"
-                    IsSnapToTickEnabled="True"
-                    TickPlacement="Both"/>
+                    Ticks="7,14,21,28"
+                    TickPlacement="TopLeft"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center" />
 
-            <Label Content="days" />
-        </StackPanel>
-
+            <TextBlock Grid.Column="2"
+                       Grid.Row="3"
+                       Text="{Binding DayDuration, ElementName=Root}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="22"
+                       FontWeight="Thin" />
+        </Grid>
+            
         <StackPanel Grid.Row="3"
-                    Orientation="Horizontal"
+                    Orientation="Vertical"
                     Margin="0,8,0,0">
-            <Label Content="{Binding SelectedStartDate, ElementName=Root}" />
+            <TextBlock Text="{Binding ReportingDuration, Mode=OneWay, ElementName=Root, StringFormat='{}{0}.'}" />
 
-            <Label Content="{Binding ReportingDuration, Mode=OneWay, ElementName=Root}" />
+            <TextBlock Text="{Binding SelectedStartDate, ElementName=Root, StringFormat='This will bring us back to {0:dddd MMMM d, yyyy}.'}" />
         </StackPanel>
     </Grid>
 </UserControl>
