@@ -4,12 +4,9 @@
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      xmlns:converters="clr-namespace:WorkSummarizerGUI.Converters"
-                      xmlns:views="clr-namespace:WorkSummarizerGUI.Views"
-                      xmlns:vms="clr-namespace:WorkSummarizerGUI.ViewModels"
                       mc:Ignorable="d"
                       Title="Work Summarizer"
-                      Height="850"
+                      Height="820"
                       MinHeight="300"
                       Width="820"
                       MinWidth="400"
@@ -19,24 +16,7 @@
                       ResizeMode="CanResizeWithGrip"
                       BorderThickness="0"
                       GlowBrush="{DynamicResource AccentColorBrush}">
-    <controls:MetroWindow.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        
-        <Canvas Width="48"
-                Height="48"
-                Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
-                UseLayoutRounding="False"
-                x:Key="appbar_save">
-            <Path Width="22"
-                  Height="22"
-                  Canvas.Left="13"
-                  Canvas.Top="13"
-                  Stretch="Fill"
-                  Fill="{DynamicResource BlackBrush}"
-                  Data="F1 M 13,13L 35,13L 35,35L 29,35L 29,28L 19,28L 19,35L 13,35L 13,13 Z M 21,35L 21,32L 25,32L 25,35L 21,35 Z M 17,15L 17,21L 31,21L 31,15L 17,15 Z " />
-        </Canvas>
-
+    <controls:MetroWindow.Resources>        
         <Style TargetType="Hyperlink"
                BasedOn="{StaticResource {x:Type Hyperlink}}">
             <Setter Property="FontFamily"
@@ -128,20 +108,22 @@
     </controls:MetroWindow.WindowCommands>
     <Grid DataContext="{Binding ViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Row="0"
-                        Margin="0,30,0,0"
+                        Margin="0,0,0,0"
                         Focusable="False"
+                        VerticalAlignment="Top"
                         Content="{Binding ToastNotificationWidget, Source={StaticResource ViewModelLocator}}" />
 
         <Label x:Name="TitleStage" 
                Grid.Row="1"
                Content="WORK SUMMARIZER"
+               Margin="20,0,0,0"
                FontSize="50"
                FontWeight="Bold"
                Opacity="0.8">
