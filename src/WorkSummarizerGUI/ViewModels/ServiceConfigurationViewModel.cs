@@ -38,6 +38,7 @@ namespace WorkSummarizerGUI.ViewModels
         public ConfigurationSettingViewModel(ConfigurationSetting setting)
         {
             m_setting = setting;
+            setting.ValueChanged += (sender, args) => OnPropertyChanged("Value");
             RevertToDefaultCommand = new RelayCommand(() => Value = DefaultValue);
         }
 
