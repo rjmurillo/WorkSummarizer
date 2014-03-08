@@ -196,6 +196,8 @@ namespace WorkSummarizerGUI.ViewModels
             public IDictionary<string, int> WeightedPeople { get; set; } 
 
             public IEnumerable<string> ImportantSentences { get; set; }
+
+            public ExceptionMessage Exception { get; set; }
         }
 
         public async Task GenerateAsync()
@@ -252,79 +254,13 @@ namespace WorkSummarizerGUI.ViewModels
                         var processingResults = new List<ProcessingResult>();
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
-                            KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
-                            currentActivity = String.Format("Pulling data for {0} - {1}", registration1.Key.Family, registration1.Key.Name);
-                            uiDispatcher.Invoke(() => { ProgressStatus = String.Format("{0}...", currentActivity); });
+                            var result = ProcessResult(eventQueryServiceRegistration, uiDispatcher, selectedStartLocalTime, selectedEndLocalTime, progressIncrement, selectedIsGeneratePerSourceEnabled, renderServiceRegistrations);
 
-                            IEnumerable<Event> evts = Enumerable.Empty<Event>();
-                            Action pullEventsDelegate = () =>
+                            if (result.Exception != null)
                             {
-                                evts = registration1.Value.PullEvents(selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), Environment.UserName);
-                            };
-
-                            if (eventQueryServiceRegistration.Key.InvokeOnShellDispatcher)
-                            {
-                                uiDispatcher.Invoke(pullEventsDelegate);
+                                m_messenger.Send(result.Exception);
+                                return;
                             }
-                            else
-                            {
-                                pullEventsDelegate();
-                            }
-
-                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; ProgressStatus = String.Format("Summarizing data for {0} - {1}...", registration1.Key.Family, registration1.Key.Name); });
-
-                            var textProc = new TextProcessor();
-                            var peopleProc = new PeopleProcessor();
-
-                            var sb = new StringBuilder();
-
-                            foreach (var evt in evts)
-                            {
-                                sb.Append(evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty));
-                            }
-
-
-                            IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
-
-                            var customStopList = IdentityUtility.GetIdentityAttributes();
-
-                            var splitCustomStopList = new List<string>();
-
-                            foreach (var token in customStopList)
-                            {
-                                splitCustomStopList.AddRange(token.Split(' '));
-                            }
-
-                            textProc.AddStopWords(splitCustomStopList);
-
-                            var nouns = textProc.GetNouns(sb.ToString());
-                            IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
-                            IEnumerable<string> importantSentences = textProc.GetImportantEvents(evts.Select(x => x.Text), nouns);
-
-                            if (selectedIsGeneratePerSourceEnabled)
-                            {
-                                foreach (var render in renderServiceRegistrations)
-                                {
-                                    KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
-                                    currentActivity = String.Format("Rendering data for {0} - {1} with {2} - {3}...", registration1.Key.Family, registration1.Key.Name, render1.Key.Family, render1.Key.Name);
-                                    uiDispatcher.Invoke(() => { ProgressStatus = String.Format("{0}...", currentActivity); });
-
-                                    KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
-                                    Action renderEventsDelegate = () => render1.Value.Render(registration.Key.Id, selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)), evts, weightedTags, weightedPeople, importantSentences);
-                                    if (render.Key.InvokeOnShellDispatcher)
-                                    {
-                                        uiDispatcher.Invoke(renderEventsDelegate);
-                                    }
-                                    else
-                                    {
-                                        renderEventsDelegate();
-                                    }
-                                }
-                            }
-
-                            var result = new ProcessingResult{Events = evts, ImportantSentences = importantSentences, WeightedPeople = weightedPeople, WeightedTags = weightedTags };
-                            
-                            uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
 
                             processingResults.Add(result);
                         }
@@ -391,6 +327,119 @@ namespace WorkSummarizerGUI.ViewModels
                 ProgressStatus = "...done.";
                 ProgressPercentage = 100;
             }
+        }
+
+        private ProcessingResult ProcessResult(KeyValuePair<ServiceRegistration, IEventQueryService> eventQueryServiceRegistration, Dispatcher uiDispatcher,
+            DateTime selectedStartLocalTime, DateTime selectedEndLocalTime, int progressIncrement,
+            bool selectedIsGeneratePerSourceEnabled, IEnumerable<KeyValuePair<ServiceRegistration, IRenderEvents>> renderServiceRegistrations)
+        {
+            KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
+            var currentActivity = String.Format("Pulling data for {0} - {1}", registration1.Key.Family, registration1.Key.Name);
+
+            try
+            {
+                uiDispatcher.Invoke(() => { ProgressStatus = String.Format("{0}...", currentActivity); });
+
+                IEnumerable<Event> evts = Enumerable.Empty<Event>();
+                Action pullEventsDelegate =
+                    () =>
+                    {
+                        evts = registration1.Value.PullEvents(selectedStartLocalTime, (selectedEndLocalTime.AddDays(1).AddTicks(-1)),
+                            Environment.UserName);
+                    };
+
+                if (eventQueryServiceRegistration.Key.InvokeOnShellDispatcher)
+                {
+                    uiDispatcher.Invoke(pullEventsDelegate);
+                }
+                else
+                {
+                    pullEventsDelegate();
+                }
+
+                uiDispatcher.Invoke(() =>
+                {
+                    ProgressPercentage += progressIncrement;
+                    ProgressStatus = String.Format("Summarizing data for {0} - {1}...", registration1.Key.Family,
+                        registration1.Key.Name);
+                });
+
+                var textProc = new TextProcessor();
+                var peopleProc = new PeopleProcessor();
+
+                var sb = new StringBuilder();
+
+                foreach (var evt in evts)
+                {
+                    sb.Append(evt.Text.Replace("\n", String.Empty).Replace("\r", String.Empty));
+                }
+
+
+                IDictionary<string, int> weightedPeople = peopleProc.GetTeam(evts);
+
+                var customStopList = IdentityUtility.GetIdentityAttributes();
+
+                var splitCustomStopList = new List<string>();
+
+                foreach (var token in customStopList)
+                {
+                    splitCustomStopList.AddRange(token.Split(' '));
+                }
+
+                textProc.AddStopWords(splitCustomStopList);
+
+                var nouns = textProc.GetNouns(sb.ToString());
+                IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
+                IEnumerable<string> importantSentences = textProc.GetImportantEvents(evts.Select(x => x.Text), nouns);
+
+                if (selectedIsGeneratePerSourceEnabled)
+                {
+                    foreach (var render in renderServiceRegistrations)
+                    {
+                        KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
+                        currentActivity = String.Format("Rendering data for {0} - {1} with {2} - {3}...", registration1.Key.Family,
+                            registration1.Key.Name, render1.Key.Family, render1.Key.Name);
+                        uiDispatcher.Invoke(() => { ProgressStatus = String.Format("{0}...", currentActivity); });
+
+                        KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
+                        Action renderEventsDelegate =
+                            () =>
+                                render1.Value.Render(registration.Key.Id, selectedStartLocalTime,
+                                    (selectedEndLocalTime.AddDays(1).AddTicks(-1)), evts, weightedTags, weightedPeople,
+                                    importantSentences);
+                        if (render.Key.InvokeOnShellDispatcher)
+                        {
+                            uiDispatcher.Invoke(renderEventsDelegate);
+                        }
+                        else
+                        {
+                            renderEventsDelegate();
+                        }
+                    }
+                }
+
+                var result = new ProcessingResult
+                {
+                    Events = evts,
+                    ImportantSentences = importantSentences,
+                    WeightedPeople = weightedPeople,
+                    WeightedTags = weightedTags
+                };
+
+                uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
+                return result;
+            }
+            catch (AggregateException ex)
+            {
+                Trace.WriteLine("Aggregate inner exception: " + ex.InnerException);
+                return new ProcessingResult { Exception = new ExceptionMessage(ex, currentActivity)};
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex);
+                return new ProcessingResult { Exception = new ExceptionMessage(ex, currentActivity) };
+            }
+            
         }
     }
 }
