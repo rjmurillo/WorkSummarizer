@@ -27,6 +27,7 @@ namespace Events.Kudos
                     };
 
                     e.Participants.Add(IdentityUtility.Create(p.SenderAlias));
+                    e.Participants.Add(IdentityUtility.Create(Environment.UserName));
 
                     return e;
                 }).ToList();
