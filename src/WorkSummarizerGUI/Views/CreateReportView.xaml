@@ -35,7 +35,7 @@
                     <Button Command="{Binding ConfigureCommand}"
                             Height="32"
                             Width="32"
-                            Visibility="{Binding ConfigureCommand.IsEnabled, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Visibility="{Binding IsConfigurable, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="12"
                                    Height="12">

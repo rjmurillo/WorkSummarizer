@@ -5,16 +5,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 using DataSources.Who;
 using Events;
 using Extensibility;
-using FUSE.Weld.Base;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Processing.Text;
@@ -58,14 +54,16 @@ namespace WorkSummarizerGUI.ViewModels
                              .GroupBy(p => p.Key.Family)
                              .Select(p =>
                                  {
+                                     var configureCommand = new RelayCommand(() => m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }), () => p.ToList().Any(q => q.Key.IsConfigurable));
+
                                      var vm = new ServiceViewModel(
                                          p.Key,
                                          p.Select(q => q.Key.Id).ToList(),
-                                         new WorkSummarizerGUI.Commands.RelayCommand(() => { m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }); }) { IsEnabled = p.Any(q => q.Key.IsConfigurable) })
-                                        {
+                                         configureCommand)
+                                         {
                                             HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))
                                         };
-                                     vm.PropertyChanged += (sender, propertyChanged) => { m_generateReportCommand.RaiseCanExecuteChanged(); };
+                                     vm.PropertyChanged += (sender, propertyChanged) => { m_generateReportCommand.RaiseCanExecuteChanged(); configureCommand.RaiseCanExecuteChanged(); };
                                      return vm;
                                  })
                              .ToList();
@@ -76,14 +74,17 @@ namespace WorkSummarizerGUI.ViewModels
                              .GroupBy(p => p.Key.Family)
                              .Select(p => 
                                  {
+                                     var configureCommand = new RelayCommand(() => m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }), () => p.Any(q => q.Key.IsConfigurable));
+                                     
                                      var vm = new ServiceViewModel(
-                                         p.Key,
-                                         p.Select(q => q.Key.Id).ToList(),
-                                         new WorkSummarizerGUI.Commands.RelayCommand(() => { m_messenger.Send(new ServiceConfigurationRequest { Name = p.Key, Ids = p.Select(q => q.Key.Id).ToList() }); }) { IsEnabled = p.Any(q => q.Key.IsConfigurable) })
+                                         p.Key, 
+                                         p.Select(q => q.Key.Id).ToList(), 
+                                         configureCommand)
                                          {
                                              HelpText = String.Join(", ", p.Select(pair => pair.Key.Name))
                                          };
-                                     vm.PropertyChanged += (sender, propertyChanged) => { m_generateReportCommand.RaiseCanExecuteChanged(); };
+
+                                     vm.PropertyChanged += (sender, propertyChanged) => { m_generateReportCommand.RaiseCanExecuteChanged(); configureCommand.RaiseCanExecuteChanged(); };
                                      return vm;
                                  })
                              .ToList();

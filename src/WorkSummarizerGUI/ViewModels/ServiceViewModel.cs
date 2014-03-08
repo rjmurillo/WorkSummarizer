@@ -1,32 +1,24 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace WorkSummarizerGUI.ViewModels
 {
-    using GalaSoft.MvvmLight.Command;
-
     public class ServiceViewModel : ViewModelBase
     {
+        private readonly bool m_isConfigurable;
         private readonly IEnumerable<string> m_serviceIds;
         private readonly string m_name;
         private readonly ICommand m_configureCommand;
         private string m_helpText;
-        private bool m_isEnabled;
         private bool m_isSelected;
-
-        public ServiceViewModel(string name, IEnumerable<string> serviceIds)
-            : this(name, serviceIds, new RelayCommand(() =>{}, () => false))
-        {
-        }
-
+        
         public ServiceViewModel(string name, IEnumerable<string> serviceIds, ICommand configureCommand)
         {
             m_serviceIds = serviceIds;
             m_name = name;
             m_helpText = String.Empty;
-            m_isEnabled = true;
+            m_isConfigurable = configureCommand.CanExecute(null);
             m_configureCommand = configureCommand;
         }
 
@@ -45,20 +37,11 @@ namespace WorkSummarizerGUI.ViewModels
             get { return m_configureCommand; }
         }
 
-        public bool IsEnabled
+        public bool IsConfigurable
         {
-            get
-            {
-                return m_isEnabled;
-            }
-            set
-            {
-                m_isEnabled = value;
-                OnPropertyChanged();
-                OnPropertyChanged("IsConfigurable");
-            }
+            get { return m_isConfigurable; }
         }
-
+        
         public bool IsSelected
         {
             get 

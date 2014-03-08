@@ -77,7 +77,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\DateRangePicker.xaml.cs">
       <DependentUpon>DateRangePicker.xaml</DependentUpon>
     </Compile>
