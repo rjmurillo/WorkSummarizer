@@ -1,11 +1,12 @@
 ﻿using System.Globalization;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
-using WorkSummarizerGUI.Commands;
 using WorkSummarizerGUI.Services;
 
 namespace WorkSummarizerGUI.ViewModels
 {
+    using GalaSoft.MvvmLight.Command;
+
     public class ThemeSwitchWidgetViewModel : ViewModelBase
     {
         private readonly IThemeSwitchService m_themeSwitchService;

@@ -1,12 +1,12 @@
 ﻿
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Input;
-using WorkSummarizerGUI.Commands;
 
 namespace WorkSummarizerGUI.ViewModels
 {
+    using GalaSoft.MvvmLight.Command;
+
     public class ServiceViewModel : ViewModelBase
     {
         private readonly IEnumerable<string> m_serviceIds;
@@ -17,7 +17,7 @@ namespace WorkSummarizerGUI.ViewModels
         private bool m_isSelected;
 
         public ServiceViewModel(string name, IEnumerable<string> serviceIds)
-            : this(name, serviceIds, new RelayCommand(() =>{}){ IsEnabled = false })
+            : this(name, serviceIds, new RelayCommand(() =>{}, () => false))
         {
         }
 
