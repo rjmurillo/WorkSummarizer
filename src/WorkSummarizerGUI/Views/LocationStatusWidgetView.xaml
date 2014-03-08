@@ -20,7 +20,10 @@
                   Data="F1 M 14.0494,25L 12,25L 12,23L 14.0494,23C 14.5184,18.2756 18.2756,14.5184 23,14.0494L 23,12L 25,12L 25,14.0494C 29.7244,14.5184 33.4816,18.2756 33.9506,23L 36,23L 36,25L 33.9506,25C 33.4816,29.7244 29.7244,33.4816 25,33.9506L 25,36L 23,36L 23,33.9506C 18.2756,33.4816 14.5184,29.7244 14.0494,25 Z M 16.0619,23L 18,23L 18,25L 16.0619,25C 16.5131,28.6187 19.3813,31.4869 23,31.9381L 23,30L 25,30L 25,31.9381C 28.6187,31.4869 31.4868,28.6187 31.9381,25L 30,25L 30,23L 31.9381,23C 31.4868,19.3813 28.6187,16.5132 25,16.0619L 25,18L 23,18L 23,16.0619C 19.3813,16.5132 16.5131,19.3813 16.0619,23 Z " />
         </Canvas>
     </UserControl.Resources>
-    <Button ToolTip="Location: unavailable">
+    <Button>
+        <Button.ToolTip>
+            <TextBlock Text="{Binding Location, StringFormat='Location: {0}'}"/>
+        </Button.ToolTip>
         <Grid Width="14"
               Height="14">
             <Ellipse Width="3"
@@ -28,26 +31,47 @@
                      Fill="{DynamicResource BlackBrush}"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Center">
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="Ellipse.Loaded">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity"
-                                                               Duration="0:0:3"
-                                                               RepeatBehavior="Forever">
-                                    <DoubleAnimationUsingKeyFrames.KeyFrames>
-                                        <DoubleKeyFrameCollection>
-                                            <DiscreteDoubleKeyFrame KeyTime="0:0:0"
-                                                                    Value="1" />
-                                            <DiscreteDoubleKeyFrame KeyTime="0:0:2.5"
-                                                                    Value="0" />
-                                        </DoubleKeyFrameCollection>
-                                    </DoubleAnimationUsingKeyFrames.KeyFrames>
-                                </DoubleAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Ellipse.Triggers>
+                <Ellipse.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLocationLocked}"
+                                         Value="False">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity"
+                                                                           Duration="0:0:2"
+                                                                           RepeatBehavior="Forever">
+                                                <DoubleAnimationUsingKeyFrames.KeyFrames>
+                                                    <DoubleKeyFrameCollection>
+                                                        <DiscreteDoubleKeyFrame KeyTime="0:0:0"
+                                                                                Value="1" />
+                                                        <DiscreteDoubleKeyFrame KeyTime="0:0:1"
+                                                                                Value="0" />
+                                                    </DoubleKeyFrameCollection>
+                                                </DoubleAnimationUsingKeyFrames.KeyFrames>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                                                <DoubleAnimationUsingKeyFrames.KeyFrames>
+                                                    <DoubleKeyFrameCollection>
+                                                        <DiscreteDoubleKeyFrame KeyTime="0:0:0"
+                                                                                Value="1" />
+                                                    </DoubleKeyFrameCollection>
+                                                </DoubleAnimationUsingKeyFrames.KeyFrames>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Ellipse.Style>
             </Ellipse>
             <Rectangle Width="14"
                        Height="14">
