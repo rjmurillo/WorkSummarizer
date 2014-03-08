@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Extensibility;
-using WorkSummarizerGUI.Commands;
+using GalaSoft.MvvmLight.Command;
 
 namespace WorkSummarizerGUI.ViewModels
 {
@@ -17,7 +14,7 @@ namespace WorkSummarizerGUI.ViewModels
         {
             Name = name;
             Settings = configurationService.Settings.Select(p => new ConfigurationSettingViewModel(p)).ToList();
-            RevertToDefaultCommand = new RelayCommand(() => { foreach (var setting in Settings) { setting.RevertToDefaultCommand.Execute(null); } });
+            RevertToDefaultCommand = new RelayCommand(() => { foreach (var setting in Settings) { setting.RevertToDefaultCommand.Execute(null); } }, () => Settings.Any(p => p.RevertToDefaultCommand.CanExecute(null)));
         }
 
         public string Name { get; private set; }
@@ -39,7 +36,7 @@ namespace WorkSummarizerGUI.ViewModels
         {
             m_setting = setting;
             setting.ValueChanged += (sender, args) => OnPropertyChanged("Value");
-            RevertToDefaultCommand = new RelayCommand(() => Value = DefaultValue);
+            RevertToDefaultCommand = new RelayCommand(() => Value = DefaultValue, () => Value != DefaultValue);
         }
 
         public string DefaultValue
