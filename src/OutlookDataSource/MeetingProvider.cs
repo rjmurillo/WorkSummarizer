@@ -23,7 +23,7 @@ namespace DataSources.Outlook
             calendarItems.IncludeRecurrences = true;
 
             var filter = "[Start] >= \"" + startFilterDate.ToShortDateString() + "\" and [Start] <=\"" +
-                         endFilterDate.ToString(CultureInfo.CurrentUICulture) + "\"";
+                         endFilterDate.ToShortDateString() + "\"";
 
             var item = calendarItems.Find(filter);
 
@@ -63,7 +63,7 @@ namespace DataSources.Outlook
                     body ?? string.Empty, 
                     appointmentItem.StartUTC,
                     appointmentItem.EndUTC,
-                    appointmentItem.Recipients.Cast<Recipient>().Select(x => x.Name)));
+                    appointmentItem.Recipients.Cast<Recipient>().Select(x => x.Name).ToList()));
 
                 try
                 {

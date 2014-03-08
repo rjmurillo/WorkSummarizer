@@ -20,7 +20,7 @@ namespace DataSources.Outlook
                 mapiNamespace.GetDefaultFolder(OlDefaultFolders.olFolderSentMail);
 
             var filter = "[SentOn] >= \"" + startDateUtc.ToShortDateString() + "\" and [SentOn] <=\"" +
-                         endDateUtc.ToString(CultureInfo.CurrentUICulture) + "\"";
+                         endDateUtc.ToShortDateString() + "\"";
 
             Items restrictedItems = emailSentFolder.Items.Restrict(filter);
 
@@ -47,7 +47,8 @@ namespace DataSources.Outlook
                                 mail.CreationTime,
                                 mail.Recipients.Cast<Recipient>()
                                     .Select(x => x.Name)
-                                    .Union(new[] {mail.Sender != null ? mail.Sender.Name : null})));
+                                    .Union(new[] {mail.Sender != null ? mail.Sender.Name : null})
+                                    .ToList()));
                         }
                         catch (COMException e)
                         {
