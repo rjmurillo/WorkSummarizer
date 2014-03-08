@@ -20,6 +20,8 @@ using WorkSummarizerGUI.Models;
 
 namespace WorkSummarizerGUI.ViewModels
 {
+    using System.Threading;
+
     public class CreateReportViewModel : ViewModelBase
     {
         private readonly IEnumerable<ServiceViewModel> m_eventSources;
@@ -37,6 +39,7 @@ namespace WorkSummarizerGUI.ViewModels
         private DateTime m_startLocalTime;
         private int m_progressPercentage;
         private string m_progressStatus;
+        private bool m_isParallelProcessingEnabled = false; //  TODO toggle when UI supports displaying a blast of multiple notifications
 
         public CreateReportViewModel(
             IDictionary<ServiceRegistration, IEventQueryService> eventQueryServices, 
@@ -189,6 +192,8 @@ namespace WorkSummarizerGUI.ViewModels
 
         private class ProcessingResult
         {
+            public ServiceRegistration EventSourceService { get; set; }
+
             public IEnumerable<Event> Events { get; set; }
 
             public IDictionary<string, int> WeightedTags { get; set; }
@@ -252,17 +257,91 @@ namespace WorkSummarizerGUI.ViewModels
 
                         var progressIncrement = 100 / Math.Max(totalProgressSteps, 1);
                         var processingResults = new List<ProcessingResult>();
+
+                        var cancelSource = new CancellationTokenSource();
+                        var tf = new TaskFactory();
+                        var taskList = new List<Task>();
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
-                            var result = ProcessResult(eventQueryServiceRegistration, uiDispatcher, selectedStartLocalTime, selectedEndLocalTime, progressIncrement, selectedIsGeneratePerSourceEnabled, renderServiceRegistrations);
-
-                            if (result.Exception != null)
+                            if (m_isParallelProcessingEnabled)
                             {
-                                m_messenger.Send(result.Exception);
-                                return;
-                            }
+                                var task = tf.StartNew(() =>
+                                                       {
+                                                           if (cancelSource.IsCancellationRequested)
+                                                           {
+                                                               return;
+                                                           }
 
-                            processingResults.Add(result);
+                                                           var result = ProcessResult(eventQueryServiceRegistration,
+                                                               uiDispatcher, selectedStartLocalTime,
+                                                               selectedEndLocalTime, progressIncrement);
+
+                                                           if (result.Exception != null)
+                                                           {
+                                                               m_messenger.Send(result.Exception);
+                                                               cancelSource.Cancel();
+                                                               return;
+                                                           }
+
+                                                           processingResults.Add(result);
+                                                       }, cancelSource.Token);
+
+                                taskList.Add(task);
+                            }
+                            else
+                            {
+                                var result = ProcessResult(eventQueryServiceRegistration,
+                                                               uiDispatcher, selectedStartLocalTime,
+                                                               selectedEndLocalTime, progressIncrement);
+
+                                if (result.Exception != null)
+                                {
+                                    m_messenger.Send(result.Exception);
+                                    cancelSource.Cancel();
+                                    return;
+                                }
+
+                                processingResults.Add(result);
+                            }
+                        }
+
+                        Task.WaitAll(taskList.ToArray());
+
+                        if (cancelSource.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
+
+                        if (selectedIsGeneratePerSourceEnabled)
+                        {
+                            foreach (var result in processingResults)
+                            {
+                                foreach (var render in renderServiceRegistrations)
+                                {
+                                    KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
+                                    currentActivity = String.Format("Rendering data for {0} - {1} with {2} - {3}...",
+                                        result.EventSourceService.Family,
+                                        result.EventSourceService.Name, render1.Key.Family, render1.Key.Name);
+                                    uiDispatcher.Invoke(
+                                        () => { ProgressStatus = String.Format("{0}...", currentActivity); });
+
+                                    Action renderEventsDelegate =
+                                        () =>
+                                            render1.Value.Render(result.EventSourceService.Id, selectedStartLocalTime,
+                                                (selectedEndLocalTime.AddDays(1).AddTicks(-1)), result.Events, result.WeightedTags,
+                                                result.WeightedPeople,
+                                                result.ImportantSentences);
+                                    if (render.Key.InvokeOnShellDispatcher)
+                                    {
+                                        uiDispatcher.Invoke(renderEventsDelegate);
+                                    }
+                                    else
+                                    {
+                                        renderEventsDelegate();
+                                    }
+                                }
+                            }
                         }
 
                         if (selectedIsGeneratePerSummaryEnabled)
@@ -329,9 +408,12 @@ namespace WorkSummarizerGUI.ViewModels
             }
         }
 
-        private ProcessingResult ProcessResult(KeyValuePair<ServiceRegistration, IEventQueryService> eventQueryServiceRegistration, Dispatcher uiDispatcher,
-            DateTime selectedStartLocalTime, DateTime selectedEndLocalTime, int progressIncrement,
-            bool selectedIsGeneratePerSourceEnabled, IEnumerable<KeyValuePair<ServiceRegistration, IRenderEvents>> renderServiceRegistrations)
+        private ProcessingResult ProcessResult(
+            KeyValuePair<ServiceRegistration, IEventQueryService> eventQueryServiceRegistration, 
+            Dispatcher uiDispatcher,
+            DateTime selectedStartLocalTime, 
+            DateTime selectedEndLocalTime, 
+            int progressIncrement)
         {
             KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
             var currentActivity = String.Format("Pulling data for {0} - {1}", registration1.Key.Family, registration1.Key.Name);
@@ -391,35 +473,10 @@ namespace WorkSummarizerGUI.ViewModels
                 var nouns = textProc.GetNouns(sb.ToString());
                 IDictionary<string, int> weightedTags = textProc.GetNouns(sb.ToString());
                 IEnumerable<string> importantSentences = textProc.GetImportantEvents(evts.Select(x => x.Text), nouns);
-
-                if (selectedIsGeneratePerSourceEnabled)
-                {
-                    foreach (var render in renderServiceRegistrations)
-                    {
-                        KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
-                        currentActivity = String.Format("Rendering data for {0} - {1} with {2} - {3}...", registration1.Key.Family,
-                            registration1.Key.Name, render1.Key.Family, render1.Key.Name);
-                        uiDispatcher.Invoke(() => { ProgressStatus = String.Format("{0}...", currentActivity); });
-
-                        KeyValuePair<ServiceRegistration, IEventQueryService> registration = eventQueryServiceRegistration;
-                        Action renderEventsDelegate =
-                            () =>
-                                render1.Value.Render(registration.Key.Id, selectedStartLocalTime,
-                                    (selectedEndLocalTime.AddDays(1).AddTicks(-1)), evts, weightedTags, weightedPeople,
-                                    importantSentences);
-                        if (render.Key.InvokeOnShellDispatcher)
-                        {
-                            uiDispatcher.Invoke(renderEventsDelegate);
-                        }
-                        else
-                        {
-                            renderEventsDelegate();
-                        }
-                    }
-                }
-
+                
                 var result = new ProcessingResult
                 {
+                    EventSourceService = registration1.Key,
                     Events = evts,
                     ImportantSentences = importantSentences,
                     WeightedPeople = weightedPeople,
@@ -432,7 +489,7 @@ namespace WorkSummarizerGUI.ViewModels
             catch (AggregateException ex)
             {
                 Trace.WriteLine("Aggregate inner exception: " + ex.InnerException);
-                return new ProcessingResult { Exception = new ExceptionMessage(ex, currentActivity)};
+                return new ProcessingResult { Exception = new ExceptionMessage(ex.InnerException, currentActivity)};
             }
             catch (Exception ex)
             {
