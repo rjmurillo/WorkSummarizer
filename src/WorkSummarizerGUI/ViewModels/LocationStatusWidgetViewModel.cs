@@ -82,7 +82,7 @@ namespace WorkSummarizerGUI.ViewModels
                                     continue;
                                 }
 
-                                m_dispatcher.Invoke(() => { IsLocationLocked = true; Location = "Gateway " + outputColumns[1]; });
+                                m_dispatcher.Invoke(() => { IsLocationLocked = true; Location = "Gateway " + outputColumns[1].Replace('-', ':').ToUpperInvariant() + " (" + gatewayIp4Address + ")"; });
                                 return;
                             }
                         }

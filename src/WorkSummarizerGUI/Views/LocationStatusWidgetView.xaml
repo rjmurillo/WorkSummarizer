@@ -26,8 +26,8 @@
         </Button.ToolTip>
         <Grid Width="14"
               Height="14">
-            <Ellipse Width="3"
-                     Height="3"
+            <Ellipse Width="5"
+                     Height="5"
                      Fill="{DynamicResource BlackBrush}"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Center">
