@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Microsoft.TeamFoundation;
 using Microsoft.TeamFoundation.Client;
 
 namespace Events.TeamFoundationServer
@@ -21,16 +23,24 @@ namespace Events.TeamFoundationServer
             TfsTeamProjectCollection projectCollection =
                 TfsTeamProjectCollectionFactory.GetTeamProjectCollection(TeamFoundationServer);
 
-            var identities = new[]
+            try
             {
-                projectCollection.TeamFoundationServer.AuthenticatedUserIdentity.AccountName,
-                projectCollection.TeamFoundationServer.AuthenticatedUserIdentity.DisplayName,
-                projectCollection.TeamFoundationServer.AuthenticatedUserDisplayName,
-                projectCollection.TeamFoundationServer.AuthenticatedUserName,
-                alias
-            };
+                var identities = new[]
+                {
+                    projectCollection.TeamFoundationServer.AuthenticatedUserIdentity.AccountName,
+                    projectCollection.TeamFoundationServer.AuthenticatedUserIdentity.DisplayName,
+                    projectCollection.TeamFoundationServer.AuthenticatedUserDisplayName,
+                    projectCollection.TeamFoundationServer.AuthenticatedUserName,
+                    alias
+                };
 
-            return PullEvents(startDateTime, stopDateTime, e => e.Participants.Any(s => identities.Contains(s.Value.Alias, StringComparer.OrdinalIgnoreCase)));
+                return PullEvents(startDateTime, stopDateTime, e => e.Participants.Any(s => identities.Contains(s.Value.Alias, StringComparer.OrdinalIgnoreCase)));
+            }
+            catch (TeamFoundationServerUnauthorizedException)
+            {
+                Trace.WriteLine("TFS server failed authentication");
+                return Enumerable.Empty<Event>();
+            }
         }
     }
 }
