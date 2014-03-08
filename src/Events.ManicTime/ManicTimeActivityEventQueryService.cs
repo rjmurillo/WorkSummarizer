@@ -1,27 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
 using DataSources.ManicTime;
 using DataSources.Who;
 using Extensibility;
 
 namespace Events.ManicTime
 {
-    public class ManicTimeActivityEventQueryService : EventQueryServiceBase
-    {
-        private readonly IConfigurationService m_configurationService;
+    using System.IO;
 
-        public ManicTimeActivityEventQueryService(IConfigurationService configurationService)
+    public class ManicTimeActivityEventQueryService : EventQueryServiceBase, IConfigurable
+    {
+        private readonly IDictionary<string, ConfigurationSetting> m_settings;
+
+        public ManicTimeActivityEventQueryService()
         {
-            m_configurationService = configurationService;
+            var manicTimeDbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "..\\Local\\Finkit\\ManicTime");
+            if (!Directory.Exists(manicTimeDbPath))
+            {
+                manicTimeDbPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            }
+
+            var manicTimeDbFile = Path.Combine(manicTimeDbPath, "ManicTime.sdf");
+            m_settings = new[]
+            {
+                new ConfigurationSetting(ManicTimeSettingConstants.ActivitiesDatabaseFile, manicTimeDbFile) 
+                { 
+                    Name = "Database File Location", 
+                    Description = "Path to the *.sdf database." 
+                }
+            }.ToDictionary(p => p.Key);
         }
+
+        public IEnumerable<ConfigurationSetting> Settings { get { return m_settings.Values; } }
 
         public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event,bool> predicate)
         {
-            var m = new ManicTimeDataProvider(m_configurationService.GetValueOrDefault(ManicTimeSettingConstants.ActivitiesDatabaseFile));
+            var m = new ManicTimeDataProvider(m_settings[ManicTimeSettingConstants.ActivitiesDatabaseFile].Value);
 
             var retval = m.PullData(startDateTime, stopDateTime).Select(p => 
             {

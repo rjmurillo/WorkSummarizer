@@ -30,12 +30,59 @@ namespace WorkSummarizer
                 Console.WriteLine("Loading " + pluginType.FullName);
                 try
                 {
-                    Activator.CreateInstance(pluginType, this);
+                    var pluginContext = new PluginContext(pluginType.FullName, this);
+                    Activator.CreateInstance(pluginType, pluginContext);
                 }
                 catch (Exception ex)
                 {
                     Debug.Fail(ex.ToString());
                     Trace.WriteLine(ex);
+                }
+            }
+        }
+    }
+
+    internal class PluginContext : IPluginContext
+    {
+        private readonly string id;
+        private readonly IPluginRuntime pluginRuntime;
+
+        public PluginContext(string id, IPluginRuntime pluginRuntime)
+        {
+            this.id = id;
+            this.pluginRuntime = pluginRuntime;
+        }
+
+        public string Id
+        {
+            get { return this.id; }
+        }
+
+        public void RegisterService(ISet<Type> serviceTypes, object service, ServiceRegistration registration)
+        {
+            foreach (var serviceType in serviceTypes)
+            {
+                if (!serviceType.IsInstanceOfType(service))
+                {
+                    throw new InvalidOperationException("Invalid service registration type mapping");
+                }
+
+                // TODO revise "shared" interfaces - probably use FullName keys?
+                if (serviceType.IsAssignableFrom(typeof (IEventQueryService)))
+                {
+                    pluginRuntime.EventQueryServices[registration] = service as IEventQueryService;
+                }
+
+                if (serviceType.IsAssignableFrom(typeof(IRenderEvents)))
+                {
+                    pluginRuntime.RenderEventServices[registration] = service as IRenderEvents;
+                }
+
+                if (service is IConfigurable)
+                {
+                    registration.IsConfigurable = true;
+                    var configurableService = service as IConfigurable;
+                    pluginRuntime.ConfigurationServices[registration] = new DefaultConfigurationService(configurableService.Settings);
                 }
             }
         }

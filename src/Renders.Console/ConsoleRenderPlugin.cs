@@ -4,9 +4,9 @@ namespace Renders.Console
 {
     public class ConsoleRenderPlugin
     {
-        public ConsoleRenderPlugin(IPluginRuntime pluginRuntime)
+        public ConsoleRenderPlugin(IPluginContext pluginContext)
         {
-            pluginRuntime.RenderEventServices[new ServiceRegistration("Console", "Console", "Console")] = new ConsoleWriteEvents();
+            pluginContext.RegisterService<IRenderEvents>(new ConsoleWriteEvents(), new ServiceRegistration("Console", "Console", "Console"));
         }
     }
 }

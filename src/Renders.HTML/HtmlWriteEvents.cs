@@ -30,14 +30,24 @@ namespace Renders.HTML
         }
     }
 
-    public class HtmlWriteEvents : IRenderEvents
+    public class HtmlWriteEvents : IRenderEvents, IConfigurable
     {
-        private readonly IConfigurationService m_configurationService;
-
-        public HtmlWriteEvents(IConfigurationService configurationService)
+        private readonly IDictionary<string, ConfigurationSetting> m_settings;
+ 
+        public HtmlWriteEvents()
         {
-            m_configurationService = configurationService;
+            m_settings = new[]
+                         {
+                             new ConfigurationSetting(HtmlRenderSettingConstants.OutputDirectory,
+                                 Directory.GetCurrentDirectory())
+                             {
+                                 Name = "Output Directory",
+                                 Description = "Location where output should be generated."
+                             }
+                         }.ToDictionary(p => p.Key);
         }
+        
+        public IEnumerable<ConfigurationSetting> Settings { get { return m_settings.Values; } }
 
         private static string LoadResource(string name)
         {
@@ -214,7 +224,7 @@ namespace Renders.HTML
                 jsMain + jsOther);
 
             string fileName = string.Format("WorkSummarizer_{0}.html", eventType);
-            fileName = Path.Combine(m_configurationService.GetValueOrDefault(HtmlRenderSettingConstants.OutputDirectory), fileName);
+            fileName = Path.Combine(m_settings[HtmlRenderSettingConstants.OutputDirectory].Value, fileName);
             File.WriteAllText(fileName, htmlFinal);
             Process.Start(fileName);
 

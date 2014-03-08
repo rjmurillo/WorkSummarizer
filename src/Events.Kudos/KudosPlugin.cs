@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Extensibility;
+﻿using Extensibility;
 
 namespace Events.Kudos
 {
     public class KudosPlugin
     {
-        public KudosPlugin(IPluginRuntime pluginRuntime)
+        public KudosPlugin(IPluginContext pluginContext)
         {
-            pluginRuntime.EventQueryServices[new ServiceRegistration("Kudos.Received", "Kudos", "Received")] = new KudosReceivedEventQueryService();
+            pluginContext.RegisterService<IEventQueryService>(new KudosReceivedEventQueryService(), new ServiceRegistration("Kudos.Received", "Kudos", "Received"));
         }
     }
 }

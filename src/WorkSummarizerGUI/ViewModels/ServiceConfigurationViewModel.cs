@@ -9,6 +9,8 @@ using WorkSummarizerGUI.Commands;
 
 namespace WorkSummarizerGUI.ViewModels
 {
+    using WorkSummarizer;
+
     public class ServiceConfigurationViewModel : ViewModelBase
     {
         public ServiceConfigurationViewModel(string name, IConfigurationService configurationService)

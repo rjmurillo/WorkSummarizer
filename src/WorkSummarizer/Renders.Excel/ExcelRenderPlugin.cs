@@ -4,9 +4,9 @@ namespace Renders.Excel
 {
     public class ExcelRenderPlugin
     {
-        public ExcelRenderPlugin(IPluginRuntime pluginRuntime)
+        public ExcelRenderPlugin(IPluginContext pluginContext)
         {
-            pluginRuntime.RenderEventServices[new ServiceRegistration("Excel", "Excel", "Spreadsheet")] = new ExcelWriteEvents();
+            pluginContext.RegisterService<IRenderEvents>(new ExcelWriteEvents(), new ServiceRegistration("Excel", "Excel", "Spreadsheet"));
         }
     }
 }

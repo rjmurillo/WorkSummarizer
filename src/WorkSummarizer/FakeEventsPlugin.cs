@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
 using Extensibility;
 
 namespace Events
 {
     public class FakeEventsPlugin
     {
-        public FakeEventsPlugin(IPluginRuntime pluginRuntime)
+        public FakeEventsPlugin(IPluginContext pluginContext)
         {
-            pluginRuntime.EventQueryServices[new ServiceRegistration("Fake", "Fake", "Random series")] = new FakeEventsQueryService();
+            pluginContext.RegisterService<IEventQueryService>(new FakeEventsQueryService(), new ServiceRegistration("Fake", "Fake", "Random series"));
         }
 
         private class FakeEventsQueryService : IEventQueryService

@@ -4,9 +4,9 @@ namespace Events.Yammer
 {
     public class YammerPlugin
     {
-        public YammerPlugin(IPluginRuntime pluginRuntime)
+        public YammerPlugin(IPluginContext pluginContext)
         {
-            pluginRuntime.EventQueryServices[new ServiceRegistration("Yammer.SentMessages", "Yammer", "Sent messages") { InvokeOnShellDispatcher = true }] = new YammerEventsQueryService();
+            pluginContext.RegisterService<IEventQueryService>(new YammerEventsQueryService(), new ServiceRegistration("Yammer.SentMessages", "Yammer", "Sent messages") { InvokeOnShellDispatcher = true });
         }
     }
 }

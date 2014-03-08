@@ -39,8 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IConfigurationService.cs" />
-    <Compile Include="IPluginRuntime.cs" />
+    <Compile Include="IConfigurable.cs" />
+    <Compile Include="IPluginContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceRegistration.cs" />
   </ItemGroup>

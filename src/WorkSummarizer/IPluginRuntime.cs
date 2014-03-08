@@ -5,6 +5,8 @@ using Renders;
 
 namespace Extensibility
 {
+    using WorkSummarizer;
+
     // REVIEW expose service resolution... e.g. to read configuration
     public interface IPluginRuntime
     {

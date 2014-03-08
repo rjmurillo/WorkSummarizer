@@ -4,10 +4,8 @@ using System.Linq;
 using Common;
 using DataSources.TeamFoundationServer;
 using DataSources.Who;
-using Extensibility;
 using Graph;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using WorkSummarizer.TeamFoundationServerDataSource;
 
 namespace Events.TeamFoundationServer
 {
@@ -15,10 +13,10 @@ namespace Events.TeamFoundationServer
     {
         private readonly string m_skipWorkItemWhenHistoryContainsText;
 
-        public WorkItemEventsQueryServiceInternal(Uri teamFoundationServerUri, string projectName, IConfigurationService configurationService)
+        public WorkItemEventsQueryServiceInternal(Uri teamFoundationServerUri, string projectName, string skipWorkItemWhenHistoryContainsText)
             :base(teamFoundationServerUri, projectName)
         {
-            m_skipWorkItemWhenHistoryContainsText = configurationService.GetValueOrDefault(TeamFoundationServerSettingConstants.WorkItemSkipWhenHistoryContains);
+            m_skipWorkItemWhenHistoryContainsText = skipWorkItemWhenHistoryContainsText;
         }
 
         public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime endDateTime, Func<Event, bool> predicate)
