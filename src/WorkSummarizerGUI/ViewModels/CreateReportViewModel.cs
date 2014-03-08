@@ -187,6 +187,17 @@ namespace WorkSummarizerGUI.ViewModels
             get { return "v" + Assembly.GetExecutingAssembly().GetName().Version; }
         }
 
+        private class ProcessingResult
+        {
+            public IEnumerable<Event> Events { get; set; }
+
+            public IDictionary<string, int> WeightedTags { get; set; }
+
+            public IDictionary<string, int> WeightedPeople { get; set; } 
+
+            public IEnumerable<string> ImportantSentences { get; set; }
+        }
+
         public async Task GenerateAsync()
         {
             var selectedEventSourceIds = EventSources.Where(p => p.IsSelected)
@@ -223,12 +234,7 @@ namespace WorkSummarizerGUI.ViewModels
                         var renderServiceRegistrations =
                             m_renderServices
                                 .Where(p => selectedReportingSinkTypes.Contains(p.Key.Id));
-
-                        var summaryEvents = new List<Event>();
-                        var summaryWeightedTags = new ConcurrentDictionary<string, int>();
-                        var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
-                        var summaryImportantSentences = new List<string>();
-
+                        
                         var eventQueryServiceRegistrationsCount = eventQueryServiceRegistrations.Count();
                         var totalProgressSteps = eventQueryServiceRegistrationsCount;
 
@@ -243,6 +249,7 @@ namespace WorkSummarizerGUI.ViewModels
                         }
 
                         var progressIncrement = 100 / Math.Max(totalProgressSteps, 1);
+                        var processingResults = new List<ProcessingResult>();
                         foreach (var eventQueryServiceRegistration in eventQueryServiceRegistrations)
                         {
                             KeyValuePair<ServiceRegistration, IEventQueryService> registration1 = eventQueryServiceRegistration;
@@ -315,26 +322,39 @@ namespace WorkSummarizerGUI.ViewModels
                                 }
                             }
 
-                            summaryEvents.AddRange(evts);
-                            foreach (var weightedTagEntry in weightedTags)
-                            {
-                                summaryWeightedTags.AddOrUpdate(weightedTagEntry.Key, weightedTagEntry.Value,
-                                    (s, i) => i + weightedTagEntry.Value);
-                            }
-
-                            foreach (var weightedPersonEntry in weightedPeople)
-                            {
-                                summaryWeightedPeople.AddOrUpdate(weightedPersonEntry.Key, weightedPersonEntry.Value,
-                                    (s, i) => i + weightedPersonEntry.Value);
-                            }
-
-                            summaryImportantSentences.AddRange(importantSentences);
-
+                            var result = new ProcessingResult{Events = evts, ImportantSentences = importantSentences, WeightedPeople = weightedPeople, WeightedTags = weightedTags };
+                            
                             uiDispatcher.Invoke(() => { ProgressPercentage += progressIncrement; });
+
+                            processingResults.Add(result);
                         }
 
                         if (selectedIsGeneratePerSummaryEnabled)
                         {
+                            var summaryEvents = new List<Event>();
+                            var summaryWeightedTags = new ConcurrentDictionary<string, int>();
+                            var summaryWeightedPeople = new ConcurrentDictionary<string, int>();
+                            var summaryImportantSentences = new List<string>();
+
+                            foreach (var result in processingResults)
+                            {
+                                summaryEvents.AddRange(result.Events);
+
+                                foreach (var weightedTagEntry in result.WeightedTags)
+                                {
+                                    summaryWeightedTags.AddOrUpdate(weightedTagEntry.Key, weightedTagEntry.Value,
+                                        (s, i) => i + weightedTagEntry.Value);
+                                }
+
+                                foreach (var weightedPersonEntry in result.WeightedPeople)
+                                {
+                                    summaryWeightedPeople.AddOrUpdate(weightedPersonEntry.Key, weightedPersonEntry.Value,
+                                        (s, i) => i + weightedPersonEntry.Value);
+                                }
+
+                                summaryImportantSentences.AddRange(result.ImportantSentences);
+                            }
+
                             foreach (var render in renderServiceRegistrations)
                             {
                                 KeyValuePair<ServiceRegistration, IRenderEvents> render1 = render;
