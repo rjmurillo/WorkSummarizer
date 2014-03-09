@@ -20,6 +20,7 @@ using WorkSummarizerGUI.Models;
 
 namespace WorkSummarizerGUI.ViewModels
 {
+    using System.Deployment.Application;
     using System.Threading;
 
     public class CreateReportViewModel : ViewModelBase
@@ -187,7 +188,17 @@ namespace WorkSummarizerGUI.ViewModels
 
         public string Version
         {
-            get { return "v" + Assembly.GetExecutingAssembly().GetName().Version; }
+            get
+            {
+                if (ApplicationDeployment.IsNetworkDeployed)
+                {
+                    return "v" + ApplicationDeployment.CurrentDeployment.CurrentVersion + "D";
+                }
+                else
+                {
+                    return "v" + Assembly.GetExecutingAssembly().GetName().Version;   
+                }
+            }
         }
 
         private class ProcessingResult
