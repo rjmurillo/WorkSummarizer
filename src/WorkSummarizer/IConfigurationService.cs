@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using Extensibility;
 
@@ -48,29 +49,41 @@
         public FileConfigurationService(IEnumerable<ConfigurationSetting> defaultConfiguration) 
             : base(defaultConfiguration)
         {
-            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None); 
-            
-            foreach (var defaultSetting in defaultConfiguration)
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WorkSummarizer", "v1");
+            try
             {
-                var fileConfig = configuration.AppSettings.Settings[defaultSetting.Key];
-                if (fileConfig != null)
-                {
-                    defaultSetting.Value = fileConfig.Value;
-                }
+                var configFile = Path.Combine(path, "Global");
+                Directory.CreateDirectory(path);
+                File.WriteAllText(configFile, string.Empty); // needs a file to base config off of? there's probably a better api.
+                var configuration = ConfigurationManager.OpenExeConfiguration(configFile);
 
-                defaultSetting.ValueChanged += (sender, args) =>
-                                               {
-                                                   try
-                                                   {
-                                                       configuration.AppSettings.Settings.Remove(defaultSetting.Key);
-                                                       configuration.AppSettings.Settings.Add(defaultSetting.Key, defaultSetting.Value);
-                                                       configuration.Save(ConfigurationSaveMode.Modified);
-                                                   }
-                                                   catch (ConfigurationErrorsException ex)
-                                                   {
-                                                       Trace.WriteLine(ex);
-                                                   }
-                                               };
+                foreach (var defaultSetting in defaultConfiguration)
+                {
+                    var fileConfig = configuration.AppSettings.Settings[defaultSetting.Key];
+                    if (fileConfig != null)
+                    {
+                        defaultSetting.Value = fileConfig.Value;
+                    }
+
+                    defaultSetting.ValueChanged += (sender, args) =>
+                    {
+                        try
+                        {
+                            configuration.AppSettings.Settings.Remove(defaultSetting.Key);
+                            configuration.AppSettings.Settings.Add(defaultSetting.Key, defaultSetting.Value);
+                            configuration.Save(ConfigurationSaveMode.Modified);
+                        }
+                        catch (ConfigurationErrorsException ex)
+                        {
+                            Trace.WriteLine(ex);
+                        }
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                // oh wells, configuration is broken
+                Trace.WriteLine(ex);   
             }
         }
     }

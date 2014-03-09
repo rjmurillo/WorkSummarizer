@@ -39,7 +39,7 @@ namespace Renders.HTML
             m_settings = new[]
                          {
                              new ConfigurationSetting(HtmlRenderSettingConstants.OutputDirectory,
-                                 Directory.GetCurrentDirectory())
+                                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
                              {
                                  Name = "Output Directory",
                                  Description = "Location where output should be generated."
