@@ -199670,13 +199670,13 @@ function addPerson(room, alias, offsetX, offsetY)
 		fill = "#ffff00";
 	}
 	
-	person.setAttribute("style", "stroke: black; opacity: 0.8; fill: " + fill);		
+	person.setAttribute("style", "stroke: black; opacity: 0.8; fill: " + fill);	
 	person.setAttribute("r", "3");
 	
 	var personInfluence = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 	personInfluence.setAttribute("cx", offsetX);
 	personInfluence.setAttribute("cy", offsetY);
-	personInfluence.setAttribute("style", "stroke: none; opacity: 0.15; fill: " + fill);		
+	personInfluence.setAttribute("style", "stroke: none; fill: red; opacity: 0.15");		
 	personInfluence.setAttribute("r", "20");
 	
 	var personTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
@@ -199736,13 +199736,3 @@ addPerson("1340FL", "a-juanga", -10, -8);
 </script>
 </body>
 </html>
-<!-- generated -->
-<script>
-scores["edkotows"] = 5;
-scores["jocarrie"] = 1;
-scores["rimuri"] = 1;
-scores["benb"] = 2;
-scores["mattwest"] = 3;
-scores["kalonj"] = 4;
-render();
-</script>
