@@ -34,7 +34,7 @@ namespace Renders.HTML
         public void Render(string eventType, DateTime startDateTime, DateTime endDateTime, IEnumerable<Event> events, IDictionary<string, int> weightedTags,
             IDictionary<string, int> weightedPeople, IEnumerable<string> importantSentences)
         {
-             weightedPeople = new Dictionary<string, int> { { "jocarrie", 5 }, { "edkotows", 8 }, { "benb", 1 }, { "rimuri", 500 }, { "alspiri", 5 }, { "mattwest", 5 }, };
+            // weightedPeople = new Dictionary<string, int> { { "jocarrie", 5 }, { "edkotows", 8 }, { "benb", 1 }, { "rimuri", 500 }, { "alspiri", 5 }, { "mattwest", 5 }, };
             var sb = new StringBuilder();
             sb.AppendLine("<script>");
             var orderedWeightedPeople = weightedPeople.OrderByDescending(p => p.Value).GroupBy(p => p.Value).ToList();
