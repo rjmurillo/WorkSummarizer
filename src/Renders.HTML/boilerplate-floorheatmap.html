@@ -1,3 +1,5 @@
+<!doctype html>  
+<!-- saved from url=(0014)about:internet -->  
 <html>
 <head>
 <title>
@@ -8,7 +10,7 @@ Floor plan
   <div id="div1">
   
 <svg xmlns="http://www.w3.org/2000/svg" 
-     viewBox="450 630 250 300" 
+     viewBox="450 430 400 480" 
 	 width="100%" 
      height="100%">
 	 
@@ -199585,9 +199587,14 @@ Floor plan
 //alert(document.getElementById("shape22068-65682").getElementsByTagName("*")[3].getAttribute("cx"))
 var scores = [];
 
-
-function addPerson(room, alias, offsetX, offsetY)
+function addGhostPerson(room, alias, offsetX, offsetY)
 {
+addPerson(room, alias, offsetX, offsetY, 0.4);
+}
+
+function addPerson(room, alias, offsetX, offsetY, opacity)
+{
+	opacity = typeof opacity !== 'undefined' ? opacity : 0.8;
 	var roomShapeId = "shape22068-65682";
 
 	// TODO mapping
@@ -199626,6 +199633,14 @@ function addPerson(room, alias, offsetX, offsetY)
 	else if (room === "1340FL")
 	{
 	roomShapeId = "shape22007-65523";
+	}
+	else if (room === "1801")
+	{
+	roomShapeId = "shape22104-65768";
+	}
+	else if (room === "1815FL")
+	{
+	roomShapeId = "shape22254-66156";
 	}
 
 	var roomShape = document.getElementById(roomShapeId);
@@ -199670,13 +199685,13 @@ function addPerson(room, alias, offsetX, offsetY)
 		fill = "#ffff00";
 	}
 	
-	person.setAttribute("style", "stroke: black; opacity: 0.8; fill: " + fill);	
+	person.setAttribute("style", "stroke: black; opacity: " + opacity + "; fill: " + fill);		
 	person.setAttribute("r", "3");
 	
 	var personInfluence = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 	personInfluence.setAttribute("cx", offsetX);
 	personInfluence.setAttribute("cy", offsetY);
-	personInfluence.setAttribute("style", "stroke: none; fill: red; opacity: 0.15");		
+	personInfluence.setAttribute("style", "stroke: none; opacity: 0.15; fill: " + fill);		
 	personInfluence.setAttribute("r", "20");
 	
 	var personTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
@@ -199756,6 +199771,57 @@ addPerson("1240FL", "chhugh", 12, -4);
 
 addPerson("1340FL", "a-juanga", -10, -8);
 addPerson("1340FL", "kerrida", -4, -2);
+
+<!-- 2013 seating plan -->
+addGhostPerson("1801", "cdockter", -16, -48);
+addGhostPerson("1801", "drwill", 15, -70);
+addGhostPerson("1801", "edkotows", -10, -54);
+addGhostPerson("1801", "eyodeme", -7, -39);
+addGhostPerson("1801", "gmpacko", 31, -34);
+addGhostPerson("1801", "jocarrie", -4, -60);
+addGhostPerson("1801", "keshavt", 6, -52);
+addGhostPerson("1801", "paulgo", 33, -68);
+addGhostPerson("1801", "rajshres", -20, -40);
+addGhostPerson("1801", "riche", -14, -34);
+addGhostPerson("1801", "ryanvog", 2, -66);
+addGhostPerson("1801", "stephpic", 0, -46);
+addGhostPerson("1801", "yaolu", 33, -41);
+
+addGhostPerson("1801", "briapu", 6, -10);
+addGhostPerson("1801", "jacobt", -3, -18);
+addGhostPerson("1801", "micli", -8, -10);
+addGhostPerson("1801", "v-anlava", 33, -54);
+addGhostPerson("1801", "v-tarat", 22, -41);
+
+addGhostPerson("1801", "danicole", -50, -14);
+addGhostPerson("1801", "leechen", -45, -9);
+addGhostPerson("1801", "lgolding", -40, -24);
+addGhostPerson("1801", "pkaranth", -34, -18);
+addGhostPerson("1801", "raymli", -28, -24);
+addGhostPerson("1801", "samch", -34, -30);
+addGhostPerson("1801", "vijayag", -40, -4);
+
+addGhostPerson("1801", "cshi", -66, 26);
+addGhostPerson("1801", "ericgu", -56, 26);
+addGhostPerson("1801", "geshurt", -54, -6);
+addGhostPerson("1801", "paveg", -66, 4);
+addGhostPerson("1801", "rudigerw", -52, 4);
+addGhostPerson("1801", "urosv", -62, -6);
+addGhostPerson("1801", "yanglu", -66, 12);
+
+addGhostPerson("1801", "chhugh", -46, 26);
+addGhostPerson("1801", "rodcar", -16, 26);
+
+addGhostPerson("1815FL", "alspiri", -4, -8);
+addGhostPerson("1815FL", "benb", 14, -16);
+addGhostPerson("1815FL", "greglu", 14, -8);
+addGhostPerson("1815FL", "kalonj", -12, -8);
+addGhostPerson("1815FL", "ravk", -4, 6);
+addGhostPerson("1815FL", "rimuri", -12, 14);
+addGhostPerson("1815FL", "sriharip", -4, -16);
+addGhostPerson("1815FL", "sukhu", -12, 6);
+addGhostPerson("1815FL", "sunnyg", -4, 14);
+
 }
 </script>
 </body>
