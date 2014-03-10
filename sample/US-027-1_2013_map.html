@@ -199651,9 +199651,17 @@ function addPerson(room, alias, offsetX, offsetY)
 	
 	var fill = "#3300FF"
 	var score = this.scores[alias];
-	if(typeof score === "undefined" || score < 1)
+	if(typeof score === "undefined")
 	{
 		score = "0";
+	}
+	else if(score < 0)
+	{
+		fill = "#00FF00";
+	}
+	else if(score < 1)
+	{
+		fill = "#3300FF";
 	}
 	else if(score < 2)
 	{
