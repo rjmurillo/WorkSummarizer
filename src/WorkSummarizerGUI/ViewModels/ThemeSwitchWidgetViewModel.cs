@@ -7,7 +7,7 @@ namespace WorkSummarizerGUI.ViewModels
 {
     using GalaSoft.MvvmLight.Command;
 
-    public class ThemeSwitchWidgetViewModel : ViewModelBase
+    internal class ThemeSwitchWidgetViewModel : ViewModelBase
     {
         private readonly IThemeSwitchService m_themeSwitchService;
         private string m_accentText;

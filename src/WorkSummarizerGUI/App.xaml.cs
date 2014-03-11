@@ -32,6 +32,8 @@ namespace WorkSummarizerGUI
             var pluginRuntime = new PluginRuntime();
             pluginRuntime.Start(new[]
             {
+                typeof(ModernUserInterfacePlugin),
+
                 typeof(CodeFlowPlugin),
                 typeof(ConnectPlugin),
                 typeof(KudosPlugin),

@@ -92,6 +92,7 @@
     <Compile Include="Models\ExceptionMessage.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\ServiceConfigurationRequest.cs" />
+    <Compile Include="ModernUserInterfacePlugin.cs" />
     <Compile Include="Services\MahAppsModernThemeSwitchService.cs" />
     <Compile Include="ViewModels\ServiceConfigurationViewModel.cs" />
     <Compile Include="ViewModels\ServiceViewModel.cs" />

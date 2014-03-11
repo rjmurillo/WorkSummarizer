@@ -12,7 +12,7 @@ using Renders;
 
 namespace WorkSummarizerGUI.ViewModels
 {
-    public class ViewModelLocator
+    internal class ViewModelLocator
     {
         static ViewModelLocator()
         {
@@ -30,6 +30,11 @@ namespace WorkSummarizerGUI.ViewModels
                 SimpleIoc.Default.Register<ToastNotificationWidgetViewModel>();
                 SimpleIoc.Default.Register<UserWidgetViewModel>();
             }            
+        }
+
+        public static void RegisterService<T>(T instance) where T : class
+        {
+            SimpleIoc.Default.Register<T>(() => instance);
         }
 
         public CreateReportViewModel CreateReport
