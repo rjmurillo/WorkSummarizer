@@ -53,7 +53,7 @@ namespace Events.Outlook
                         x.Recipients.Select(IdentityUtility.Create).ToGraph()
                 }).ToList();
 
-            var includeOnlyAliases = new HashSet<string>(m_includeOnlyMeetingAliasesSetting.Value.Split(','), StringComparer.OrdinalIgnoreCase);
+            var includeOnlyAliases = new HashSet<string>(m_includeOnlyMeetingAliasesSetting.Value.Split(',').Select(p => p.Trim()), StringComparer.OrdinalIgnoreCase);
             if (includeOnlyAliases.Any())
             {
                 retval = retval.Where(p => p.Participants.Any(q => includeOnlyAliases.Contains(q.Value.Alias))).ToList();
