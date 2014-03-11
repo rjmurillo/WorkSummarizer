@@ -46,13 +46,13 @@
 
     internal class FileConfigurationService : MemoryConfigurationService
     {
-        public FileConfigurationService(IEnumerable<ConfigurationSetting> defaultConfiguration) 
+        public FileConfigurationService(string id, IEnumerable<ConfigurationSetting> defaultConfiguration) 
             : base(defaultConfiguration)
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WorkSummarizer", "v1");
             try
             {
-                var configFile = Path.Combine(path, "Global");
+                var configFile = Path.Combine(path, id);
                 Directory.CreateDirectory(path);
                 File.WriteAllText(configFile, string.Empty); // needs a file to base config off of? there's probably a better api.
                 var configuration = ConfigurationManager.OpenExeConfiguration(configFile);

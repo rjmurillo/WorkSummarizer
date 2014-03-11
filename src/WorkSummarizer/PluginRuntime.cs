@@ -82,7 +82,7 @@ namespace WorkSummarizer
                 {
                     registration.IsConfigurable = true;
                     var configurableService = service as IConfigurable;
-                    pluginRuntime.ConfigurationServices[registration] = new FileConfigurationService(configurableService.Settings);
+                    pluginRuntime.ConfigurationServices[registration] = new FileConfigurationService(registration.Id, configurableService.Settings);
                 }
             }
         }
