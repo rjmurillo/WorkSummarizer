@@ -2,6 +2,13 @@
 
 namespace Events.Outlook
 {
+    public class OutlookSettingConstants
+    {
+        public const string IncludeOnlyMailAliases = "Outlook.Mail.IncludeOnlyAliases";
+        public const string IncludeOnlyMeetingAliases = "Outlook.Meetings.IncludeOnlyAliases";
+        public const string IncludeOnlyConversationHistoryAliases = "Outlook.ConversationHistory.IncludeOnlyAliases";
+    }
+
     public class OutlookPlugin
     {
         public OutlookPlugin(IPluginContext pluginContext)

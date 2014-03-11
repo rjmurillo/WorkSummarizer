@@ -9,14 +9,32 @@ using Graph;
 
 namespace Events.Outlook
 {
-    public class OutlookEmailEventQueryService : EventQueryServiceBase
+    using Extensibility;
+
+    public class OutlookEmailEventQueryService : EventQueryServiceBase, IConfigurable
     {
         private readonly IDataPull<OutlookItem> m_outlookDataSource;
+        private readonly IDictionary<string, ConfigurationSetting> m_settings;
+
+        private readonly ConfigurationSetting m_includeOnlyMailAliasesSetting;
 
         public OutlookEmailEventQueryService()
         {
             m_outlookDataSource = new EmailProvider();
+
+             m_includeOnlyMailAliasesSetting = new ConfigurationSetting(OutlookSettingConstants.IncludeOnlyMailAliases, string.Empty)
+            {
+                Name = "Include Only From",
+                Description = "Mail not matching these comma-separated aliases will be excluded."
+            };
+
+            m_settings = new[]
+                         {
+                            m_includeOnlyMailAliasesSetting
+                         }.ToDictionary(p => p.Key);
         }
+
+        public IEnumerable<ConfigurationSetting> Settings { get { return m_settings.Values; } }
 
         public override IEnumerable<Event> PullEvents(DateTime startDateTime, DateTime stopDateTime, Func<Event, bool> predicate )
         {
@@ -32,6 +50,12 @@ namespace Events.Outlook
                     Participants =
                         x.Recipients.Select(IdentityUtility.Create).ToGraph()
                 }).ToList();
+
+            var includeOnlyAliases = new HashSet<string>(m_includeOnlyMailAliasesSetting.Value.Split(','), StringComparer.OrdinalIgnoreCase);
+            if (includeOnlyAliases.Any())
+            {
+                retval = retval.Where(p => p.Participants.Any(q => includeOnlyAliases.Contains(q.Value.Alias))).ToList();
+            }
 
             return (predicate != null) ? retval.Where(predicate) : retval;
         }

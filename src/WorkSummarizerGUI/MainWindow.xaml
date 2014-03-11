@@ -323,6 +323,7 @@
                                                                    Grid.ColumnSpan="2"
                                                                    Grid.Row="1"
                                                                    Text="{Binding Description, Mode=OneWay}"
+                                                                   TextWrapping="Wrap"
                                                                    VerticalAlignment="Center" />
 
                                                         <TextBox Grid.Column="0"
