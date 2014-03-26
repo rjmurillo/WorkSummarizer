@@ -56,8 +56,12 @@ namespace DataSources.Who
         public string ResolveDisplayName(string displayName)
         {
             var wsr = EnsurePeopleStoreSoapClient();
-            var f = wsr.FindPeopleByFuzzy(displayName);
-            var p = f.FirstOrDefault();
+            displayName = displayName.Trim(new[] {'\'', '\"', ' '});
+            IEnumerable<Person> f = wsr.FindPeopleByFuzzy(displayName);
+            f = f.OrderBy(q => q.Office, new BuildingPriorityComparer("27")); // prioritize office buildings...
+            var p = f.FirstOrDefault(q => q.Name.Equals(displayName, StringComparison.OrdinalIgnoreCase)) 
+                ?? (f.FirstOrDefault(q => q.Name.ToUpperInvariant().Contains(displayName.ToUpperInvariant())) 
+                ?? f.FirstOrDefault());
             if (p != null)
             {
                 return p.Alias;
@@ -82,6 +86,34 @@ namespace DataSources.Who
             
             
             return wsr;
+        }
+
+        private class BuildingPriorityComparer : IComparer<string>
+        {
+            private readonly string _priorityString;
+
+            public BuildingPriorityComparer(string priorityString)
+            {
+                _priorityString = priorityString;
+            }
+
+            public int Compare(string x, string y)
+            {
+                var xPriority = x.StartsWith(_priorityString, StringComparison.OrdinalIgnoreCase);
+                var yPriority = y.StartsWith(_priorityString, StringComparison.OrdinalIgnoreCase);
+
+                if (xPriority && yPriority || !(xPriority || yPriority))
+                {
+                    return System.String.Compare(x, y, System.StringComparison.OrdinalIgnoreCase);
+                }
+
+                if (xPriority)
+                {
+                    return -1;
+                }
+
+                return 1;
+            }
         }
     }
 }
