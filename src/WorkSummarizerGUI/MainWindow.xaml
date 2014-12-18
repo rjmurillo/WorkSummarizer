@@ -1,0 +1,381 @@
+﻿<controls:MetroWindow x:Class="WorkSummarizerGUI.MainWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      mc:Ignorable="d"
+                      Title="Work Summarizer"
+                      Height="820"
+                      MinHeight="300"
+                      Width="820"
+                      MinWidth="400"
+                      ShowTitleBar="False"
+                      WindowStartupLocation="CenterScreen"
+                      BorderBrush="#dd222222"
+                      ResizeMode="CanResizeWithGrip"
+                      BorderThickness="0"
+                      GlowBrush="{DynamicResource AccentColorBrush}">
+    <controls:MetroWindow.Resources>        
+        <Style TargetType="Hyperlink"
+               BasedOn="{StaticResource {x:Type Hyperlink}}">
+            <Setter Property="FontFamily"
+                    Value="Segoe UI" />
+            <Setter Property="FontSize"
+                    Value="9" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource TextBrush}" />
+        </Style>
+        <Style TargetType="Label"
+               BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="FontFamily"
+                    Value="Segoe UI" />
+            <Setter Property="FontSize"
+                    Value="12" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="Segoe UI" />
+            <Setter Property="FontSize"
+                    Value="12" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource TextBrush}" />
+        </Style>
+    </controls:MetroWindow.Resources>
+    <controls:MetroWindow.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="X"
+                                     Storyboard.TargetName="TitleTranslateTransform"
+                                     From="20"
+                                     To="0"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="X"
+                                     Storyboard.TargetName="ContentTranslateTransform"
+                                     From="40"
+                                     To="0"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="Height"
+                                     Storyboard.TargetName="FooterStage"
+                                     From="0"
+                                     To="28"
+                                     Duration="0:0:0.3"
+                                     BeginTime="0:0:1">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                     Storyboard.TargetName="TitleStage"
+                                     From="0.8"
+                                     To="1"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                     Storyboard.TargetName="ContentStage"
+                                     From="0.8"
+                                     To="1"
+                                     Duration="0:0:0.5">
+                        <DoubleAnimation.EasingFunction>
+                            <CircleEase />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </controls:MetroWindow.Triggers>
+    <controls:MetroWindow.WindowCommands>
+        <controls:WindowCommands>
+            <ContentControl Focusable="False"
+                            Content="{Binding UserWidget, Source={StaticResource ViewModelLocator}}" />
+            <ContentControl Focusable="False"
+                            Content="{Binding LocationStatusWidget, Source={StaticResource ViewModelLocator}}" />
+            <ContentControl Focusable="False"
+                            Content="{Binding ThemeSwitchWidget, Source={StaticResource ViewModelLocator}}" />
+        </controls:WindowCommands>
+    </controls:MetroWindow.WindowCommands>
+    <Grid DataContext="{Binding ViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ContentControl Grid.Row="0"
+                        Margin="0,0,0,0"
+                        Focusable="False"
+                        VerticalAlignment="Top"
+                        Content="{Binding ToastNotificationWidget, Source={StaticResource ViewModelLocator}}" />
+
+        <Label x:Name="TitleStage" 
+               Grid.Row="1"
+               Content="WORK SUMMARIZER"
+               Margin="20,0,0,0"
+               FontSize="50"
+               FontWeight="Bold"
+               Opacity="0.8">
+            <Label.RenderTransform>
+                <TranslateTransform x:Name="TitleTranslateTransform"
+                                    X="20" />
+            </Label.RenderTransform>
+        </Label>
+
+        <ContentControl Grid.Row="2"
+                        x:Name="ContentStage"
+                        Focusable="False"
+                        Content="{Binding CreateReport, Source={StaticResource ViewModelLocator}}">
+            <ContentControl.RenderTransform>
+                <TranslateTransform x:Name="ContentTranslateTransform"
+                                    X="0" />
+            </ContentControl.RenderTransform>
+        </ContentControl>
+
+        <Grid Grid.Row="3"
+              Height="28">
+            <StatusBar x:Name="FooterStage"
+                       Background="Transparent"
+                       Height="0"
+                       VerticalAlignment="Bottom">
+                <StatusBarItem>
+                    <Label Content="By benb, edkotows, jocarrie, mattwest, rimuri"
+                           FontSize="9"
+                           Foreground="{DynamicResource GrayBrush1}"/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center">
+                            <Hyperlink FontSize="9"
+                                       FontFamily="Segoe UI"
+                                       Click="OnLicenseClick">
+                                License
+                            </Hyperlink>
+                        </TextBlock>
+
+                        <Label Content="|"
+                               FontSize="9"
+                               Margin="2,0,0,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource GrayBrush1}" 
+                               SnapsToDevicePixels="True"/>
+
+                        <!-- TODO don't reference CreateReport view model -->
+                        <Label Content="{Binding CreateReport.Version, Mode=OneTime, Source={StaticResource ViewModelLocator}}"
+                               FontSize="9"
+                               Margin="0,0,8,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource GrayBrush1}" />
+                    </StackPanel>
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+        <Grid Grid.Column="0"
+              Grid.Row="0"
+              Grid.ColumnSpan="1"
+              Grid.RowSpan="3"
+              Margin="2470,1240,0,0"
+              d:DesignVisibility="Collapsed">
+            <Grid>
+                <Grid.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="16"
+                                        ScaleY="16" />
+                        <RotateTransform Angle="350"/>
+                    </TransformGroup>
+                </Grid.RenderTransform>
+
+                <Rectangle Fill="DarkSeaGreen"
+                           HorizontalAlignment="Left"
+                           Height="15"
+                           VerticalAlignment="Top"
+                           Width="7"
+                           Margin="-1,-1,0,0" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="2"
+                           VerticalAlignment="Top"
+                           Width="2" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="2"
+                           VerticalAlignment="Top"
+                           Width="2"
+                           Margin="4,0,0,0" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="3"
+                           VerticalAlignment="Top"
+                           Width="2"
+                           Margin="2,2,0,0" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="3"
+                           VerticalAlignment="Top"
+                           Width="1"
+                           Margin="1,3,0,0" />
+                <Rectangle Fill="Black"
+                           HorizontalAlignment="Left"
+                           Height="3"
+                           VerticalAlignment="Top"
+                           Width="1"
+                           Margin="4,3,0,0" />
+            </Grid>
+        </Grid>
+    </Grid>
+    <controls:MetroWindow.Flyouts>
+        <controls:FlyoutsControl>
+            <controls:Flyout x:Name="ConfigureFlyout"
+                             Position="Right"
+                             Theme="Adapt"
+                             Header="Configuration"
+                             IsModal="True"
+                             Width="500">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="20,0,20,0">
+                        <ItemsControl x:Name="ConfigureView">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,20">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Column="0"
+                                                   Grid.Row="0"
+                                                   Text="{Binding Name, Mode=OneWay}"
+                                                   Foreground="{DynamicResource AccentColorBrush}"
+                                                   FontSize="18"
+                                                   VerticalAlignment="Center" />
+
+                                        <Button Grid.Column="1"
+                                                Grid.Row="0"
+                                                Command="{Binding RevertToDefaultCommand}"
+                                                Width="32"
+                                                Height="32"
+                                                Style="{DynamicResource MetroCircleButtonStyle}"
+                                                HorizontalAlignment="Right"
+                                                ToolTip="Revert all to default values">
+                                            <Rectangle Width="12"
+                                                       Height="12">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill">
+                                                        <VisualBrush.Visual>
+                                                            <!-- explicitly defined Canvas here instead of a resource because WPF won't update the Shape Fill on theme change bound with DynamicResource -->
+                                                            <Canvas Width="48.0067"
+                                                                    Height="48.0067"
+                                                                    Clip="F1 M 0,0L 48.0067,0L 48.0067,48.0067L 0,48.0067L 0,0"
+                                                                    UseLayoutRounding="False">
+                                                                <Path Width="22.0015"
+                                                                      Height="20.7793"
+                                                                      Canvas.Left="13.0018"
+                                                                      Canvas.Top="13.0019"
+                                                                      Stretch="Fill"
+                                                                      Fill="{DynamicResource BlackBrush}"
+                                                                      Data="F1 M 16.0018,13.0019L 16.0009,18.4508C 18.0067,16.3263 20.8494,15.0004 24.0018,15.0004C 30.0778,15.0004 35.0033,19.926 35.0033,26.0019C 35.0033,29.0399 33.772,31.7903 31.7811,33.7812L 29.3059,31.3061C 30.6633,29.9486 31.5029,28.0734 31.5029,26.002C 31.5029,21.8593 28.1446,18.501 24.0019,18.501C 21.7803,18.501 19.7843,19.4668 18.4108,21.0014L 24.0018,21.0019L 21.0018,24.002L 13.0018,24.0019L 13.0018,16.002L 16.0018,13.0019 Z " />
+                                                            </Canvas>
+                                                        </VisualBrush.Visual>
+                                                    </VisualBrush>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Button>
+
+                                        <ItemsControl Grid.Column="0"
+                                                      Grid.ColumnSpan="2"
+                                                      Grid.Row="1"
+                                                      ItemsSource="{Binding Settings}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Margin="0,16,0,0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <TextBlock Grid.Column="0"      
+                                                                   Grid.ColumnSpan="2"
+                                                                   Grid.Row="0"
+                                                                   Text="{Binding Name, Mode=OneWay}"
+                                                                   VerticalAlignment="Center"/>
+
+                                                        <TextBlock Grid.Column="0"
+                                                                   Grid.ColumnSpan="2"
+                                                                   Grid.Row="1"
+                                                                   Text="{Binding Description, Mode=OneWay}"
+                                                                   TextWrapping="Wrap"
+                                                                   VerticalAlignment="Center" />
+
+                                                        <TextBox Grid.Column="0"
+                                                                 Grid.Row="2"
+                                                                 Text="{Binding Value, Mode=TwoWay}"
+                                                                 controls:TextboxHelper.ClearTextButton="True"
+                                                                 HorizontalAlignment="Stretch"
+                                                                 Margin="0,4,0,4"/>
+
+                                                        <Button Grid.Column="1"
+                                                                Grid.Row="2"
+                                                                Command="{Binding RevertToDefaultCommand}"
+                                                                Width="32"
+                                                                Height="32"
+                                                                Style="{DynamicResource MetroCircleButtonStyle}"
+                                                                HorizontalAlignment="Right"
+                                                                Margin="8,0,0,0"
+                                                                ToolTip="{Binding DefaultValue, Mode=OneWay}">
+                                                            <Rectangle Width="12"
+                                                                       Height="12">
+                                                                <Rectangle.Fill>
+                                                                    <VisualBrush Stretch="Fill">
+                                                                        <VisualBrush.Visual>
+                                                                            <!-- explicitly defined Canvas here instead of a resource because WPF won't update the Shape Fill on theme change bound with DynamicResource -->
+                                                                            <Canvas Width="48.0067"
+                                                                                    Height="48.0067"
+                                                                                    Clip="F1 M 0,0L 48.0067,0L 48.0067,48.0067L 0,48.0067L 0,0"
+                                                                                    UseLayoutRounding="False">
+                                                                                <Path Width="22.0015"
+                                                                                      Height="20.7793"
+                                                                                      Canvas.Left="13.0018"
+                                                                                      Canvas.Top="13.0019"
+                                                                                      Stretch="Fill"
+                                                                                      Fill="{DynamicResource BlackBrush}"
+                                                                                      Data="F1 M 16.0018,13.0019L 16.0009,18.4508C 18.0067,16.3263 20.8494,15.0004 24.0018,15.0004C 30.0778,15.0004 35.0033,19.926 35.0033,26.0019C 35.0033,29.0399 33.772,31.7903 31.7811,33.7812L 29.3059,31.3061C 30.6633,29.9486 31.5029,28.0734 31.5029,26.002C 31.5029,21.8593 28.1446,18.501 24.0019,18.501C 21.7803,18.501 19.7843,19.4668 18.4108,21.0014L 24.0018,21.0019L 21.0018,24.002L 13.0018,24.0019L 13.0018,16.002L 16.0018,13.0019 Z " />
+                                                                            </Canvas>
+                                                                        </VisualBrush.Visual>
+                                                                    </VisualBrush>
+                                                                </Rectangle.Fill>
+                                                            </Rectangle>
+                                                        </Button>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </ScrollViewer>
+            </controls:Flyout>
+        </controls:FlyoutsControl>
+    </controls:MetroWindow.Flyouts>
+</controls:MetroWindow>
