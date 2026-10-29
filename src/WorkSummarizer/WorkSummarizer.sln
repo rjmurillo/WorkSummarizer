@@ -40,13 +40,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Render", "Render", "{F580E3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events.ManicTime", "..\Events.ManicTime\Events.ManicTime.csproj", "{82B4140F-D6B8-45BE-AA72-B2D179B8069E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2C6490F5-E060-4149-8B0A-BED07D4330BF}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events.CodeFlow", "..\Events.CodeFlow\Events.CodeFlow.csproj", "{E4370D41-E906-47EE-B9CB-7C19E17B60C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{611C092D-4CC2-4FC3-A9F4-16758FFB1176}"
